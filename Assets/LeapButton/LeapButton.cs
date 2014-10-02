@@ -3,8 +3,22 @@ using System.Collections;
 
 namespace P1
 {
+		public struct ButtonEvent
+		{
+				public LeapButton button;
+				public string eventType;
+
+				public ButtonEvent (LeapButton b, string e)
+				{
+						button = b;
+						eventType = e;
+				}
+		}
+
 		public class LeapButton : MonoBehaviour
 		{
+		public string buttonValue;
+
 				public GameObject defaultSprite;
 				public GameObject overSprite;
 				public GameObject downSprite;
@@ -49,26 +63,42 @@ namespace P1
 				}
 
 		#region mouse
-		void OnMouseEnter()
-		{
-			state.Change("over");
+				void OnMouseEnter ()
+				{
+						state.Change ("over");
 				}
 
-		void OnMouseDown()
-		{
-			state.Change ("down");
-		}
-
-		void OnMouseUp()
-		{
-			state.Change ("over");
+				void OnMouseDown ()
+				{
+						state.Change ("down");
 				}
 
-		void OnMouseExit()
-		{
-			state.Change ("default");
+				void OnMouseUp ()
+				{
+						OnButtonEvent ("click");
+						state.Change ("over");
 				}
 
+				void OnMouseExit ()
+				{
+						state.Change ("default");
+				}
+
+		#endregion
+
+		#region Events
+		
+				public delegate void ButtonEventDelegate (ButtonEvent change);
+		
+				/// <summary>An event that gets fired </summary>
+				public event ButtonEventDelegate ButtonEventBroadcaster;
+
+				public void OnButtonEvent (string e)
+				{
+						if (ButtonEventBroadcaster != null) // fire the event
+								ButtonEventBroadcaster (new ButtonEvent (this, e));
+				}
+		
 		#endregion
 
 			#region loop
@@ -77,7 +107,7 @@ namespace P1
 				{
 						Init ();
 						state.StateChangedEvent += OnStateChange;
-			state.Change("default");
+						state.Change ("default");
 				}
 		
 				// Update is called once per frame
