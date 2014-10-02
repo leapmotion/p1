@@ -122,10 +122,12 @@ namespace P1
 			
 						Assert.IsTrue (state.Change ("Poodle"), "Can change from Terrier to Poodle");
 						Assert.AreEqual ("Poodle", state.currentItem.ToString (), "changed to Poodle");
-			
+						Assert.IsTrue (watcher.change.allowed, "Watcher reflects allowed change");
+
 						Assert.IsFalse (state.Change ("Terrier"), "Cannot change from Poodle to Terrier");
 						Assert.AreEqual ("Poodle", state.currentItem.ToString (), "still a Poodle");
-			
+						Assert.AreEqual ("Terrier", watcher.change.toState.name, "Watcher reflects attempted change to Terrier");
+						Assert.IsFalse (watcher.change.allowed, "Watcher reflects prohibition of attempted change");
 				}
 		
 				[Test]
