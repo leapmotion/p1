@@ -6,19 +6,19 @@ namespace P1
 {
 		public class LeapGUI : MonoBehaviour
 		{
-		public float scaleLeap;
-
-		public GameObject ulSPhere;
-		public GameObject lrSPhere;
-
-				public GameObject interactionBoxCenter;
 				Controller controller = new Controller ();
-				int lastFrameID = -1; //DEFAULT: No frames seen
+				long lastFrameID = -1; //DEFAULT: -1 < frame.Id for all IDs
+
+				float viewAngle = 60f; // Field of View of parent camera
+				public float leapScale = 2.0f; // Rescaling of Leap coordinates to Unity scene
+
+				public GameObject ulSPhere;
+				public GameObject lrSPhere;
+				public GameObject interactionBoxCenter;
 
 				// Use this for initialization
 				void Start ()
 				{
-					scaleLeap = transform.localScale.x;
 				}
 	
 				// Update is called once per frame
@@ -36,13 +36,36 @@ namespace P1
 
 				void UpdateFrame (Frame frame)
 				{
+			if (lastFrameID < 0) {
+				// First-frame initialization
+				AlignInteractionBox(frame);
+						}
+			lastFrameID = frame.Id;
+
 						foreach (Finger finger in frame.Fingers) {
 								if (finger.Type () == Finger.FingerType.TYPE_INDEX) {
 										GameObject indexSprite = (GameObject)Instantiate (Resources.Load ("IndexFinger"));
+
+										// Position is in scaled and displaced Leap coordinates
 										indexSprite.transform.parent = transform;
 										indexSprite.transform.localPosition = new Vector3 (finger.TipPosition.x, finger.TipPosition.y, finger.TipPosition.z);
+
 								}
 						}
+				}
+
+				void AlignInteractionBox (Frame frame)
+				{
+						InteractionBox box = frame.InteractionBox;
+
+						// Position of Leap to align scaled InteractionBox in Field of View
+						float front = (box.Width / 2) / Mathf.Tan (viewAngle / 2);
+						transform.localPosition = new Vector3 (0, - box.Center.y, front + box.Depth / 2) * leapScale;
+
+						// Local Scale includes transformation from Leap Right-Chiral to Unity Left-Chiral coordinates
+			transform.localScale = new Vector3 (leapScale, leapScale, -leapScale);
+
+			Debug.Log ("AlignInteractionBox");
 				}
 
 				void DrawInteractionBox (Frame frame)
@@ -51,15 +74,17 @@ namespace P1
 								return;
 						}
 
-						InteractionBox box = frame.InteractionBox;
-						Vector3 center = new Vector3 (box.Center.x, 0, box.Center.z);
-						Vector3 dimensions = new Vector3 (box.Width, box.Height, box.Depth) * scaleLeap;
+			InteractionBox box = frame.InteractionBox;
+			Vector3 center = new Vector3 (box.Center.x, box.Center.y, box.Center.z);
+			Vector3 dimensions = new Vector3 (box.Width, box.Height, box.Depth);
 
-			ulSPhere.transform.localPosition = dimensions;
-			lrSPhere.transform.localPosition = dimensions * (-1);
-
+			interactionBoxCenter.transform.localPosition = center;
+			ulSPhere.transform.localPosition = center + dimensions/2;
+			lrSPhere.transform.localPosition = center - dimensions/2;
+/*
 						interactionBoxCenter.transform.localPosition = center;
 						GlDrawer.instance.DrawWireCube (interactionBoxCenter.transform.position, interactionBoxCenter.transform.rotation, dimensions, Color.red);
+						*/
 				}
 		}
 }
