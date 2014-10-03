@@ -18,8 +18,8 @@ namespace P1
 				Controller controller = new Controller ();
 				long lastFrameID = -1; //NOTE: -1 < frame.Id for all IDs
 
-				float viewAngle = 60f; // Field of View of parent camera
-				public float leapScale = 10.0f; // Rescaling of Leap coordinates to Unity scene
+				float viewAngle = 60f * (2 * Mathf.PI / 360); // Field of View of parent camera
+				public float leapScale = 5.0f; // Rescaling of Leap coordinates to Unity scene
 
 				// Use this for initialization
 				void Start ()
