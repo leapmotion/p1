@@ -11,7 +11,7 @@ namespace ButtonMonkey
 		public event HitSymbolCall HitSymbolEvent;
 
 		public void Trial(char[] symbolTrial) {
-			if (HitSymbolEvent != null ||
+			if (HitSymbolEvent == null ||
 				KeyStrokeEvent == null) {
 				Console.WriteLine("No monkeys? No research!");
 			}
@@ -30,6 +30,7 @@ namespace ButtonMonkey
 				if (correct) {
 					symbolInd += 1;
 					if (symbolInd >= symbolTrial.Length) {
+						HitSymbolEvent(' '); //Commit results by setting new target
 						break;
 					}
 					correct = false;
@@ -52,18 +53,17 @@ namespace ButtonMonkey
 
 	class MainClass
 	{
-
 		public static void Main (string[] args)
 		{
 			ButtonTrial monkeySee = new ButtonTrial();
 			ButtonCounter monkeyDo = new ButtonCounter();
-			monkeySee.KeyStrokeEvent += new ButtonTrial.KeyStrokeCall (monkeyDo.OnKeyStroke);
-			monkeySee.HitSymbolEvent += new ButtonTrial.HitSymbolCall (monkeyDo.ChangeSymbol);
+			monkeySee.KeyStrokeEvent += new ButtonTrial.KeyStrokeCall (monkeyDo.WhenPushed);
+			monkeySee.HitSymbolEvent += new ButtonTrial.HitSymbolCall (monkeyDo.ChangeTarget);
 
 			char[] symbolTrial = {'1','2','3','4'};
 			monkeySee.Trial (symbolTrial);
 
-			Console.WriteLine ("Monkey dismissed...");
+			Console.WriteLine ("Autopsy report for monkey:\n\n" + monkeyDo.ToString());
 		}
 	}
 }

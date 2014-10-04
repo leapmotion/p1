@@ -6,11 +6,9 @@ namespace ButtonMonkey
 {
 	public struct ButtonPushed {
 		public char symbol;
-		public bool correct;
 		public TimeSpan time;
-		public ButtonPushed(char s, bool c, TimeSpan t) {
+		public ButtonPushed(char s, TimeSpan t) {
 			symbol = s;
-			correct = c;
 			time = t;
 		}
 	}
@@ -19,31 +17,63 @@ namespace ButtonMonkey
 	{
 		Stopwatch timer;
 
-		char symbol;
+		bool ready;
+		char target;
+
 		List<ButtonPushed> attempts;
-		List<List<ButtonPushed>> complete;
+		List<Tuple<char, List<ButtonPushed>>> complete;
 
 		public ButtonCounter()
 		{
-			attempts = new List<ButtonPushed> ();
-			complete = new List<List<ButtonPushed>> ();
-
 			timer = new Stopwatch ();
-		}
 
-		public void ChangeSymbol (char next) {
-			complete.Add(attempts);
-			attempts = new List<ButtonPushed>();
-			symbol = next;
-			timer.Reset();
-		}
+			ready = false;
+			target = ' ';
 
-		public void OnKeyStroke (char key) {
+			attempts = new List<ButtonPushed> ();
+			complete = new List<Tuple<char, List<ButtonPushed>>> ();
+		}
+		
+		public void WhenPushed (char symbol) {
+			if (ready == false) {
+				return;
+			}
 			attempts.Add (new ButtonPushed (
-				key,
-				key == symbol,
+				symbol,
 				timer.Elapsed
-			));
+				));
+		}
+
+		public void CommitTrial() {
+			complete.Add(new Tuple<char, List<ButtonPushed>>(
+				target, 
+				attempts
+				));
+			attempts = new List<ButtonPushed>();
+			ready = false;
+			target = ' ';
+		}
+
+		public void ChangeTarget (char next) {
+			if (ready == true) {
+				CommitTrial();
+			}
+			ready = true;
+			target = next;
+			timer.Reset();
+			timer.Start();
+		}
+
+		//Print results to CSV
+		public override string ToString() {
+			string report = "Target, Symbol, Time\n";
+			foreach (Tuple<char, List<ButtonPushed>> trial in complete) {
+				char goal = trial.Item1;
+				foreach (ButtonPushed push in trial.Item2) {
+					report += goal + ", " + push.symbol + ", " + push.time.ToString() + "\n";
+				}
+			}
+			return report;
 		}
 	}
 }
