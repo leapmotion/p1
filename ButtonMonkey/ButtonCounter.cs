@@ -31,7 +31,7 @@ namespace ButtonMonkey
 			timer = new Stopwatch ();
 		}
 
-		public void SetNextSymbol(char next) {
+		public void ChangeSymbol (char next) {
 			complete.Add(attempts);
 			attempts = new List<ButtonPushed>();
 			symbol = next;
