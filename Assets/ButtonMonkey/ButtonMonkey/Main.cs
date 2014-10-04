@@ -11,6 +11,10 @@ namespace ButtonMonkey
 		public event HitSymbolCall HitSymbolEvent;
 
 		public void Trial(char[] symbolTrial) {
+#if UNITY_EDITOR
+			Console.WriteLine ("Have a banana...");
+			return;
+#else
 			if (HitSymbolEvent == null ||
 				KeyStrokeEvent == null) {
 				Console.WriteLine("No monkeys? No research!");
@@ -47,7 +51,8 @@ namespace ButtonMonkey
 				}
 				Console.WriteLine ("Good monkey - keep typing!");
 				correct = true;
-			}
+			}		
+#endif
 		}
 	}
 

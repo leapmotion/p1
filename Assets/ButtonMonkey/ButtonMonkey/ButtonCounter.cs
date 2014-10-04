@@ -13,6 +13,15 @@ namespace ButtonMonkey
 		}
 	}
 
+	public struct PushedTrials {
+		public char target;
+		public List<ButtonPushed> attempts;
+		public PushedTrials(char t, List<ButtonPushed> a) {
+			target = t;
+			attempts = a;
+		}
+	}
+
 	public class ButtonCounter
 	{
 		Stopwatch timer;
@@ -21,7 +30,7 @@ namespace ButtonMonkey
 		char target;
 
 		List<ButtonPushed> attempts;
-		List<Tuple<char, List<ButtonPushed>>> complete;
+		List<PushedTrials> complete;
 
 		public ButtonCounter()
 		{
@@ -31,7 +40,7 @@ namespace ButtonMonkey
 			target = ' ';
 
 			attempts = new List<ButtonPushed> ();
-			complete = new List<Tuple<char, List<ButtonPushed>>> ();
+			complete = new List<PushedTrials> ();
 		}
 		
 		public void WhenPushed (char symbol) {
@@ -45,7 +54,7 @@ namespace ButtonMonkey
 		}
 
 		public void CommitTrial() {
-			complete.Add(new Tuple<char, List<ButtonPushed>>(
+			complete.Add(new PushedTrials(
 				target, 
 				attempts
 				));
@@ -67,9 +76,9 @@ namespace ButtonMonkey
 		//Print results to CSV
 		public override string ToString() {
 			string report = "Target, Symbol, Time\n";
-			foreach (Tuple<char, List<ButtonPushed>> trial in complete) {
-				char goal = trial.Item1;
-				foreach (ButtonPushed push in trial.Item2) {
+			foreach (PushedTrials trials in complete) {
+				char goal = trials.target;
+				foreach (ButtonPushed push in trials.attempts) {
 					report += goal + ", " + push.symbol + ", " + push.time.ToString() + "\n";
 				}
 			}
