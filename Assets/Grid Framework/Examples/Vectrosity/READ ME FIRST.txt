@@ -1,0 +1,1 @@
+The Vectrosity example scripts need to be uncommented before they so anything. The reason they are commented is to prevent them from sending error messages for customers who don't have Vectrosity.
