@@ -78,6 +78,45 @@ namespace ButtonMonkey
 						return attempts [past];
 				}
 
+				public int CurrentAttemptsCount {
+						get {
+								return attempts.Count;
+						}
+				}
+		
+				public int CompletedTrialsCount {
+						get {
+								return complete.Count;
+						}
+				}
+
+				public int CurrentSuccessCount {
+						get { 
+								int successes = 0;
+								foreach (ButtonPushed push in attempts) {
+										if (push.symbol == target) {
+												successes += 1;
+										}
+								}
+								return successes; 
+						}
+				}
+		
+				public int CompletedSuccessCount {
+						get { 
+								int successes = 0;
+								foreach (PushedTrials trials in complete) {
+										char goal = trials.target;
+										foreach (ButtonPushed push in trials.attempts) {
+												if (push.symbol == goal) {
+														successes += 1;
+												}
+										}
+								}
+								return successes; 
+						}
+				}
+
 				//Print results to CSV
 				public override string ToString ()
 				{
