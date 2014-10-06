@@ -23,7 +23,7 @@ namespace ButtonMonkey
 			}
 			
 			// Initial instructions
-			Stopwatch timer;
+			Stopwatch timer = new Stopwatch();
 			string instructions = "Monkey, type: ";
 			foreach (char symbol in symbolTrial) {
 				instructions += symbol;
@@ -46,7 +46,7 @@ namespace ButtonMonkey
 				}
 				
 				ConsoleKeyInfo info = Console.ReadKey ();
-				KeyStrokeEvent(info.KeyChar, (float)timer.ElapsedMilliseconds);
+				KeyStrokeEvent(info.KeyChar, timer.ElapsedMilliseconds/1000.0f);
 				
 				//User guidance
 				if (info.KeyChar != symbolTrial[symbolInd]) {

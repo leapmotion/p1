@@ -120,7 +120,7 @@ namespace ButtonMonkey
 				//Print results to CSV
 				public override string ToString ()
 				{
-						string report = "Target, Symbol, Time\n";
+						string report = "Target, Symbol, Time(seconds)\n";
 						foreach (PushedTrials trials in complete) {
 								char goal = trials.target;
 								foreach (ButtonPushed push in trials.attempts) {
