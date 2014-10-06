@@ -1,0 +1,17 @@
+% This is a LaTeX file using TikZ to create a vector drawing of the rotary dial. The code was compiled with Texpad
+\documentclass{article}
+\usepackage{tikz}
+\usepackage[graphics, active, tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+
+\begin{document}
+\begin{tikzpicture}[font=\huge\bfseries]
+	\def\r{0.75}
+	\def\R{3.5}
+	\filldraw[very thick,fill=gray!10] (0,0) circle(5);
+	\fill[black] (0,0) circle(0.5);
+	\fill[white] (0,0) circle(0.2);
+	\foreach \i in {1,2,...,9} {\filldraw[very thick,fill=white] (\i * 30 + 15:\R) node{\i} circle(\r);}
+	\filldraw[very thick,fill=white] (11 * 30 - 15:\R) node{0} circle(\r);
+\end{tikzpicture}
+\end{document}
