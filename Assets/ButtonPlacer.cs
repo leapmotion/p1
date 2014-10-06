@@ -46,8 +46,9 @@ namespace P1
 						grid = GetComponent<GFRectGrid> ();
 						foreach (KeyDef k in keys) {
 								Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
-								GameObject g = (GameObject)Instantiate (buttonTemplate);
-								((TextMesh)g.GetComponentInChildren<TextMesh> ()).text = k.label;
+								GameObject go = ((GameObject)Instantiate (buttonTemplate));
+								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
+								g.label.text = k.label;
 								g.transform.parent = transform;
 								g.transform.position = pos;
 						}
