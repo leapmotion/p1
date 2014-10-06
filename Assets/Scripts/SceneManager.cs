@@ -4,16 +4,18 @@ using System.Collections;
 public class SceneManager : MonoBehaviour {
 
   Texture2D texture_;
-  private float timer_ = 0.0f;
-  private float timer_threshold_ = 120.0f;
-  private float timer_increment_ = 1.0f;
+  private float timer_;
+  private float start_timer_;
+  private float timer_threshold_ = 2.0f;
   private string stage_to_load_ = "Stage1";
+  private bool load_stage_ = false;
 
 	// Use this for initialization
 	void Start () {
     Rect pixelInset = new Rect(0, 0, Screen.width, Screen.height);
     guiTexture.color = Color.black;
     guiTexture.pixelInset = pixelInset;
+    start_timer_ = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -22,37 +24,37 @@ public class SceneManager : MonoBehaviour {
     if (Input.GetKeyDown(KeyCode.Alpha1))
     {
       stage_to_load_ = "Stage1";
-      timer_increment_ = -1.0f;
+      start_timer_ = Time.time;
+      load_stage_ = true;
     }
     else if (Input.GetKeyDown(KeyCode.Alpha2))
     {
       stage_to_load_ = "Stage2";
-      timer_increment_ = -1.0f;
+      start_timer_ = Time.time;
+      load_stage_ = true;
     }
     else if (Input.GetKeyDown(KeyCode.Alpha3))
     {
       stage_to_load_ = "Stage3";
-      timer_increment_ = -1.0f;
+      start_timer_ = Time.time;
+      load_stage_ = true;
     }
 
-    if (timer_ < 0.0f)
+    timer_ = Time.time;
+
+    if (load_stage_ && (timer_ - start_timer_) / timer_threshold_ > 1.0f)
     {
       Application.LoadLevel(stage_to_load_);
     }
-
-    timer_ += timer_increment_;
-    if (timer_ > timer_threshold_)
-    {
-      timer_ = timer_threshold_;
-    }
-    Debug.Log(timer_);
 	}
-
-  
 
   void OnGUI()
   {
-    float alpha = 1.0f - Mathf.Clamp(timer_ / timer_threshold_, 0.0f, 1.0f);
+    float alpha = 1.0f - Mathf.Clamp((timer_ - start_timer_)/ timer_threshold_, 0.0f, 1.0f);
+    if (load_stage_)
+    {
+      alpha = 1.0f - alpha;
+    }
     Color color = guiTexture.color;
     color.a = alpha;
     guiTexture.color = color;
