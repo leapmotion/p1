@@ -17,8 +17,7 @@ namespace P1
 
 		public class LeapButton : MonoBehaviour
 		{
-		public string buttonValue;
-
+				public string buttonValue;
 				public GameObject defaultSprite;
 				public GameObject overSprite;
 				public GameObject downSprite;
@@ -35,7 +34,6 @@ namespace P1
 
 				void ToggleSprites (string stateName)
 				{
-						Debug.Log ("Changing state to " + stateName);
 						switch (stateName) {
 						case "default":
 								defaultSprite.GetComponent<SpriteRenderer> ().enabled = true;
@@ -51,6 +49,9 @@ namespace P1
 								defaultSprite.GetComponent<SpriteRenderer> ().enabled = false;
 								overSprite.GetComponent<SpriteRenderer> ().enabled = false;
 								downSprite.GetComponent<SpriteRenderer> ().enabled = true;
+								break;
+						default:
+								Debug.Log ("Unknown stateName " + stateName);
 								break;
 						}
 				}
