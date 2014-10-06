@@ -1,33 +1,37 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ButtonMonkey
 {
-	class ButtonTrial {
-		public delegate void KeyStrokeCall(char key);
+	class ConsoleTrial {
+		public delegate void KeyStrokeCall(char key, float time);
 		public event KeyStrokeCall KeyStrokeEvent;
-
+		
 		public delegate void HitSymbolCall(char key);
 		public event HitSymbolCall HitSymbolEvent;
-
+		
 		public void Trial(char[] symbolTrial) {
-#if UNITY_EDITOR
+			#if UNITY_EDITOR
 			Console.WriteLine ("Have a banana...");
 			return;
-#else
+			#else
+
 			if (HitSymbolEvent == null ||
-				KeyStrokeEvent == null) {
+			    KeyStrokeEvent == null) {
 				Console.WriteLine("No monkeys? No research!");
 			}
-
+			
 			// Initial instructions
+			Stopwatch timer;
 			string instructions = "Monkey, type: ";
 			foreach (char symbol in symbolTrial) {
 				instructions += symbol;
 			}
 			Console.WriteLine (instructions);
-			
+
 			// Attempt guidance
+			timer.Start ();
 			int symbolInd = -1;
 			bool correct = true;
 			while (true) {
@@ -40,9 +44,9 @@ namespace ButtonMonkey
 					correct = false;
 					HitSymbolEvent(symbolTrial[symbolInd]);
 				}
-
+				
 				ConsoleKeyInfo info = Console.ReadKey ();
-				KeyStrokeEvent(info.KeyChar);
+				KeyStrokeEvent(info.KeyChar, (float)timer.ElapsedMilliseconds);
 				
 				//User guidance
 				if (info.KeyChar != symbolTrial[symbolInd]) {
@@ -52,7 +56,7 @@ namespace ButtonMonkey
 				Console.WriteLine ("Good monkey - keep typing!");
 				correct = true;
 			}		
-#endif
+			#endif
 		}
 	}
 
@@ -60,10 +64,10 @@ namespace ButtonMonkey
 	{
 		public static void Main (string[] args)
 		{
-			ButtonTrial monkeySee = new ButtonTrial();
+			ConsoleTrial monkeySee = new ConsoleTrial();
 			ButtonCounter monkeyDo = new ButtonCounter();
-			monkeySee.KeyStrokeEvent += new ButtonTrial.KeyStrokeCall (monkeyDo.WhenPushed);
-			monkeySee.HitSymbolEvent += new ButtonTrial.HitSymbolCall (monkeyDo.ChangeTarget);
+			monkeySee.KeyStrokeEvent += new ConsoleTrial.KeyStrokeCall (monkeyDo.WhenPushed);
+			monkeySee.HitSymbolEvent += new ConsoleTrial.HitSymbolCall (monkeyDo.ChangeTarget);
 
 			char[] symbolTrial = {'1','2','3','4'};
 			monkeySee.Trial (symbolTrial);
