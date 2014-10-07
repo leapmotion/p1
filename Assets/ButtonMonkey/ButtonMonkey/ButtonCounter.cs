@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+//DEBUG
+using UnityEngine;
+
 namespace ButtonMonkey
 {
 		public struct ButtonPushed
@@ -45,6 +48,7 @@ namespace ButtonMonkey
 		
 				public void WhenPushed (char symbol, float time)
 				{
+						Debug.Log ("ButtonCounter.WhenPushed");
 						if (ready == false) {
 								return;
 						}

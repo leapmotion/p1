@@ -20,6 +20,7 @@ namespace ButtonMonkey
 			if (HitSymbolEvent == null ||
 			    KeyStrokeEvent == null) {
 				Console.WriteLine("No monkeys? No research!");
+				return;
 			}
 			
 			// Initial instructions
