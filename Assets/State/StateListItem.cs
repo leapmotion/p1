@@ -26,7 +26,7 @@ namespace P1
 						return otherName.ToLower () == name.ToLower ();
 				}
 
-				public string ToString ()
+				public override string ToString ()
 				{
 						return name;
 				} 
