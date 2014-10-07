@@ -8,6 +8,7 @@ namespace P1
 
 				public LeapButton button;
 				public GameObject sunLight;
+
 		public bool isOn = true;
 
 				void OnButtonClick (ButtonEvent e)
