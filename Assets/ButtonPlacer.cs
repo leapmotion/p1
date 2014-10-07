@@ -53,7 +53,7 @@ namespace P1
 						SetGridFromConfig ("Assets/config/grid_config.json");
 						foreach (KeyDef k in keys) {
 								Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
-								GameObject go = ((GameObject)Instantiate (buttonTemplate));
+								GameObject go = ((GameObject)Instantiate (buttonTemplate, pos, Quaternion.identity));
 								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
 								g.label = k.label;
 								g.transform.parent = transform;
