@@ -57,7 +57,6 @@ namespace P1
 					
 								default: 
 										return;
-										break;
 								}
 								label_ = value;
 								foreach (GameObject g in labels) {
@@ -73,10 +72,20 @@ namespace P1
 						}
 
 				}
+
+		#region loop
+				State state;
+
+
+
 				// Use this for initialization
 				void Start ()
 				{
-	
+						if (!StateList.HasList ("ButtonState")) {
+								new StateList ("ButtonState", "unknown", "default", "over", "down");
+						}
+						state = new State ("ButtonState");
+					
 				}
 	
 				// Update is called once per frame
@@ -84,5 +93,52 @@ namespace P1
 				{
 	
 				}
+
+		#endregion
+
+		#region broadcast
+		
+				public delegate void TenKeyEventDelegate (char symbol,float time);
+
+				public event TenKeyEventDelegate TenKeyEventBroadcaster;
+		
+				public void OnTenKeyEvent (string e)
+				{
+						if (TenKeyEventBroadcaster != null) {
+								TenKeyEventBroadcaster (label [0], 0.0f);
+						}
+				}
+
+		#endregion
+
+		#region mouse
+		
+				void OnMouseEnter ()
+				{
+						Debug.Log ("OnMouseEnter");
+						state.Change ("over");
+				}
+		
+				void OnMouseDown ()
+				{
+						Debug.Log ("OnMouseDown");
+						state.Change ("down");
+				}
+		
+				void OnMouseUp ()
+				{
+						Debug.Log ("OnMouseUp");
+						OnTenKeyEvent ("click");
+						state.Change ("over");
+				}
+		
+				void OnMouseExit ()
+				{
+						Debug.Log ("OnMouseExit");
+						state.Change ("default");
+				}
+
+		#endregion
+
 		}
 }
