@@ -117,7 +117,7 @@ namespace ButtonMonkey
 						}
 				}
 
-				//Print results to CSV
+				//Print results in CSV format
 				public override string ToString ()
 				{
 						string report = "Target, Symbol, Time(seconds)\n";
