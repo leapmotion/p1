@@ -1,58 +1,65 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ButtonMonkey
 {
-	class ButtonTrial {
-		public delegate void KeyStrokeCall(char key);
+	class ConsoleTrial {
+		public delegate void KeyStrokeCall(char key, float time);
 		public event KeyStrokeCall KeyStrokeEvent;
-
+		
 		public delegate void HitSymbolCall(char key);
 		public event HitSymbolCall HitSymbolEvent;
-
-		public void Trial(char[] symbolTrial) {
-#if UNITY_EDITOR
+		
+		public void Trial(List<char> symbolTrial) {
+			#if UNITY_EDITOR
 			Console.WriteLine ("Have a banana...");
 			return;
-#else
+			#else
+
 			if (HitSymbolEvent == null ||
-				KeyStrokeEvent == null) {
+			    KeyStrokeEvent == null) {
 				Console.WriteLine("No monkeys? No research!");
 			}
-
+			
 			// Initial instructions
-			string instructions = "Monkey, type: ";
+			Stopwatch timer = new Stopwatch();
+			string instructions = "\nMonkey, type: ";
 			foreach (char symbol in symbolTrial) {
 				instructions += symbol;
 			}
 			Console.WriteLine (instructions);
-			
+
 			// Attempt guidance
+			timer.Start ();
 			int symbolInd = -1;
 			bool correct = true;
 			while (true) {
 				if (correct) {
 					symbolInd += 1;
-					if (symbolInd >= symbolTrial.Length) {
-						HitSymbolEvent(' '); //Commit results by setting new target
+					if (symbolInd >= symbolTrial.Count) {
+						Console.WriteLine ("Good monkey!\n");
+						HitSymbolEvent(' '); //Commit final results by setting new target
 						break;
 					}
 					correct = false;
 					HitSymbolEvent(symbolTrial[symbolInd]);
 				}
-
+				
 				ConsoleKeyInfo info = Console.ReadKey ();
-				KeyStrokeEvent(info.KeyChar);
+				KeyStrokeEvent(info.KeyChar, timer.ElapsedMilliseconds/1000.0f);
 				
 				//User guidance
 				if (info.KeyChar != symbolTrial[symbolInd]) {
-					Console.WriteLine ("Bad monkey - try again!");
+					Console.WriteLine ("Bad monkey! You were told to type: " + symbolTrial[symbolInd]);
 					continue;
 				}
-				Console.WriteLine ("Good monkey - keep typing!");
+				if (symbolInd+1 < symbolTrial.Count) {
+					Console.WriteLine ("Good monkey! Next, type: " + symbolTrial[symbolInd+1]);
+				}
 				correct = true;
 			}		
-#endif
+			#endif
 		}
 	}
 
@@ -60,13 +67,39 @@ namespace ButtonMonkey
 	{
 		public static void Main (string[] args)
 		{
-			ButtonTrial monkeySee = new ButtonTrial();
+			ConsoleTrial monkeySee = new ConsoleTrial();
 			ButtonCounter monkeyDo = new ButtonCounter();
-			monkeySee.KeyStrokeEvent += new ButtonTrial.KeyStrokeCall (monkeyDo.WhenPushed);
-			monkeySee.HitSymbolEvent += new ButtonTrial.HitSymbolCall (monkeyDo.ChangeTarget);
+			monkeySee.KeyStrokeEvent += new ConsoleTrial.KeyStrokeCall (monkeyDo.WhenPushed);
+			monkeySee.HitSymbolEvent += new ConsoleTrial.HitSymbolCall (monkeyDo.ChangeTarget);
 
-			char[] symbolTrial = {'1','2','3','4'};
-			monkeySee.Trial (symbolTrial);
+			int test = 1;
+			while (test<=4) {
+				// List a random key from each row
+				Random gen = new Random ();
+				List<int> rows = new List<int> ();
+				rows.Add (1 + (gen.Next () % 3));
+				rows.Add (4 + (gen.Next () % 3));
+				rows.Add (7 + (gen.Next () % 3));
+				rows.Add (0);
+
+				// Generate a random sequence of keys
+				// subject to the condition that no row is repeated
+				List<int> trial = new List<int> ();
+				while (rows.Count > 0) {
+					int next = gen.Next () % rows.Count;
+					trial.Add (rows [next]);
+					rows.RemoveAt (next);
+				}
+
+				// Generate keypad 
+				List<char> symbolTrial = new List<char> ();
+				foreach (int key in trial) {
+					symbolTrial.Add (key.ToString () [0]);
+				}
+				monkeySee.Trial (symbolTrial);
+
+				test+=1;
+			}
 
 			Console.WriteLine ("Autopsy report for monkey:\n\n" + monkeyDo.ToString());
 		}

@@ -3,9 +3,6 @@ using System.Collections;
 
 public class Button : MonoBehaviour {
 
-  public Texture texture;
-
-
 	// Use this for initialization
 	void Start () {
 	  
