@@ -18,6 +18,7 @@ namespace P1
 		public class LeapButton : MonoBehaviour
 		{
 				public string buttonValue;
+
 				public GameObject defaultSprite;
 				public GameObject overSprite;
 				public GameObject downSprite;
