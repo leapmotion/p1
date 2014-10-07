@@ -5,6 +5,7 @@ namespace P1
 {
 		public class TenKeyKey : MonoBehaviour
 		{
+				public GameObject[] labels = new GameObject[10];
 				string label_ = "";
 
 				public string label {
@@ -59,6 +60,15 @@ namespace P1
 										break;
 								}
 								label_ = value;
+								foreach (GameObject g in labels) {
+										g.SetActive (false);
+								}
+
+								try {
+										labels [System.Convert.ToInt16 (value)].SetActive (true);
+								} catch (UnityException e) {
+										Debug.Log ("Cannot set letter for value " + value);
+								}
 
 						}
 

@@ -22,15 +22,15 @@ namespace P1
 
 				public KeyDef[] keys = new KeyDef[]{
 			new KeyDef ("0", 0, -2),
-			new KeyDef ("1", -1, -1),
-			new KeyDef ("2", 0, -1),
-			new KeyDef ("3", 1, -1),
-			new KeyDef ("4", -1, 0),
+			new KeyDef ("1", 1, 1),
+			new KeyDef ("2", 0, 1),
+			new KeyDef ("3", -1, 1),
+			new KeyDef ("4", 1, 0),
 			new KeyDef ("5", 0, 0),
-			new KeyDef ("6", 1, 0),
-			new KeyDef ("7", -1, 1),
-			new KeyDef ("8", 0, 1),
-			new KeyDef ("9", 1, 1)
+			new KeyDef ("6", -1, 0),
+			new KeyDef ("7", 1, -1),
+			new KeyDef ("8", 0, -1),
+			new KeyDef ("9", -1, -1)
 };
 				public GameObject buttonTemplate;
 				GFRectGrid grid;
