@@ -24,7 +24,7 @@ namespace ButtonMonkey
 			
 			// Initial instructions
 			Stopwatch timer = new Stopwatch();
-			string instructions = "Monkey, type: ";
+			string instructions = "\nMonkey, type: ";
 			foreach (char symbol in symbolTrial) {
 				instructions += symbol;
 			}
@@ -38,7 +38,8 @@ namespace ButtonMonkey
 				if (correct) {
 					symbolInd += 1;
 					if (symbolInd >= symbolTrial.Count) {
-						HitSymbolEvent(' '); //Commit results by setting new target
+						Console.WriteLine ("Good monkey!\n");
+						HitSymbolEvent(' '); //Commit final results by setting new target
 						break;
 					}
 					correct = false;
@@ -50,10 +51,12 @@ namespace ButtonMonkey
 				
 				//User guidance
 				if (info.KeyChar != symbolTrial[symbolInd]) {
-					Console.WriteLine ("Bad monkey - try again!");
+					Console.WriteLine ("Bad monkey! You were told to type: " + symbolTrial[symbolInd]);
 					continue;
 				}
-				Console.WriteLine ("Good monkey - keep typing!");
+				if (symbolInd+1 < symbolTrial.Count) {
+					Console.WriteLine ("Good monkey! Next, type: " + symbolTrial[symbolInd+1]);
+				}
 				correct = true;
 			}		
 			#endif
