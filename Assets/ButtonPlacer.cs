@@ -48,7 +48,7 @@ namespace P1
 								Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
 								GameObject go = ((GameObject)Instantiate (buttonTemplate));
 								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
-								//if (g.label != null) g.label.text = k.label;
+								if (k.label != null) g.label = k.label;
 								g.transform.parent = transform;
 								g.transform.position = pos;
 						}
