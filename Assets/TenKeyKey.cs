@@ -5,6 +5,31 @@ namespace P1
 {
 		public class TenKeyKey : MonoBehaviour
 		{
+		
+				[SerializeField]
+				private float
+						m_KeypadUniformScale;
+
+				public float KeypadUniformScale {
+						get { return m_KeypadUniformScale; }
+						set {
+								this.transform.localScale = new Vector3 (value, value, value);
+								m_KeypadUniformScale = value;
+						}
+				}
+
+				[SerializeField]
+				private Vector3
+						m_KeypadScale;
+
+				public Vector3 KeypadScale {
+						get { return m_KeypadScale; }
+						set {
+								this.transform.localScale = value;
+								m_KeypadScale = value;
+						}
+				}
+
 				public GameObject[] labels = new GameObject[10];
 				string label_ = "";
 
