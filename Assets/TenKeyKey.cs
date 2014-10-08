@@ -98,14 +98,13 @@ namespace P1
 
 		#region broadcast
 		
-				public delegate void TenKeyEventDelegate (char symbol,float time);
+				public delegate void TenKeyEventDelegate (char symbol);
 
 				public event TenKeyEventDelegate TenKeyEventBroadcaster;
 		
-				public void OnTenKeyEvent (string e)
-				{
+				public void OnTenKeyEvent (string e) {
 						if (TenKeyEventBroadcaster != null) {
-								TenKeyEventBroadcaster (label [0], 0.0f);
+								TenKeyEventBroadcaster (label [0]);
 						}
 				}
 
@@ -115,26 +114,26 @@ namespace P1
 		
 				void OnMouseEnter ()
 				{
-						Debug.Log ("OnMouseEnter");
+						//Debug.Log ("OnMouseEnter");
 						state.Change ("over");
 				}
 		
 				void OnMouseDown ()
 				{
-						Debug.Log ("OnMouseDown");
+						//Debug.Log ("OnMouseDown");
 						state.Change ("down");
 				}
 		
 				void OnMouseUp ()
 				{
-						Debug.Log ("OnMouseUp");
+						//Debug.Log ("OnMouseUp");
 						OnTenKeyEvent ("click");
 						state.Change ("over");
 				}
 		
 				void OnMouseExit ()
 				{
-						Debug.Log ("OnMouseExit");
+						//Debug.Log ("OnMouseExit");
 						state.Change ("default");
 				}
 

@@ -35,7 +35,9 @@ namespace P1
 				};
 				public GameObject buttonTemplate;
 				GFRectGrid grid;
-				ButtonCounter counter;
+				int test;
+				ButtonTrial monkeyDo;
+				float monkeyTime;
 
 				// Use this for initialization
 				void Start ()
@@ -45,7 +47,8 @@ namespace P1
 
 				public void DoStart ()
 				{
-						counter = new ButtonCounter ();
+						monkeyDo = new ButtonTrial ();
+						monkeyTime = monkeyDo.WasAtTime ();
 
 						grid = GetComponent<GFRectGrid> ();
 						foreach (KeyDef k in keys) {
@@ -55,14 +58,33 @@ namespace P1
 								g.label = k.label;
 								g.transform.parent = transform;
 								g.transform.position = pos;
-								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (counter.WhenPushed);
+								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (monkeyDo.WhenPushed);
 						}
+
+						// Begin first trial
+						monkeyDo.Start ();
+						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
 				}
 	
 				// Update is called once per frame
 				void Update ()
 				{
-	
+						if (monkeyTime < monkeyDo.WasAtTime ()) {
+								monkeyTime = monkeyDo.WasAtTime ();
+
+								// DEBUG - print progress to log
+								if (monkeyDo.IsComplete ()) {
+										// Initial instructions
+										monkeyDo.Start ();
+										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+								} else {
+										if (monkeyDo.WasCorrect ()) {
+												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
+										} else {
+												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
+										}
+								}
+						}
 				}
 		}
 }
