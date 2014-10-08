@@ -53,15 +53,19 @@ namespace P1
           prompt = CreatePIN(transform.TransformPoint(new Vector3(-1.5f, 0.0f, 0.0f)), new_pin.Substring(0, 1));
           prompt.transform.localScale = Vector3.one;
           pins.Add(prompt);
+          prompt.GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
           prompt = CreatePIN(transform.TransformPoint(new Vector3(-0.5f, 0.0f, 0.0f)), new_pin.Substring(1, 1));
           prompt.transform.localScale = Vector3.one;
           pins.Add(prompt);
+          prompt.GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
           prompt = CreatePIN(transform.TransformPoint(new Vector3(0.5f, 0.0f, 0.0f)), new_pin.Substring(2, 1));
           prompt.transform.localScale = Vector3.one;
           pins.Add(prompt);
+          prompt.GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
           prompt = CreatePIN(transform.TransformPoint(new Vector3(1.5f, 0.0f, 0.0f)), new_pin.Substring(3, 1));
           prompt.transform.localScale = Vector3.one;
           pins.Add(prompt);
+          prompt.GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
 
           pins_index = 0;
         }
