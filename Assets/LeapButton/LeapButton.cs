@@ -31,8 +31,6 @@ namespace P1
 						state = new State ("ButtonState");
 				}
 
-				public State state;
-
 				void ToggleSprites (string stateName)
 				{
 						switch (stateName) {
@@ -65,6 +63,9 @@ namespace P1
 				}
 
 		#region mouse
+		
+		public State state;
+
 				void OnMouseEnter ()
 				{
 						state.Change ("over");

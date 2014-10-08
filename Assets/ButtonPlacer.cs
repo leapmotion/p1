@@ -2,6 +2,8 @@
 using System.Collections;
 using SimpleJSON;
 
+using ButtonMonkey;
+
 namespace P1
 {
 		public struct KeyDef
@@ -33,9 +35,12 @@ namespace P1
 					new KeyDef ("7", -1, -1),
 					new KeyDef ("8", 0, -1),
 					new KeyDef ("9", 1, -1)
-		};
+				};
 				public GameObject buttonTemplate;
 				public GFRectGrid grid;
+				int test;
+				ButtonTrial monkeyDo;
+				float monkeyTime;
 
 #region loop
 
@@ -47,6 +52,8 @@ namespace P1
 
 				public void DoStart ()
 				{
+						monkeyDo = new ButtonTrial ();
+						monkeyTime = monkeyDo.WasAtTime ();
 						if (grid == null) {	
 								grid = GetComponent<GFRectGrid> ();
 						}
@@ -58,16 +65,36 @@ namespace P1
                 g.KeypadScale = buttonScale;
 								g.label = k.label;
 								go.transform.parent = transform;
-                go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = pos;
+								go.gameObject.transform.FindChild ("button").FindChild ("default").GetComponent<SpringJoint> ().connectedAnchor = pos;
+								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (monkeyDo.WhenPushed);
                 go.transform.position = pos;
                 go.transform.rotation = transform.rotation;
 						}
+
+						// Begin first trial
+						monkeyDo.Start ();
+						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
 				}
 	
 				// Update is called once per frame
 				void Update ()
 				{
-	
+						if (monkeyTime < monkeyDo.WasAtTime ()) {
+								monkeyTime = monkeyDo.WasAtTime ();
+
+								// DEBUG - print progress to log
+								if (monkeyDo.IsComplete ()) {
+										// Initial instructions
+										monkeyDo.Start ();
+										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+								} else {
+										if (monkeyDo.WasCorrect ()) {
+												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
+										} else {
+												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
+										}
+								}
+						}
 				}
 		#endregion
 		
