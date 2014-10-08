@@ -65,14 +65,14 @@ namespace P1
 						foreach (KeyDef k in keys) {
 								Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
 								GameObject go = ((GameObject)Instantiate (buttonTemplate, pos, Quaternion.identity));
-                TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
-                g.KeypadScale = buttonScale;
+								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
+								g.KeypadScale = buttonScale;
 								g.label = k.label;
 								go.transform.parent = transform;
 								go.gameObject.transform.FindChild ("button").FindChild ("default").GetComponent<SpringJoint> ().connectedAnchor = pos;
 								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (monkeyDo.WhenPushed);
-                go.transform.position = pos;
-                go.transform.rotation = transform.rotation;
+								go.transform.position = pos;
+								go.transform.rotation = transform.rotation;
 						}
 
 						// Begin first trial
@@ -104,7 +104,7 @@ namespace P1
 												File.WriteAllText (path, monkeyDo.ToString ());
 												Debug.Log ("Autopsy report written to: " + path);
 										}
-								} else {
+								} else if (monkeyDo.HasAttempt ()) {
 										if (monkeyDo.WasCorrect ()) {
 												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
 										} else {
@@ -120,17 +120,17 @@ namespace P1
 				public void SetGridFromConfig (string filePath)
 				{
 						JSONNode data = Utils.FileToJSON (filePath);
-            float x = data["spacing"]["x"].AsFloat;
-            float y = data["spacing"]["y"].AsFloat;
-            float z = data["spacing"]["z"].AsFloat;
+						float x = data ["spacing"] ["x"].AsFloat;
+						float y = data ["spacing"] ["y"].AsFloat;
+						float z = data ["spacing"] ["z"].AsFloat;
 
-            grid.spacing = new Vector3(x, y, z);
+						grid.spacing = new Vector3 (x, y, z);
 
-            x = data["buttonScale"]["x"].AsFloat;
-            y = data["buttonScale"]["y"].AsFloat;
-            z = data["buttonScale"]["z"].AsFloat;
+						x = data ["buttonScale"] ["x"].AsFloat;
+						y = data ["buttonScale"] ["y"].AsFloat;
+						z = data ["buttonScale"] ["z"].AsFloat;
 
-            buttonScale = new Vector3(x, y, z);
+						buttonScale = new Vector3 (x, y, z);
 				}
 		
 		#endregion

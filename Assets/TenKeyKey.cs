@@ -32,7 +32,7 @@ namespace P1
 
 				public GameObject[] labels = new GameObject[10];
 				string label_ = "";
-        private bool mouse_clicked = false;
+				private bool mouse_clicked = true;
 
 				public string label {
 						get {
@@ -115,25 +115,23 @@ namespace P1
 				// Update is called once per frame
 				void Update ()
 				{
-          if (Input.GetMouseButtonDown(0) && !mouse_clicked)
-          {
-            mouse_clicked = true;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100))
-            {
-              if (hit.transform.parent.parent == this.transform && hit.transform.gameObject.layer == LayerMask.NameToLayer("Mouse"))
-              {
-                OnTenKeyEvent("click");
-                Debug.Log(label[0]);
-              }
-            }
-          }
+						if (!mouse_clicked &&
+						    Input.GetMouseButtonDown (0)) {
+								mouse_clicked = true;
+								Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+								RaycastHit hit;
+								if (Physics.Raycast (ray, out hit, 100)) {
+										if (hit.transform.parent.parent == this.transform && 
+									    	hit.transform.gameObject.layer == LayerMask.NameToLayer ("Mouse")) {
+												OnTenKeyEvent ("click");
+												Debug.Log (label [0]);
+										}
+								}
+						}
           
-          if (Input.GetMouseButtonUp(0))
-          {
-            mouse_clicked = false;
-          }
+						if (Input.GetMouseButtonUp (0)) {
+								mouse_clicked = false;
+						}
 				}
 
 		#endregion
@@ -144,7 +142,8 @@ namespace P1
 
 				public event TenKeyEventDelegate TenKeyEventBroadcaster;
 		
-				public void OnTenKeyEvent (string e) {
+				public void OnTenKeyEvent (string e)
+				{
 						if (TenKeyEventBroadcaster != null) {
 								TenKeyEventBroadcaster (label [0]);
 						}
@@ -152,7 +151,7 @@ namespace P1
 
 		#endregion
 
-		#region mouse
+		#region mouse2D
 		
 				void OnMouseEnter ()
 				{
