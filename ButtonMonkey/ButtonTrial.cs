@@ -63,7 +63,7 @@ namespace ButtonMonkey
 
 				public event TrialUpdate TrialEvent;
 
-				public void WhenPushed (char label)
+				public void WhenPushed (bool complete, char label)
 				{
 						if (IsComplete ()) {
 								//Already complete -> no event
@@ -71,7 +71,7 @@ namespace ButtonMonkey
 						}
 
 						current = timer.ElapsedMilliseconds / 1000.0f;
-						counter.WhenPushed (label, current);
+						counter.WhenPushed (complete, label, current);
 			
 						if (label == keys [step].ToString () [0]) {
 								correct = true;
