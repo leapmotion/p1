@@ -125,8 +125,8 @@ namespace P1
             {
               if (hit.transform.parent.parent == this.transform && hit.transform.gameObject.layer == LayerMask.NameToLayer("Mouse"))
               {
-                Debug.Log(label[0]);
                 OnTenKeyEvent("click");
+                Debug.Log(label[0]);
               }
             }
           }
