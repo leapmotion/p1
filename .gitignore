@@ -27,3 +27,5 @@ xcuserdata
 Release
 Debug
 *.blend1
+
+*.meta

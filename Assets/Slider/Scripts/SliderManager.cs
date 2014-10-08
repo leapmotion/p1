@@ -114,6 +114,7 @@ public class SliderManager : MonoBehaviour {
 	public float SliderSpeed;
 
 	public bool TicksOnOff;
+	public GameObject TickGRP;
 
 
 
@@ -121,6 +122,22 @@ public class SliderManager : MonoBehaviour {
 	void Start () {
 		MinLimit = MinLimit;
 		MaxLimit = MaxLimit;
+		BuildTicks ();
+	}
+
+	public IEnumerator BuildTicks (){
+		int tickTotal = MaxLimit / Interval;
+		int count = 0;
+		float tickOffset = 0;
+		while (count < tickTotal + 1) {
+			tickOffset = (1f/MaxLimit) * (count * Interval);
+			Vector3 tickPos = new Vector3(tickOffset, transform.localPosition.y, transform.localPosition.z);
+			GameObject tick = Instantiate(TickGRP, tickPos, transform.localRotation) as GameObject;
+			tick.transform.parent = this.transform;
+			count++;
+		}
+
+		return null;
 	}
 	
 	// Update is called once per frame
