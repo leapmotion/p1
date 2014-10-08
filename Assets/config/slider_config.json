@@ -1,0 +1,6 @@
+{
+	"min": 1,
+	"max": 10,
+	"interval": 2,
+	"use_ticks" : true
+}
