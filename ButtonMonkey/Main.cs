@@ -38,9 +38,9 @@ namespace ButtonMonkey
 
 				test += 1;
 			}
-			#endif
-
+			
 			Console.WriteLine ("Autopsy report for monkey:\n\n" + monkeyDo.ToString ());
+			#endif
 		}
 	}
 }
