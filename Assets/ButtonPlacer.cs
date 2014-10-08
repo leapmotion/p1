@@ -42,10 +42,11 @@ namespace P1
 				public GameObject buttonTemplate;
 				public GFRectGrid grid;
 				int test;
-				const int testNum = 2;
+				string testPath = ""; //DEFAULT: Record in TestResults
+				int testNum = 1; //DEFAULT: Run one trial
 				ButtonTrial monkeyDo;
 				float monkeyTime;
-        public GameObject pinPrompt;
+				public GameObject pinPrompt;
 
 #region loop
 
@@ -65,22 +66,23 @@ namespace P1
 						foreach (KeyDef k in keys) {
 								Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
 								GameObject go = ((GameObject)Instantiate (buttonTemplate, pos, Quaternion.identity));
-                TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
-                g.KeypadScale = buttonScale;
+								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
+								g.KeypadScale = buttonScale;
 								g.label = k.label;
 								go.transform.parent = transform;
 								go.gameObject.transform.FindChild ("button").FindChild ("default").GetComponent<SpringJoint> ().connectedAnchor = pos;
 								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (monkeyDo.WhenPushed);
-                go.transform.position = pos;
-                go.transform.rotation = transform.rotation;
+								go.transform.position = pos;
+								go.transform.rotation = transform.rotation;
 						}
 
 						// Begin first trial
+						SetTestFromConfig ("Assets/config/test_config.json");
 						test = 1;
 						monkeyTime = 0.0f;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-            pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
+						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 				}
 	
 				// Update is called once per frame
@@ -91,16 +93,18 @@ namespace P1
 
 								// DEBUG - print progress to log
 								if (monkeyDo.IsComplete ()) {
-										Debug.Log ("test = " + test.ToString () + " <? testNum = " + testNum.ToString ());
 										if (test < testNum) {
 												// Initial instructions
+												test += 1;
 												monkeyTime = 0.0f;
 												monkeyDo.Start ();
-                    Debug.Log("Monkey, type: " + monkeyDo.GetTrialKeys());
-                    pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
+												Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+												pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 										} else {
 												Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
-												string path = Application.dataPath + "/TestResults/" + string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+												string path = Application.dataPath + "/TestResults/" + testPath;
+												Directory.CreateDirectory (path);
+												path += string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
 												File.WriteAllText (path, monkeyDo.ToString ());
 												Debug.Log ("Autopsy report written to: " + path);
 										}
@@ -122,17 +126,27 @@ namespace P1
 				public void SetGridFromConfig (string filePath)
 				{
 						JSONNode data = Utils.FileToJSON (filePath);
-            float x = data["spacing"]["x"].AsFloat;
-            float y = data["spacing"]["y"].AsFloat;
-            float z = data["spacing"]["z"].AsFloat;
+						float x = data ["spacing"] ["x"].AsFloat;
+						float y = data ["spacing"] ["y"].AsFloat;
+						float z = data ["spacing"] ["z"].AsFloat;
 
-            grid.spacing = new Vector3(x, y, z);
+						grid.spacing = new Vector3 (x, y, z);
 
-            x = data["buttonScale"]["x"].AsFloat;
-            y = data["buttonScale"]["y"].AsFloat;
-            z = data["buttonScale"]["z"].AsFloat;
+						x = data ["buttonScale"] ["x"].AsFloat;
+						y = data ["buttonScale"] ["y"].AsFloat;
+						z = data ["buttonScale"] ["z"].AsFloat;
 
-            buttonScale = new Vector3(x, y, z);
+						buttonScale = new Vector3 (x, y, z);
+				}
+
+				public void SetTestFromConfig (string filePath)
+				{
+						JSONNode data = Utils.FileToJSON (filePath);
+						testPath = data ["results_dir"].ToString ();
+						// NOTE: JSONNode ToString helpfully interprets both path/ (no quotes in file) and "path/" (quotes in file)
+						// as "path/" (quotes IN string).
+						testPath = testPath.Substring (1, testPath.Length - 2);
+						testNum = data ["trial_count"].AsInt;
 				}
 		
 		#endregion
