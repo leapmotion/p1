@@ -94,13 +94,20 @@ namespace P1
 								// DEBUG - print progress to log
 								if (monkeyDo.IsComplete ()) {
 										if (test < testNum) {
+                        if (test > 0)
+                        {
+                          pinPrompt.GetComponent<PINPrompt>().TogglePIN(true);
+                        }
 												// Initial instructions
 												test += 1;
 												monkeyTime = 0.0f;
 												monkeyDo.Start ();
 												Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
 												pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
-										} else {
+                    }
+                    else
+                    {
+                      pinPrompt.GetComponent<PINPrompt>().TogglePIN(true);
 												Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
 												string path = Application.dataPath + "/TestResults/" + testPath;
 												Directory.CreateDirectory (path);
