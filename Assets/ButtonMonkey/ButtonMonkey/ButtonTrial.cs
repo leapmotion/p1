@@ -72,6 +72,7 @@ namespace ButtonMonkey
 				step += 1;
 				correct = true;
 				if (IsComplete ()) {
+					counter.CommitTrial ();
 					report += "Trial: " + GetTrialKeys () + "\n";
 					report += counter.ToString () + "\n";
 				} else {
