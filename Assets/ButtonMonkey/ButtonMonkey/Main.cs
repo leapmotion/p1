@@ -7,12 +7,12 @@ namespace ButtonMonkey
 	{
 		public static void Main (string[] args)
 		{
-			ButtonTrial monkeyDo = new ButtonTrial();
-
 			#if UNITY_EDITOR || UNITY_STANDALONE
 				Console.WriteLine ("No monkeys? No research!");
 				return;
 			#else
+			ButtonTrial monkeyDo = new ButtonTrial();
+
 			int test = 1;
 			while (test <= 4) {
 				// Initial instructions
