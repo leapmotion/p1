@@ -57,29 +57,39 @@ namespace ButtonMonkey
 						timer.Reset ();
 						timer.Start ();
 				}
-		
+
+				//Events are broadcast AFTER trial state has been updated
+				public delegate void TrialUpdate (ButtonTrial trial,bool correct);
+
+				public event TrialUpdate TrialEvent;
+
 				public void WhenPushed (char label)
 				{
-					if (IsComplete ()) {
-							return;
-					}
+						if (IsComplete ()) {
+								//Already complete -> no event
+								return;
+						}
 
-					current = timer.ElapsedMilliseconds / 1000.0f;
-					counter.WhenPushed (label, current);
+						current = timer.ElapsedMilliseconds / 1000.0f;
+						counter.WhenPushed (label, current);
 			
-					if (label == keys [step].ToString () [0]) {
-							step += 1;
-							correct = true;
-							if (IsComplete ()) {
-									counter.CommitTrial ();
-									report += "Trial: " + GetTrialKeys () + "\n";
-									report += counter.ToString () + "\n";
-							} else {
-									counter.ChangeTarget (keys [step].ToString () [0]);
-							}
-					} else {
-							correct = false;
-					}
+						if (label == keys [step].ToString () [0]) {
+								correct = true;
+								step += 1;
+								if (IsComplete ()) {
+										counter.CommitTrial ();
+										report += "Trial: " + GetTrialKeys () + "\n";
+										report += counter.ToString () + "\n";
+								} else {
+										counter.ChangeTarget (keys [step].ToString () [0]);
+								}
+						} else {
+								correct = false;
+						}
+			
+						if (TrialEvent != null) {
+								TrialEvent (this, correct);
+						}
 				}
 
 				public char GetTargetKey ()
@@ -106,7 +116,7 @@ namespace ButtonMonkey
 
 				public bool WasCorrect ()
 				{
-					return correct;
+						return correct;
 				}
 
 				public float WasAtTime ()
