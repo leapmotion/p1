@@ -101,7 +101,6 @@ namespace ButtonMonkey
 
 				public bool HasAttempt ()
 				{
-			UnityEngine.Debug.Log ("CurrentAttemptsCount = " + counter.CurrentAttemptsCount.ToString ());
 						return counter.CurrentAttemptsCount > 0;
 				}
 
