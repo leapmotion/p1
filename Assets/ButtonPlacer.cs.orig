@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
+using System.Text;
+
 using SimpleJSON;
 
 using ButtonMonkey;
@@ -34,18 +37,15 @@ namespace P1
 					new KeyDef ("6", 1, 0),
 					new KeyDef ("7", -1, -1),
 					new KeyDef ("8", 0, -1),
-<<<<<<< HEAD
 					new KeyDef ("9", 1, -1)
-		};
-=======
-					new KeyDef ("9", -1, -1)
 				};
->>>>>>> 8b126897c2dc548e040428f50a474731b47e2ea2
 				public GameObject buttonTemplate;
 				public GFRectGrid grid;
 				int test;
+				const int testNum = 2;
 				ButtonTrial monkeyDo;
 				float monkeyTime;
+        public GameObject pinPrompt;
 
 #region loop
 
@@ -58,38 +58,29 @@ namespace P1
 				public void DoStart ()
 				{
 						monkeyDo = new ButtonTrial ();
-						monkeyTime = monkeyDo.WasAtTime ();
 						if (grid == null) {	
 								grid = GetComponent<GFRectGrid> ();
 						}
 						SetGridFromConfig ("Assets/config/grid_config.json");
 						foreach (KeyDef k in keys) {
 								Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
-<<<<<<< HEAD
-=======
-								Debug.Log (pos);
->>>>>>> 8b126897c2dc548e040428f50a474731b47e2ea2
 								GameObject go = ((GameObject)Instantiate (buttonTemplate, pos, Quaternion.identity));
                 TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
                 g.KeypadScale = buttonScale;
 								g.label = k.label;
-<<<<<<< HEAD
 								go.transform.parent = transform;
-                go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = pos;
-                go.transform.position = pos;
-                go.transform.rotation = transform.rotation;
-=======
-								g.transform.parent = transform;
-								g.transform.position = pos;
-								g.KeypadScale = buttonScale;
 								go.gameObject.transform.FindChild ("button").FindChild ("default").GetComponent<SpringJoint> ().connectedAnchor = pos;
 								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (monkeyDo.WhenPushed);
->>>>>>> 8b126897c2dc548e040428f50a474731b47e2ea2
+                go.transform.position = pos;
+                go.transform.rotation = transform.rotation;
 						}
 
 						// Begin first trial
+						test = 1;
+						monkeyTime = 0.0f;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+            pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
 				}
 	
 				// Update is called once per frame
@@ -100,9 +91,26 @@ namespace P1
 
 								// DEBUG - print progress to log
 								if (monkeyDo.IsComplete ()) {
+<<<<<<< HEAD
 										// Initial instructions
 										monkeyDo.Start ();
-										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+                    Debug.Log("Monkey, type: " + monkeyDo.GetTrialKeys());
+                    pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
+=======
+										Debug.Log ("test = " + test.ToString () + " <? testNum = " + testNum.ToString ());
+										if (test < testNum) {
+												// Initial instructions
+												monkeyTime = 0.0f;
+												monkeyDo.Start ();
+												Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+												test += 1;
+										} else {
+												Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+												string path = Application.dataPath + "/TestResults/" + string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+												File.WriteAllText (path, monkeyDo.ToString ());
+												Debug.Log ("Autopsy report written to: " + path);
+										}
+>>>>>>> c0b57637aa163f00a7450992dc2b8bf00b41596e
 								} else {
 										if (monkeyDo.WasCorrect ()) {
 												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());

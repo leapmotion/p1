@@ -31,6 +31,7 @@ namespace P1
 				}
 
 				public GameObject[] labels = new GameObject[10];
+        public GameObject button;
 				string label_ = "";
         private bool mouse_clicked = false;
 
@@ -98,6 +99,12 @@ namespace P1
 
 				}
 
+        public void UpdateColor(Color color)
+        {
+          float alpha = button.renderer.material.color.a;
+          color.a = alpha;
+          button.renderer.material.color = color;
+        }
 		#region loop
 
 				State state;

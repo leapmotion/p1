@@ -106,8 +106,10 @@ namespace P1
 										}
 								} else {
 										if (monkeyDo.WasCorrect ()) {
+                        pinPrompt.GetComponent<PINPrompt>().TogglePIN(true);
 												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
 										} else {
+                        pinPrompt.GetComponent<PINPrompt>().TogglePIN(false);
 												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
 										}
 								}
