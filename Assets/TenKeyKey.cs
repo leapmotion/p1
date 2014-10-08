@@ -99,9 +99,8 @@ namespace P1
 				}
 
 		#region loop
+
 				State state;
-
-
 
 				// Use this for initialization
 				void Start ()
