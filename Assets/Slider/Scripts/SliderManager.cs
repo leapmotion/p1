@@ -132,7 +132,8 @@ public class SliderManager : MonoBehaviour {
 		while (count < tickTotal + 1) {
 			tickOffset = (1f/MaxLimit) * (count * Interval);
 			Vector3 tickPos = new Vector3(tickOffset, transform.localPosition.y, transform.localPosition.z);
-			Instantiate(TickGRP, tickPos, transform.localRotation);
+			GameObject tick = Instantiate(TickGRP, tickPos, transform.localRotation) as GameObject;
+			tick.transform.parent = this.transform;
 			count++;
 		}
 
