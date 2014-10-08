@@ -13,7 +13,6 @@ namespace P1
 				float creationTime;
 				private float timer_threshold_ = 2.0f;
 				public List<string> scenes;
-				Regex q = new Regex ("(.*)");
 				private string currentScene_;
 
 				public string currentScene {
