@@ -21,7 +21,7 @@ namespace ButtonMonkey
 
 				while (true) {
 					ConsoleKeyInfo info = Console.ReadKey ();
-					monkeyDo.WhenPushed (info.KeyChar);
+					monkeyDo.WhenPushed (true, info.KeyChar); //No partial key strokes
 					
 					// Monkey guidance
 					if (monkeyDo.IsComplete ()) {
