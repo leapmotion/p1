@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using SimpleJSON;
+
 namespace P1
 {
   public class PINPrompt : MonoBehaviour
@@ -17,6 +19,11 @@ namespace P1
     // Use this for initialization
     void Start()
     {
+      JSONNode data = Utils.FileToJSON("Assets/config/grid_config.json");
+      float x = data["buttonScale"]["x"].AsFloat;
+      float y = data["buttonScale"]["y"].AsFloat;
+      float z = data["buttonScale"]["z"].AsFloat;
+      transform.localScale = new Vector3(x, y, z);
     }
 
     // Update is called once per frame
@@ -43,16 +50,16 @@ namespace P1
           pins.Clear();
 
           GameObject prompt;
-          prompt = CreatePIN(transform.TransformPoint(new Vector3(-3.0f, 0.0f, 0.0f)), new_pin.Substring(0, 1));
+          prompt = CreatePIN(transform.TransformPoint(new Vector3(-1.5f, 0.0f, 0.0f)), new_pin.Substring(0, 1));
           prompt.transform.localScale = Vector3.one;
           pins.Add(prompt);
-          prompt = CreatePIN(transform.TransformPoint(new Vector3(-2.0f, 0.0f, 0.0f)), new_pin.Substring(1, 1));
+          prompt = CreatePIN(transform.TransformPoint(new Vector3(-0.5f, 0.0f, 0.0f)), new_pin.Substring(1, 1));
           prompt.transform.localScale = Vector3.one;
           pins.Add(prompt);
-          prompt = CreatePIN(transform.TransformPoint(new Vector3(-1.0f, 0.0f, 0.0f)), new_pin.Substring(2, 1));
+          prompt = CreatePIN(transform.TransformPoint(new Vector3(0.5f, 0.0f, 0.0f)), new_pin.Substring(2, 1));
           prompt.transform.localScale = Vector3.one;
           pins.Add(prompt);
-          prompt = CreatePIN(transform.TransformPoint(new Vector3(-0.0f, 0.0f, 0.0f)), new_pin.Substring(3, 1));
+          prompt = CreatePIN(transform.TransformPoint(new Vector3(1.5f, 0.0f, 0.0f)), new_pin.Substring(3, 1));
           prompt.transform.localScale = Vector3.one;
           pins.Add(prompt);
 

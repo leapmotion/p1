@@ -30,6 +30,14 @@ namespace P1
 						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
                 Debug.Log("Hitting: " + transform.parent.parent.GetComponent<TenKeyKey>().label);
 								transform.parent.parent.GetComponent<TenKeyKey> ().OnTenKeyEvent ("Leap");
+                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
+						}
+				}
+
+        void OnTriggerExit (Collider other)
+				{
+						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
+                transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
 						}
 				}
 		}

@@ -5,7 +5,9 @@ namespace P1
 {
 		public class TenKeyKey : MonoBehaviour
 		{
-		
+
+      private Color original_color;
+
 				[SerializeField]
 				private float
 						m_KeypadUniformScale;
@@ -105,6 +107,11 @@ namespace P1
           color.a = alpha;
           button.renderer.material.color = color;
         }
+
+        public void ResetColor()
+        {
+          button.renderer.material.color = original_color;
+        }
 		#region loop
 
 				State state;
@@ -116,7 +123,7 @@ namespace P1
 								new StateList ("ButtonState", "unknown", "default", "over", "down");
 						}
 						state = new State ("ButtonState");
-					
+            original_color = button.renderer.material.color;
 				}
 	
 				// Update is called once per frame
