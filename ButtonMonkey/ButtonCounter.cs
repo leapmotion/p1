@@ -139,7 +139,10 @@ namespace ButtonMonkey
 										//report += goal + ", " + push.symbol + ", " + push.complete.ToString () + ", " + push.time.ToString () + "\n";
 
 										//Dorin accessibility assistance
-										bool IsHit = (goal == push.symbol);
+										int IsHit = 0;
+										if (goal == push.symbol) {
+											IsHit = 1;
+										}
 										int rectified = -1; //DEFAULT: Not on key pad
 										switch (push.symbol) {
 										case '0':
