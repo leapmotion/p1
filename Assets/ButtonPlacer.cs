@@ -163,7 +163,11 @@ namespace P1
               go.transform.localPosition = localPos;
               go.transform.localScale = buttonScale;
               go.transform.rotation = transform.rotation;
-            }  
+            }
+
+            pinPrompt.transform.localPosition = new Vector3(0, 2 * buttonSpacing.y + 2 * buttonScale.y);
+            pinPrompt.transform.localScale = buttonScale;
+            pinPrompt.transform.rotation = transform.rotation;
 				}
 
 				public void SetTestFromConfig (string filePath)
