@@ -52,7 +52,7 @@ namespace P1
 
 				public void DoStart ()
 				{
-						monkeyDo = new ButtonTrial ();
+						monkeyDo = new ButtonTrial();
 						monkeyTime = monkeyDo.WasAtTime ();
 						if (grid == null) {	
 								grid = GetComponent<GFRectGrid> ();
