@@ -52,7 +52,7 @@ namespace P1
 				// Use this for initialization
 				void Start ()
 				{
-						DoStart ();
+					DoStart ();
 				}
 
 				public void DoStart ()
@@ -62,20 +62,6 @@ namespace P1
 								grid = GetComponent<GFRectGrid> ();
 						}
 						SetGridFromConfig ("Assets/config/grid_config.json");
-						foreach (KeyDef k in keys) {
-								Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
-								GameObject go = ((GameObject)Instantiate (buttonTemplate, pos, Quaternion.identity));
-								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
-								g.KeypadScale = buttonScale;
-								g.label = k.label;
-								go.transform.parent = transform;
-								go.gameObject.transform.FindChild ("button").FindChild ("default").GetComponent<SpringJoint> ().connectedAnchor = pos;
-								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (monkeyDo.WhenPushed);
-								go.transform.position = pos;
-								go.transform.rotation = transform.rotation;
-						}
-
-						// Begin first trial
 						SetTestFromConfig ("Assets/config/test_config.json");
 						test = 1;
 
@@ -135,9 +121,12 @@ namespace P1
 				public void SetGridFromConfig (string filePath)
 				{
 						JSONNode data = Utils.FileToJSON (filePath);
-						float x = data ["spacing"] ["x"].AsFloat;
-						float y = data ["spacing"] ["y"].AsFloat;
-						float z = data ["spacing"] ["z"].AsFloat;
+
+            float x, y, z;
+
+						x = data ["spacing"] ["x"].AsFloat;
+						y = data ["spacing"] ["y"].AsFloat;
+						z = data ["spacing"] ["z"].AsFloat;
 
 						grid.spacing = new Vector3 (x, y, z);
 
@@ -146,6 +135,30 @@ namespace P1
 						z = data ["buttonScale"] ["z"].AsFloat;
 
 						buttonScale = new Vector3 (x, y, z);
+
+            foreach (KeyDef k in keys)
+            {
+              //Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
+              Vector3 pos = new Vector3(
+
+                );
+              GameObject go = ((GameObject)Instantiate(buttonTemplate, pos, Quaternion.identity));
+              TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
+              g.KeypadScale = buttonScale;
+              g.label = k.label;
+              go.transform.parent = transform;
+              go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = pos;
+              g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate(monkeyDo.WhenPushed);
+              go.transform.position = pos;
+              go.transform.rotation = transform.rotation;
+            }
+
+            x = data["position"]["x"].AsFloat;
+            y = data["position"]["y"].AsFloat;
+            z = data["position"]["z"].AsFloat;
+
+            transform.position = new Vector3(x, y, z);
+            transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
 				}
 
 				public void SetTestFromConfig (string filePath)
