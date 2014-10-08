@@ -27,7 +27,7 @@ namespace P1
         incorrect_timer--;
         if (incorrect_timer == 0)
         {
-          pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.gray);
+          pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
         }
       }
 
@@ -83,7 +83,7 @@ namespace P1
       else
       {
         pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.red);
-        //incorrect_timer = 20;
+        incorrect_timer = 20;
       }
     }
 
