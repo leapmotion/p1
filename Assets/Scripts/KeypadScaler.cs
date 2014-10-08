@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ Integrated into TenKeyKey -- deprecated class
+*/
+
 public class KeypadScaler : MonoBehaviour {
 
 
