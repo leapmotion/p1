@@ -42,7 +42,7 @@ namespace P1
 				public GameObject buttonTemplate;
 				public GFRectGrid grid;
 				int test;
-				const int testNum = 2;
+				const int testNum = 4;
 				ButtonTrial monkeyDo;
 				float monkeyTime;
         public GameObject pinPrompt;
