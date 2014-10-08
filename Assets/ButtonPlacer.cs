@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
+using System.Text;
+
 using SimpleJSON;
 
 using ButtonMonkey;
@@ -39,6 +42,7 @@ namespace P1
 				public GameObject buttonTemplate;
 				public GFRectGrid grid;
 				int test;
+				const int testNum = 2;
 				ButtonTrial monkeyDo;
 				float monkeyTime;
 
@@ -53,7 +57,6 @@ namespace P1
 				public void DoStart ()
 				{
 						monkeyDo = new ButtonTrial ();
-						monkeyTime = monkeyDo.WasAtTime ();
 						if (grid == null) {	
 								grid = GetComponent<GFRectGrid> ();
 						}
@@ -72,6 +75,8 @@ namespace P1
 						}
 
 						// Begin first trial
+						test = 1;
+						monkeyTime = 0.0f;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
 				}
@@ -84,9 +89,19 @@ namespace P1
 
 								// DEBUG - print progress to log
 								if (monkeyDo.IsComplete ()) {
-										// Initial instructions
-										monkeyDo.Start ();
-										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+										Debug.Log ("test = " + test.ToString () + " <? testNum = " + testNum.ToString ());
+										if (test < testNum) {
+												// Initial instructions
+												monkeyTime = 0.0f;
+												monkeyDo.Start ();
+												Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+												test += 1;
+										} else {
+												Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+												string path = Application.dataPath + "/TestResults/" + string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+												File.WriteAllText (path, monkeyDo.ToString ());
+												Debug.Log ("Autopsy report written to: " + path);
+										}
 								} else {
 										if (monkeyDo.WasCorrect ()) {
 												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
