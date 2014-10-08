@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class ButtonGrid : MonoBehaviour {
-  private float size = 1.0f;
-  private float spacing = 0.5f;
+  private float size = 2.0f;
+  private float spacing = 0.2f;
   private float depth = 10.0f;
   private Color button_color_ = Color.black;
 
