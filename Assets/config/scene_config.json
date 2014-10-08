@@ -1,0 +1,4 @@
+{
+	"scenes": ["Stage1", "Stage2", "Stage3"],
+	"transition_time" : 0.5
+}
