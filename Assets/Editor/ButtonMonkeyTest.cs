@@ -28,7 +28,7 @@ namespace ButtonMonkey
 		{
 			ButtonCounter monkeyDo = new ButtonCounter();
 
-			monkeyDo.WhenPushed ('0', 0.0f);
+			monkeyDo.WhenPushed (true, '0', 0.0f);
 
 			Assert.AreEqual (0, monkeyDo.CurrentAttemptsCount,"Cannot record attempts before target is set");
 			Assert.AreEqual (0, monkeyDo.CompletedTrialsCount);
@@ -45,7 +45,7 @@ namespace ButtonMonkey
 			ButtonCounter monkeyDo = new ButtonCounter();
 			
 			monkeyDo.ChangeTarget('0');
-			monkeyDo.WhenPushed ('1', 0.0f);
+			monkeyDo.WhenPushed (true, '1', 0.0f);
 			
 			Assert.AreEqual (1, monkeyDo.CurrentAttemptsCount);
 			Assert.AreEqual (0, monkeyDo.CompletedTrialsCount);
@@ -62,8 +62,8 @@ namespace ButtonMonkey
 			ButtonCounter monkeyDo = new ButtonCounter();
 			
 			monkeyDo.ChangeTarget('0');
-			monkeyDo.WhenPushed ('1', 0.0f);
-			monkeyDo.WhenPushed ('0', 0.1f);
+			monkeyDo.WhenPushed (true, '1', 0.0f);
+			monkeyDo.WhenPushed (true, '0', 0.1f);
 			
 			Assert.AreEqual (2, monkeyDo.CurrentAttemptsCount);
 			Assert.AreEqual (0, monkeyDo.CompletedTrialsCount);
@@ -80,7 +80,7 @@ namespace ButtonMonkey
 			ButtonCounter monkeyDo = new ButtonCounter();
 			
 			monkeyDo.ChangeTarget('0');
-			monkeyDo.WhenPushed ('0', 0.1f);
+			monkeyDo.WhenPushed (true, '0', 0.1f);
 			
 			Assert.AreEqual (1, monkeyDo.CurrentAttemptsCount);
 			Assert.AreEqual (0, monkeyDo.CompletedTrialsCount);
@@ -97,8 +97,8 @@ namespace ButtonMonkey
 			ButtonCounter monkeyDo = new ButtonCounter();
 			
 			monkeyDo.ChangeTarget('0');
-			monkeyDo.WhenPushed ('0', 0.0f);
-			monkeyDo.WhenPushed ('1', 0.1f);
+			monkeyDo.WhenPushed (true, '0', 0.0f);
+			monkeyDo.WhenPushed (true, '1', 0.1f);
 			
 			Assert.AreEqual (2, monkeyDo.CurrentAttemptsCount);
 			Assert.AreEqual (0, monkeyDo.CompletedTrialsCount);
@@ -118,7 +118,7 @@ namespace ButtonMonkey
 			ButtonCounter monkeyDo = new ButtonCounter();
 			
 			monkeyDo.ChangeTarget('0');
-			monkeyDo.WhenPushed ('0', 1.0f);
+			monkeyDo.WhenPushed (true, '0', 1.0f);
 			
 			Assert.AreEqual(1.0f,monkeyDo.GetTrial(0).time,"Correct time association");
 		}

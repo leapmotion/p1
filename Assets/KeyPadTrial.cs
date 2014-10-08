@@ -60,7 +60,7 @@ namespace P1
 
 						// Using labeling string instead of referencing Label object
 						if (IsKeyPad (e.button.buttonValue)) {
-								counter.WhenPushed (e.button.buttonValue [0], timer.ElapsedMilliseconds / 1000.0f);
+								counter.WhenPushed (true, e.button.buttonValue [0], timer.ElapsedMilliseconds / 1000.0f);
 						} else {
 								UnityEngine.Debug.Log ("Ignoring button " + e.button.buttonValue);
 						}
