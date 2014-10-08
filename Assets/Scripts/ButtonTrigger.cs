@@ -32,6 +32,14 @@ namespace P1
 
 								//TODO: Add events for incomplete key pressing
 								transform.parent.parent.GetComponent<TenKeyKey> ().OnTenKeyEvent (true, "Leap");
+                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
+						}
+				}
+
+        void OnTriggerExit (Collider other)
+				{
+						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
+                transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
 						}
 				}
 		}
