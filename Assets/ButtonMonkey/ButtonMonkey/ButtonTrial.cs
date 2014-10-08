@@ -10,7 +10,9 @@ namespace ButtonMonkey
 		List<int> keys;
 		ButtonCounter counter;
 		bool correct;
+		float current;
 		string report;
+
 		Stopwatch timer;
 
 		// Initialize to completed state
@@ -20,6 +22,7 @@ namespace ButtonMonkey
 			keys = new List<int> ();
 			counter = new ButtonCounter ();
 			correct = false;
+			current = 0.0f;
 			report = "";
 
 			timer = new Stopwatch ();
@@ -29,7 +32,7 @@ namespace ButtonMonkey
 		// subject to the condition that no row is repeated
 		public void Start ()
 		{
-			Random gen = new Random ();
+			System.Random gen = new System.Random ();
 			
 			// List a random key from each row
 			List<int> rows = new List<int> ();
@@ -51,6 +54,7 @@ namespace ButtonMonkey
 			counter.Reset ();
 			counter.ChangeTarget (keys [step].ToString () [0]);
 			
+			current = 0.0f;
 			timer.Reset ();
 			timer.Start ();
 		}
@@ -60,8 +64,9 @@ namespace ButtonMonkey
 			if (IsComplete ()) {
 				return;
 			}
-			
-			counter.WhenPushed (label, timer.ElapsedMilliseconds / 1000.0f);
+
+			current = timer.ElapsedMilliseconds / 1000.0f;
+			counter.WhenPushed (label, current);
 			
 			if (label == keys [step].ToString () [0]) {
 				step += 1;
@@ -97,6 +102,10 @@ namespace ButtonMonkey
 		public bool WasCorrect ()
 		{
 			return correct;
+		}
+
+		public float WasAtTime() {
+			return current;
 		}
 
 		public bool IsComplete ()
