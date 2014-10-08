@@ -108,7 +108,10 @@ namespace P1
 										Debug.Log ("Autopsy report written to: " + path);
 
 										//TODO: Applaud Monkey *IN-SCENE*
-										SceneManager.instance.Next();
+                    if (SceneManager.instance)
+                    {
+                      SceneManager.instance.Next();
+                    }
 								}
 						} else {
 								if (monkeyDo.WasCorrect ()) {

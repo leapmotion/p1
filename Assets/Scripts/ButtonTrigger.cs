@@ -9,6 +9,8 @@ namespace P1
 				Vector3 original_position;
 				Vector3 correct_basis;
 
+        private bool didHit = false;
+
 				// Use this for initialization
 				void Start ()
 				{
@@ -28,18 +30,28 @@ namespace P1
 				void OnTriggerEnter (Collider other)
 				{
 						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
-								Debug.Log ("Hitting: " + transform.parent.parent.GetComponent<TenKeyKey> ().label);
-
-								//TODO: Add events for incomplete key pressing
-								transform.parent.parent.GetComponent<TenKeyKey> ().OnTenKeyEvent (true, "Leap");
+              if (other.gameObject.name == "Cushion")
+              {
+                didHit = false;
                 transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
+              }
+              else if (other.gameObject.name == "Trigger")
+              {
+                didHit = true;
+                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
+              }
 						}
 				}
 
         void OnTriggerExit (Collider other)
 				{
 						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
+              if (other.gameObject.name == "Cushion")
+              {
+                transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(didHit, "Leap");
                 transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
+                didHit = false;
+              }
 						}
 				}
 		}
