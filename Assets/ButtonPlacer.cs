@@ -53,12 +53,14 @@ namespace P1
 						SetGridFromConfig ("Assets/config/grid_config.json");
 						foreach (KeyDef k in keys) {
 								Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
+                Debug.Log(pos);
 								GameObject go = ((GameObject)Instantiate (buttonTemplate, pos, Quaternion.identity));
 								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
 								g.label = k.label;
 								g.transform.parent = transform;
 								g.transform.position = pos;
 				        g.KeypadScale = buttonScale;
+                go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = pos;
 						}
 				}
 	
