@@ -26,7 +26,8 @@ namespace P1
 		public class ButtonPlacer : MonoBehaviour
 		{
 
-				public Vector3 buttonScale;
+				private Vector3 buttonScale;
+        private Vector3 buttonSpacing;
 				public KeyDef[] keys = new KeyDef[]{
 					new KeyDef ("0", 0, -2),
 					new KeyDef ("1", -1, 1),
@@ -40,7 +41,7 @@ namespace P1
 					new KeyDef ("9", 1, -1)
 				};
 				public GameObject buttonTemplate;
-				public GFRectGrid grid;
+				//public GFRectGrid grid;
 				int test;
 				string testPath = ""; //DEFAULT: Record in TestResults
 				int testNum = 1; //DEFAULT: Run one trial
@@ -58,9 +59,9 @@ namespace P1
 				public void DoStart ()
 				{
 						monkeyDo = new ButtonTrial ();
-						if (grid == null) {	
-								grid = GetComponent<GFRectGrid> ();
-						}
+            //if (grid == null) {	
+            //    grid = GetComponent<GFRectGrid> ();
+            //}
 						SetGridFromConfig ("Assets/config/grid_config.json");
 						SetTestFromConfig ("Assets/config/test_config.json");
 						test = 1;
@@ -128,7 +129,8 @@ namespace P1
 						y = data ["spacing"] ["y"].AsFloat;
 						z = data ["spacing"] ["z"].AsFloat;
 
-						grid.spacing = new Vector3 (x, y, z);
+						//grid.spacing = new Vector3 (x, y, z);
+            buttonSpacing = new Vector3(x, y, z);
 
 						x = data ["buttonScale"] ["x"].AsFloat;
 						y = data ["buttonScale"] ["y"].AsFloat;
@@ -136,29 +138,32 @@ namespace P1
 
 						buttonScale = new Vector3 (x, y, z);
 
-            foreach (KeyDef k in keys)
-            {
-              //Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
-              Vector3 pos = new Vector3(
-
-                );
-              GameObject go = ((GameObject)Instantiate(buttonTemplate, pos, Quaternion.identity));
-              TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
-              g.KeypadScale = buttonScale;
-              g.label = k.label;
-              go.transform.parent = transform;
-              go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = pos;
-              g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate(monkeyDo.WhenPushed);
-              go.transform.position = pos;
-              go.transform.rotation = transform.rotation;
-            }
-
             x = data["position"]["x"].AsFloat;
             y = data["position"]["y"].AsFloat;
             z = data["position"]["z"].AsFloat;
 
             transform.position = new Vector3(x, y, z);
             transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+
+            foreach (KeyDef k in keys)
+            {
+              //Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
+              Vector3 localPos = new Vector3(
+                k.i * buttonSpacing.x + k.i * buttonScale.x,
+                k.j * buttonSpacing.y + k.j * buttonScale.y,
+                0
+                );
+              GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
+              TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
+              g.KeypadScale = buttonScale;
+              g.label = k.label;
+              go.transform.parent = transform;
+              go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = transform.TransformPoint(localPos);
+              g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate(monkeyDo.WhenPushed);
+              go.transform.localPosition = localPos;
+              go.transform.localScale = buttonScale;
+              go.transform.rotation = transform.rotation;
+            }  
 				}
 
 				public void SetTestFromConfig (string filePath)
