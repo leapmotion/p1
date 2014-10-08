@@ -26,15 +26,15 @@ namespace P1
 				public Vector3 buttonScale;
 				public KeyDef[] keys = new KeyDef[]{
 					new KeyDef ("0", 0, -2),
-					new KeyDef ("1", 1, 1),
+					new KeyDef ("1", -1, 1),
 					new KeyDef ("2", 0, 1),
-					new KeyDef ("3", -1, 1),
-					new KeyDef ("4", 1, 0),
+					new KeyDef ("3", 1, 1),
+					new KeyDef ("4", -1, 0),
 					new KeyDef ("5", 0, 0),
-					new KeyDef ("6", -1, 0),
-					new KeyDef ("7", 1, -1),
+					new KeyDef ("6", 1, 0),
+					new KeyDef ("7", -1, -1),
 					new KeyDef ("8", 0, -1),
-					new KeyDef ("9", -1, -1)
+					new KeyDef ("9", 1, -1)
 				};
 				public GameObject buttonTemplate;
 				public GFRectGrid grid;
@@ -52,7 +52,7 @@ namespace P1
 
 				public void DoStart ()
 				{
-						monkeyDo = new ButtonTrial ();
+						monkeyDo = new ButtonTrial();
 						monkeyTime = monkeyDo.WasAtTime ();
 						if (grid == null) {	
 								grid = GetComponent<GFRectGrid> ();
@@ -60,15 +60,15 @@ namespace P1
 						SetGridFromConfig ("Assets/config/grid_config.json");
 						foreach (KeyDef k in keys) {
 								Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
-								Debug.Log (pos);
 								GameObject go = ((GameObject)Instantiate (buttonTemplate, pos, Quaternion.identity));
-								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
+                TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
+                g.KeypadScale = buttonScale;
 								g.label = k.label;
-								g.transform.parent = transform;
-								g.transform.position = pos;
-								g.KeypadScale = buttonScale;
+								go.transform.parent = transform;
 								go.gameObject.transform.FindChild ("button").FindChild ("default").GetComponent<SpringJoint> ().connectedAnchor = pos;
 								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (monkeyDo.WhenPushed);
+                go.transform.position = pos;
+                go.transform.rotation = transform.rotation;
 						}
 
 						// Begin first trial
@@ -103,17 +103,17 @@ namespace P1
 				public void SetGridFromConfig (string filePath)
 				{
 						JSONNode data = Utils.FileToJSON (filePath);
-						float x = data ["spacing"] ["x"].AsFloat;
-						float y = data ["spacing"] ["y"].AsFloat;
-						float z = data ["spacing"] ["z"].AsFloat;
+            float x = data["spacing"]["x"].AsFloat;
+            float y = data["spacing"]["y"].AsFloat;
+            float z = data["spacing"]["z"].AsFloat;
 
-						grid.spacing = new Vector3 (x, y, z);
-			
-						x = data ["buttonScale"] ["x"].AsFloat;
-						y = data ["buttonScale"] ["y"].AsFloat;
-						z = data ["buttonScale"] ["z"].AsFloat;
-			
-						buttonScale = new Vector3 (x, y, z);
+            grid.spacing = new Vector3(x, y, z);
+
+            x = data["buttonScale"]["x"].AsFloat;
+            y = data["buttonScale"]["y"].AsFloat;
+            z = data["buttonScale"]["z"].AsFloat;
+
+            buttonScale = new Vector3(x, y, z);
 				}
 		
 		#endregion
