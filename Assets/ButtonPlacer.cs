@@ -41,6 +41,7 @@ namespace P1
 				int test;
 				ButtonTrial monkeyDo;
 				float monkeyTime;
+        public GameObject pinPrompt;
 
 #region loop
 
@@ -74,6 +75,7 @@ namespace P1
 						// Begin first trial
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+            pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
 				}
 	
 				// Update is called once per frame
@@ -86,7 +88,8 @@ namespace P1
 								if (monkeyDo.IsComplete ()) {
 										// Initial instructions
 										monkeyDo.Start ();
-										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+                    Debug.Log("Monkey, type: " + monkeyDo.GetTrialKeys());
+                    pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
 								} else {
 										if (monkeyDo.WasCorrect ()) {
 												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
