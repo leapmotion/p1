@@ -80,7 +80,7 @@ namespace P1
 						monkeyTime = 0.0f;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-            pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
+            			pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
 				}
 	
 				// Update is called once per frame
@@ -91,25 +91,24 @@ namespace P1
 
 								// DEBUG - print progress to log
 								if (monkeyDo.IsComplete ()) {
-										Debug.Log ("test = " + test.ToString () + " <? testNum = " + testNum.ToString ());
 										if (test < testNum) {
 												// Initial instructions
+												test += 1;
 												monkeyTime = 0.0f;
 												monkeyDo.Start ();
-                    Debug.Log("Monkey, type: " + monkeyDo.GetTrialKeys());
-                    pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
+												Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+												pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 										} else {
 												Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
 												string path = Application.dataPath + "/TestResults/" + string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
 												File.WriteAllText (path, monkeyDo.ToString ());
 												Debug.Log ("Autopsy report written to: " + path);
 										}
-								} else if (monkeyDo.HasAttempt ()) {
-										if (monkeyDo.WasCorrect ()) {
-												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
-										} else {
-												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
-										}
+								}
+								if (monkeyDo.WasCorrect ()) {
+										Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
+								} else {
+										Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
 								}
 						}
 				}

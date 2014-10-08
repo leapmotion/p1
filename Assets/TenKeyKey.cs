@@ -32,7 +32,7 @@ namespace P1
 
 				public GameObject[] labels = new GameObject[10];
 				string label_ = "";
-				private bool mouse_clicked = true;
+				private bool mouse_clicked = false;
 
 				public string label {
 						get {
@@ -116,19 +116,21 @@ namespace P1
 				void Update ()
 				{
 						if (!mouse_clicked &&
-						    Input.GetMouseButtonDown (0)) {
+								Input.GetMouseButtonDown (0)) {
 								mouse_clicked = true;
 								Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 								RaycastHit hit;
 								if (Physics.Raycast (ray, out hit, 100)) {
 										if (hit.transform.parent.parent == this.transform && 
-									    	hit.transform.gameObject.layer == LayerMask.NameToLayer ("Mouse")) {
+												hit.transform.gameObject.layer == LayerMask.NameToLayer ("Mouse")) {
 												OnTenKeyEvent ("click");
-												Debug.Log (label [0]);
 										}
 								}
 						}
           
+						//NOTE: ButtonUp is an event, NOT a state,
+						//so mouse_clicked must be initialized to false
+						//in order to register the first click
 						if (Input.GetMouseButtonUp (0)) {
 								mouse_clicked = false;
 						}
