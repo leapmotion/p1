@@ -31,7 +31,7 @@ namespace P1
 				}
 
 				public GameObject[] labels = new GameObject[10];
-        public GameObject button;
+				public GameObject button;
 				string label_ = "";
 				private bool mouse_clicked = false;
 
@@ -99,12 +99,12 @@ namespace P1
 
 				}
 
-        public void UpdateColor(Color color)
-        {
-          float alpha = button.renderer.material.color.a;
-          color.a = alpha;
-          button.renderer.material.color = color;
-        }
+				public void UpdateColor (Color color)
+				{
+						float alpha = button.renderer.material.color.a;
+						color.a = alpha;
+						button.renderer.material.color = color;
+				}
 		#region loop
 
 				State state;
@@ -130,7 +130,7 @@ namespace P1
 								if (Physics.Raycast (ray, out hit, 100)) {
 										if (hit.transform.parent.parent == this.transform && 
 												hit.transform.gameObject.layer == LayerMask.NameToLayer ("Mouse")) {
-												OnTenKeyEvent ("click");
+												OnTenKeyEvent (true, "click"); //Mouse click cannot be incomplete
 										}
 								}
 						}
@@ -147,17 +147,16 @@ namespace P1
 
 		#region broadcast
 		
-				public delegate void TenKeyEventDelegate (char symbol);
+				public delegate void TenKeyEventDelegate (bool complete, char symbol);
 
 				public event TenKeyEventDelegate TenKeyEventBroadcaster;
 		
-				public void OnTenKeyEvent (string e)
+				public void OnTenKeyEvent (bool complete, string e)
 				{
-          if (TenKeyEventBroadcaster != null)
-          {
-            Debug.Log("Event Firing: " + label[0]);
-						TenKeyEventBroadcaster (label [0]);
-					}
+						if (TenKeyEventBroadcaster != null) {
+								Debug.Log ("Event Firing: " + label [0]);
+								TenKeyEventBroadcaster (complete, label [0]);
+						}
 				}
 
 		#endregion
@@ -179,7 +178,7 @@ namespace P1
 				void OnMouseUp ()
 				{
 						//Debug.Log ("OnMouseUp");
-						OnTenKeyEvent ("click");
+						OnTenKeyEvent (true, "click");
 						state.Change ("over");
 				}
 		
