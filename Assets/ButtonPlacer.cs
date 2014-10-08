@@ -45,7 +45,6 @@ namespace P1
 				string testPath = ""; //DEFAULT: Record in TestResults
 				int testNum = 1; //DEFAULT: Run one trial
 				ButtonTrial monkeyDo;
-				float monkeyTime;
 				public GameObject pinPrompt;
 
 #region loop
@@ -79,52 +78,51 @@ namespace P1
 						// Begin first trial
 						SetTestFromConfig ("Assets/config/test_config.json");
 						test = 1;
-						monkeyTime = 0.0f;
+
+						monkeyDo.TrialEvent += TrialUpdate;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
 						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys (), 1);
+				}
+
+				// Called once for each key pushed
+				void  TrialUpdate (ButtonTrial trial, bool correct)
+				{
+						if (trial.IsComplete ()) {
+								if (test < testNum) {
+										if (test > 0) {
+												pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+										}
+										// Initial instructions
+										test += 1;
+										monkeyDo.Start ();
+										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+										pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys (), 60);
+								} else {
+										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+										Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+										string path = Application.dataPath + "/TestResults/" + testPath;
+										Directory.CreateDirectory (path);
+										path += string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+										File.WriteAllText (path, monkeyDo.ToString ());
+										Debug.Log ("Autopsy report written to: " + path);
+
+										//TODO: Trigger scene transition
+								}
+						} else {
+								if (monkeyDo.WasCorrect ()) {
+										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+										Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
+								} else {
+										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
+										Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
+								}
+						}
 				}
 	
 				// Update is called once per frame
 				void Update ()
 				{
-						if (monkeyTime < monkeyDo.WasAtTime ()) {
-								monkeyTime = monkeyDo.WasAtTime ();
-
-								// DEBUG - print progress to log
-								if (monkeyDo.IsComplete ()) {
-										if (test < testNum) {
-                        if (test > 0)
-                        {
-                          pinPrompt.GetComponent<PINPrompt>().TogglePIN(true);
-                        }
-												// Initial instructions
-												test += 1;
-												monkeyTime = 0.0f;
-												monkeyDo.Start ();
-												Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-												pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys (), 60);
-                    }
-                    else
-                    {
-                      pinPrompt.GetComponent<PINPrompt>().TogglePIN(true);
-												Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
-												string path = Application.dataPath + "/TestResults/" + testPath;
-												Directory.CreateDirectory (path);
-												path += string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
-												File.WriteAllText (path, monkeyDo.ToString ());
-												Debug.Log ("Autopsy report written to: " + path);
-										}
-								} else {
-										if (monkeyDo.WasCorrect ()) {
-                        pinPrompt.GetComponent<PINPrompt>().TogglePIN(true);
-												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
-										} else {
-                        pinPrompt.GetComponent<PINPrompt>().TogglePIN(false);
-												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
-										}
-								}
-						}
 				}
 		#endregion
 		
