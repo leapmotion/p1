@@ -27,3 +27,6 @@ xcuserdata
 Release
 Debug
 *.blend1
+
+#User Test Results
+/Assets/TestResults/*
