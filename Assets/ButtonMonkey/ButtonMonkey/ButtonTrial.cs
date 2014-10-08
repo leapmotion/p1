@@ -60,26 +60,26 @@ namespace ButtonMonkey
 		
 				public void WhenPushed (char label)
 				{
-						if (IsComplete ()) {
-								return;
-						}
+					if (IsComplete ()) {
+							return;
+					}
 
-						current = timer.ElapsedMilliseconds / 1000.0f;
-						counter.WhenPushed (label, current);
+					current = timer.ElapsedMilliseconds / 1000.0f;
+					counter.WhenPushed (label, current);
 			
-						if (label == keys [step].ToString () [0]) {
-								step += 1;
-								correct = true;
-								if (IsComplete ()) {
-										counter.CommitTrial ();
-										report += "Trial: " + GetTrialKeys () + "\n";
-										report += counter.ToString () + "\n";
-								} else {
-										counter.ChangeTarget (keys [step].ToString () [0]);
-								}
-						} else {
-								correct = false;
-						}
+					if (label == keys [step].ToString () [0]) {
+							step += 1;
+							correct = true;
+							if (IsComplete ()) {
+									counter.CommitTrial ();
+									report += "Trial: " + GetTrialKeys () + "\n";
+									report += counter.ToString () + "\n";
+							} else {
+									counter.ChangeTarget (keys [step].ToString () [0]);
+							}
+					} else {
+							correct = false;
+					}
 				}
 
 				public char GetTargetKey ()
@@ -106,7 +106,7 @@ namespace ButtonMonkey
 
 				public bool WasCorrect ()
 				{
-						return correct;
+					return correct;
 				}
 
 				public float WasAtTime ()

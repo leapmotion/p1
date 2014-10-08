@@ -28,6 +28,7 @@ namespace P1
 				void OnTriggerEnter (Collider other)
 				{
 						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
+                Debug.Log("Hitting: " + transform.parent.parent.GetComponent<TenKeyKey>().label);
 								transform.parent.parent.GetComponent<TenKeyKey> ().OnTenKeyEvent ("Leap");
 						}
 				}

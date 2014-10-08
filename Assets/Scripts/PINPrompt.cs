@@ -61,10 +61,10 @@ namespace P1
       }
     }
 
-    public void UpdatePIN(string pin)
+    public void UpdatePIN(string pin, int timer)
     {
       new_pin = pin;
-      creation_timer = 60;
+      creation_timer = timer;
     }
 
     public void TogglePIN(bool status)
@@ -77,12 +77,13 @@ namespace P1
       if (status)
       {
         pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.green);
-        pins_index++;  
+        incorrect_timer = -1;
+        pins_index++;
       } 
       else
       {
         pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.red);
-        incorrect_timer = 10;
+        //incorrect_timer = 20;
       }
     }
 

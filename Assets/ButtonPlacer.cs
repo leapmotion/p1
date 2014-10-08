@@ -82,7 +82,7 @@ namespace P1
 						monkeyTime = 0.0f;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
+						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys (), 1);
 				}
 	
 				// Update is called once per frame
@@ -103,7 +103,7 @@ namespace P1
 												monkeyTime = 0.0f;
 												monkeyDo.Start ();
 												Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-												pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
+												pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys (), 60);
                     }
                     else
                     {

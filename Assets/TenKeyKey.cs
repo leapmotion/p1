@@ -153,9 +153,11 @@ namespace P1
 		
 				public void OnTenKeyEvent (string e)
 				{
-						if (TenKeyEventBroadcaster != null) {
-								TenKeyEventBroadcaster (label [0]);
-						}
+          if (TenKeyEventBroadcaster != null)
+          {
+            Debug.Log("Event Firing: " + label[0]);
+						TenKeyEventBroadcaster (label [0]);
+					}
 				}
 
 		#endregion
