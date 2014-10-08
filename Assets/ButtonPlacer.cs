@@ -42,10 +42,11 @@ namespace P1
 				public GameObject buttonTemplate;
 				public GFRectGrid grid;
 				int test;
-				const int testNum = 4;
+				string testPath = ""; //DEFAULT: Record in TestResults
+				int testNum = 1; //DEFAULT: Run one trial
 				ButtonTrial monkeyDo;
 				float monkeyTime;
-        public GameObject pinPrompt;
+				public GameObject pinPrompt;
 
 #region loop
 
@@ -76,11 +77,12 @@ namespace P1
 						}
 
 						// Begin first trial
+						SetTestFromConfig ("Assets/config/test_config.json");
 						test = 1;
 						monkeyTime = 0.0f;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-            			pinPrompt.GetComponent<PINPrompt>().UpdatePIN(monkeyDo.GetTrialKeys());
+						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 				}
 	
 				// Update is called once per frame
@@ -100,15 +102,18 @@ namespace P1
 												pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 										} else {
 												Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
-												string path = Application.dataPath + "/TestResults/" + string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+												string path = Application.dataPath + "/TestResults/" + testPath;
+												Directory.CreateDirectory (path);
+												path += string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
 												File.WriteAllText (path, monkeyDo.ToString ());
 												Debug.Log ("Autopsy report written to: " + path);
 										}
-								}
-								if (monkeyDo.WasCorrect ()) {
-										Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
 								} else {
-										Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
+										if (monkeyDo.WasCorrect ()) {
+												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
+										} else {
+												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
+										}
 								}
 						}
 				}
@@ -130,6 +135,16 @@ namespace P1
 						z = data ["buttonScale"] ["z"].AsFloat;
 
 						buttonScale = new Vector3 (x, y, z);
+				}
+
+				public void SetTestFromConfig (string filePath)
+				{
+						JSONNode data = Utils.FileToJSON (filePath);
+						testPath = data ["results_dir"].ToString ();
+						// NOTE: JSONNode ToString helpfully interprets both path/ (no quotes in file) and "path/" (quotes in file)
+						// as "path/" (quotes IN string).
+						testPath = testPath.Substring (1, testPath.Length - 2);
+						testNum = data ["trial_count"].AsInt;
 				}
 		
 		#endregion
