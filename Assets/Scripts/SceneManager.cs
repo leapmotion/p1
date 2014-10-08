@@ -8,7 +8,7 @@ namespace P1
 {
 		public class SceneManager : MonoBehaviour
 		{
-				SceneManager instance;
+				public static SceneManager instance; //SINGLETON
 				Texture2D texture_;
 				float creationTime;
 				private float timer_threshold_ = 2.0f;
@@ -29,6 +29,7 @@ namespace P1
 				// Use this for initialization
 				void Start ()
 				{
+						instance = this;
 						DoStart ();
 						InitializeGUI ();
 				}
@@ -47,7 +48,6 @@ namespace P1
 								currentScene_ = Application.loadedLevelName;
 						else
 								currentScene_ = scenes [0];
-						instance = this;
 						creationTime = Time.time;
 				}
 

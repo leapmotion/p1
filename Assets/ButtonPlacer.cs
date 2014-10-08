@@ -107,7 +107,8 @@ namespace P1
 										File.WriteAllText (path, monkeyDo.ToString ());
 										Debug.Log ("Autopsy report written to: " + path);
 
-										//TODO: Trigger scene transition
+										//TODO: Applaud Monkey *IN-SCENE*
+										SceneManager.instance.Next();
 								}
 						} else {
 								if (monkeyDo.WasCorrect ()) {
