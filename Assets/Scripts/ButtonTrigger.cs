@@ -10,6 +10,7 @@ namespace P1
 				Vector3 correct_basis;
 
         private bool isIndex_ = false;
+        private bool readyToPress = true;
 
 				// Use this for initialization
 				void Start ()
@@ -37,14 +38,19 @@ namespace P1
 						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
               if (other.gameObject.name == "Trigger")
               {
-                if (isIndex_)
+                if (readyToPress)
                 {
-                  transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
-                  //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
-                }
-                else
-                {
-                  transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(false, "Leap");
+                  Debug.Log("pressed");
+                  if (isIndex_)
+                  {
+                    transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
+                    //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
+                  }
+                  else
+                  {
+                    transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(false, "Leap");
+                  }
+                  readyToPress = false;
                 }
               } 
               else if (other.gameObject.name == "Cushion") 
@@ -60,6 +66,7 @@ namespace P1
           {
             if (other.gameObject.name == "Cushion")
             {
+              readyToPress = true;
               //transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
             }
             else if (other.gameObject.name == "Trigger")
