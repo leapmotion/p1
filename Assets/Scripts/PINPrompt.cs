@@ -78,7 +78,7 @@ namespace P1
         collider.enabled = false;
       }
       go.transform.localScale = Vector3.one;
-      go.GetComponent<TenKeyKey>().SetDefaultColor(Color.green / 2);
+      go.GetComponent<TenKeyKey>().SetDefaultColor(starting_color);
       go.GetComponent<TenKeyKey>().ResetColor();
 
       return go;

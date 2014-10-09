@@ -39,14 +39,14 @@ namespace P1
               if (other.gameObject.name == "Cushion")
               {
                 didHit = false;
-                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
+                //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
               }
               else if (other.gameObject.name == "Trigger")
               {
                 didHit = true;
                 if (isIndex_)
                 {
-                  transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
+                  //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
                 }
               }
 						}
@@ -65,7 +65,7 @@ namespace P1
                 {
                   transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(false, "Leap");
                 }
-                transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
+                //transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
                 didHit = false;
               }
 						}
