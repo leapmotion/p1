@@ -40,22 +40,34 @@ namespace P1
                 if (isIndex_)
                 {
                   transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
+                  transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
                 }
                 else
                 {
                   transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(false, "Leap");
                 }
+              } 
+              else if (other.gameObject.name == "Cushion") 
+              {
+                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
               }
+
 						}
 				}
 
         void OnTriggerExit (Collider other)
 				{
-            //if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
-            //  if (other.gameObject.name == "Cushion")
-            //  {
-            //  }
-            //}
+          if (other.gameObject.layer != LayerMask.NameToLayer("Mouse"))
+          {
+            if (other.gameObject.name == "Cushion")
+            {
+              transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
+            }
+            else if (other.gameObject.name == "Trigger")
+            {
+              transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
+            }
+          }
 				}
 		}
 }
