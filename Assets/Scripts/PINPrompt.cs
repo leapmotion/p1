@@ -12,7 +12,6 @@ namespace P1
     public GameObject buttonTemplate;
     private List<GameObject> pins = new List<GameObject>();
     private int pins_index = 0;
-    private int incorrect_timer = 0;
     private int creation_timer = 0;
     private string new_pin;
     private Color starting_color = new Color(1.0f, 0.75f, 0.1f);
@@ -30,15 +29,6 @@ namespace P1
     // Update is called once per frame
     void Update()
     {
-      if (incorrect_timer > 0)
-      {
-        incorrect_timer--;
-        if (incorrect_timer == 0)
-        {
-          pins[pins_index].GetComponent<TenKeyKey>().ResetColor();
-        }
-      }
-
       if (creation_timer > 0)
       {
         creation_timer--;
@@ -76,13 +66,7 @@ namespace P1
       if (status)
       {
         pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.green);
-        incorrect_timer = -1;
         pins_index++;
-      } 
-      else
-      {
-        //pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.red);
-        //incorrect_timer = 20;
       }
     }
 
