@@ -4,140 +4,127 @@ using SimpleJSON;
 
 namespace P1
 {
-		public class SliderManager : MonoBehaviour
-		{
+	public class SliderManager : MonoBehaviour
+	{
 
-				static SliderManager m_Instance = null;
+		[SerializeField]
+		private int
+				m_MinLimit;
 
-				public static SliderManager Instance {
-						get {
-								if (null == m_Instance) {
-										SliderManager temp = (SliderManager)GameObject.FindObjectOfType (typeof(SliderManager));
-										if (temp == null) {
-												Debug.LogWarning ("You are missing a Facetopo Manager in the scene.");
-										}
-										m_Instance = temp;
-								}
-								return m_Instance;
-						}
+		public int MinLimit {
+				get { return m_MinLimit; }
+				set {
+						m_MinLimit = value;
+						TextLowerLimit.text = m_MinLimit.ToString ();
 				}
+		}
 
-				[SerializeField]
-				private int
-						m_MinLimit;
+		[SerializeField]
+		private int
+				m_MaxLimit;
 
-				public int MinLimit {
-						get { return m_MinLimit; }
-						set {
-								m_MinLimit = value;
-								TextLowerLimit.text = m_MinLimit.ToString ();
-						}
+		public int MaxLimit {
+				get { return m_MaxLimit; }
+				set {
+						m_MaxLimit = value;
+						TextUpperLimit.text = m_MaxLimit.ToString ();
 				}
+		}
 
-				[SerializeField]
-				private int
-						m_MaxLimit;
+		public int Interval;
+		public TextMesh TextLowerLimit;
+		public TextMesh TextUpperLimit;
+		public TextMesh TextSliderValue;
+		[SerializeField]
+		private float
+				m_WidgetWidth;
 
-				public int MaxLimit {
-						get { return m_MaxLimit; }
-						set {
-								m_MaxLimit = value;
-								TextUpperLimit.text = m_MaxLimit.ToString ();
-						}
+		public float WidgetWidth {
+				get { return m_WidgetWidth; }
+				set {
+						this.transform.localScale = new Vector3 (value, this.transform.localScale.y, this.transform.localScale.z);
+						m_WidgetWidth = value;
 				}
+		}
 
-				public int Interval;
-				public TextMesh TextLowerLimit;
-				public TextMesh TextUpperLimit;
-				public TextMesh TextSliderValue;
-				[SerializeField]
-				private float
-						m_WidgetWidth;
+		[SerializeField]
+		private float
+				m_WidgetHeight;
 
-				public float WidgetWidth {
-						get { return m_WidgetWidth; }
-						set {
-								this.transform.localScale = new Vector3 (value, this.transform.localScale.y, this.transform.localScale.z);
-								m_WidgetWidth = value;
-						}
+		public float WidgetHeight {
+				get { return m_WidgetHeight; }
+				set {
+						this.transform.localScale = new Vector3 (this.transform.localScale.x, value, this.transform.localScale.z);
+						m_WidgetHeight = value;
 				}
+		}
 
-				[SerializeField]
-				private float
-						m_WidgetHeight;
+		//public float Xpos;
+		//public float Ypos;
 
-				public float WidgetHeight {
-						get { return m_WidgetHeight; }
-						set {
-								this.transform.localScale = new Vector3 (this.transform.localScale.x, value, this.transform.localScale.z);
-								m_WidgetHeight = value;
-						}
+		[SerializeField]
+		private float
+				m_SliderHandleHeight;
+
+		public float SliderHandleHeight {
+				get { return m_SliderHandleHeight; }
+				set {
+						this.transform.localScale = new Vector3 (SliderBarHandleMesh.transform.localScale.x, value, SliderBarHandleMesh.transform.localScale.z);
+						m_SliderHandleHeight = value;
 				}
+		}
 
-				//public float Xpos;
-				//public float Ypos;
+		[SerializeField]
+		private float
+				m_SliderHandleWidth;
 
-				[SerializeField]
-				private float
-						m_SliderHandleHeight;
-
-				public float SliderHandleHeight {
-						get { return m_SliderHandleHeight; }
-						set {
-								this.transform.localScale = new Vector3 (SliderBarHandleMesh.transform.localScale.x, value, SliderBarHandleMesh.transform.localScale.z);
-								m_SliderHandleHeight = value;
-						}
+		public float SliderHandleWidth {
+				get { return m_SliderHandleWidth; }
+				set {
+						this.transform.localScale = new Vector3 (SliderBarHandleMesh.transform.localScale.x, SliderBarHandleMesh.transform.localScale.y, value);
+						m_SliderHandleWidth = value;
 				}
+		}
 
-				[SerializeField]
-				private float
-						m_SliderHandleWidth;
+		[SerializeField]
+		private float
+				m_SliderHandleDepth;
 
-				public float SliderHandleWidth {
-						get { return m_SliderHandleWidth; }
-						set {
-								this.transform.localScale = new Vector3 (SliderBarHandleMesh.transform.localScale.x, SliderBarHandleMesh.transform.localScale.y, value);
-								m_SliderHandleWidth = value;
-						}
+		public float SliderHandleDepth {
+				get { return m_SliderHandleDepth; }
+				set {
+						this.transform.localScale = new Vector3 (SliderBarHandleMesh.transform.localScale.x, SliderBarHandleMesh.transform.localScale.y);
+						m_SliderHandleDepth = value;
 				}
+		}
 
-				[SerializeField]
-				private float
-						m_SliderHandleDepth;
-
-				public float SliderHandleDepth {
-						get { return m_SliderHandleDepth; }
-						set {
-								this.transform.localScale = new Vector3 (SliderBarHandleMesh.transform.localScale.x, SliderBarHandleMesh.transform.localScale.y);
-								m_SliderHandleDepth = value;
-						}
-				}
-
-				public GameObject SliderBarMesh;
-				public GameObject SliderBarHandleMesh;
-				public Material SliderHandle;
-				public Material SliderHandleActive;
-				public float SliderSpeed;
-				public bool TicksOnOff;
-				public GameObject TickGRP;
-
+		public GameObject SliderBarMesh;
+		public GameObject SliderBarHandleMesh;
+		public Material SliderHandle;
+		public Material SliderHandleActive;
+		public float SliderSpeed;
+		public bool TicksOnOff;
+		public GameObject TickGRP;
 
 
 		// Use this for initialization
 		void Start ()
 		{
-				JSONNode n = Utils.FileToJSON ("Assets/config/slider_config.json");
-				MinLimit = n ["min"].AsInt;
-				Debug.Log ("Min = " + MinLimit);
-
-				MaxLimit = n ["max"].AsInt;
-				Debug.Log ("MaxLimit = " + MaxLimit);
-				Interval = n ["interval"].AsInt;
-				if (TicksOnOff == true) {
-					BuildTicks ();
-				}
+			InitializeSlider ();
 		}
-
+		
+		public void InitializeSlider () {
+			JSONNode n = Utils.FileToJSON ("Assets/config/slider_config.json");
+			MinLimit = n ["min"].AsInt;
+			Debug.Log ("Min = " + MinLimit);
+			
+			MaxLimit = n ["max"].AsInt;
+			Debug.Log ("MaxLimit = " + MaxLimit);
+			Interval = n ["interval"].AsInt;
+			if (TicksOnOff == true) {
+				BuildTicks ();
+			}
+		}
 		
 		public IEnumerator BuildTicks (){
 			int tickTotal = MaxLimit / Interval;
@@ -150,14 +137,13 @@ namespace P1
 				tick.transform.parent = this.transform;
 				count++;
 			}
-			
 			return null;
 		}
-	
-				// Update is called once per frame
-				void Update ()
-				{
-	
-				}
+
+		// Update is called once per frame
+		void Update ()
+		{
+
 		}
+	}
 }
