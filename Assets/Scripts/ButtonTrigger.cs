@@ -40,8 +40,8 @@ namespace P1
               {
                 if (readyToPress)
                 {
-                  Debug.Log("pressed");
-                  if (isIndex_)
+                  Debug.Log("pressed " + this.transform.parent.parent.GetComponent<TenKeyKey>().label);
+                  if (true)
                   {
                     transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
                     //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
