@@ -65,22 +65,21 @@ namespace P1
     private GameObject CreatePIN(Vector3 position, string label)
     {
       GameObject go = ((GameObject)Instantiate(buttonTemplate, position, Quaternion.identity));
+      go.SetActive(true);
       TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
       g.label = label;
       go.transform.parent = transform;
       go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = position;
       go.transform.position = position;
       go.transform.rotation = transform.rotation;
-      Collider[] colliders = GetComponentsInChildren<Collider>();
+      Collider[] colliders = go.GetComponentsInChildren<Collider>();
       foreach (Collider collider in colliders)
       {
         collider.enabled = false;
       }
-
       go.transform.localScale = Vector3.one;
       go.GetComponent<TenKeyKey>().SetDefaultColor(starting_color);
       go.GetComponent<TenKeyKey>().ResetColor();
-      go.SetActive(true);
 
       return go;
     }
