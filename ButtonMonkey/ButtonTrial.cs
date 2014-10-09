@@ -72,23 +72,25 @@ namespace ButtonMonkey
 
 						current = timer.ElapsedMilliseconds / 1000.0f;
 						counter.WhenPushed (complete, label, current);
-			
-						if (label == keys [step].ToString () [0]) {
-								correct = true;
-								step += 1;
-								if (IsComplete ()) {
-										counter.CommitTrial ();
-										report += "Trial: " + GetTrialKeys () + "\n";
-										report += counter.ToString () + "\n";
+
+						if (complete) {
+								if (label == keys [step].ToString () [0]) {
+										correct = true;
+										step += 1;
+										if (IsComplete ()) {
+												counter.CommitTrial ();
+												report += "Trial: " + GetTrialKeys () + "\n";
+												report += counter.ToString () + "\n";
+										} else {
+												counter.ChangeTarget (keys [step].ToString () [0]);
+										}
 								} else {
-										counter.ChangeTarget (keys [step].ToString () [0]);
+										correct = false;
 								}
-						} else {
-								correct = false;
-						}
 			
-						if (TrialEvent != null) {
-								TrialEvent (this, correct);
+								if (TrialEvent != null) {
+										TrialEvent (this, correct);
+								}
 						}
 				}
 
