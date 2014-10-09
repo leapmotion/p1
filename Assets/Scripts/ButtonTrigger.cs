@@ -44,7 +44,10 @@ namespace P1
               else if (other.gameObject.name == "Trigger")
               {
                 didHit = true;
-                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
+                if (isIndex_)
+                {
+                  transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
+                }
               }
 						}
 				}
