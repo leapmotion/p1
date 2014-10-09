@@ -56,7 +56,7 @@ namespace P1
 										this.transform.Translate (-moveAmountX, 0f, 0f);
 								}
 								float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
-								sliderInt = (int)sliderValue;
+								sliderInt = (int)(sliderValue);
 								sliderManager.TextSliderValue.text = sliderInt.ToString ();
 						}
 						origPos = Input.mousePosition;
@@ -71,7 +71,7 @@ namespace P1
 				}
 				void FixedUpdate(){
 					float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
-					sliderInt = (int)sliderValue;
+					sliderInt = (int)(sliderValue +.5f);
 					sliderManager.TextSliderValue.text = sliderInt.ToString ();
 				}
 
@@ -79,17 +79,25 @@ namespace P1
 				{
 					isThisHit = false;
 					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandle;
-//					SnapToInterval ();
+					SnapToInterval ();
 				}
 				
 				void OnTriggerEnter(){
+//					StopCoroutine("hiLightPause");
+					StopAllCoroutines();
 					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandleActive;
 				}
 				
 				void OnTriggerExit(){
+					StartCoroutine(hiLightPause());
+				}
+				
+				private IEnumerator hiLightPause () {
+					yield return new WaitForSeconds (.2f);
 					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandle;
 //					SnapToInterval ();
-				}
+			
+		}
 				
 				void SnapToInterval () {
 					snappedXint = (Mathf.Round (sliderInt / sliderManager.Interval)) * sliderManager.Interval;
