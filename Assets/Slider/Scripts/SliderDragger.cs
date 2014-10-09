@@ -95,7 +95,7 @@ namespace P1
 				private IEnumerator hiLightPause () {
 					yield return new WaitForSeconds (.2f);
 					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandle;
-//					SnapToInterval ();
+					SnapToInterval ();
 			
 		}
 				
