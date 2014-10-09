@@ -47,6 +47,7 @@ namespace P1
 				int testNum = 1; //DEFAULT: Run one trial
 				ButtonTrial monkeyDo;
 				public GameObject pinPrompt;
+        public GameObject backPad;
 
 #region loop
 
@@ -171,6 +172,8 @@ namespace P1
             pinPrompt.transform.rotation = transform.rotation;
 
             transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, buttonSpacing.z + buttonScale.z);
+
+            backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (3 * buttonScale.x + 4 * buttonSpacing.x) / 5.0f), (5 * buttonScale.y + 6 * buttonSpacing.y) / 6.0f, 1.0f);
 				}
 
 				public void SetTestFromConfig (string filePath)

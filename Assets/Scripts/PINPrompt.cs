@@ -14,7 +14,7 @@ namespace P1
     private int pins_index = 0;
     private string new_pin;
     private float creation_timer = float.MaxValue;
-    private Color starting_color = new Color(1.0f, 0.75f, 0.1f);
+    private Color starting_color = new Color(1.0f, 0.5f, 0.15f);
 
     // Use this for initialization
     void Start()
@@ -78,7 +78,7 @@ namespace P1
         collider.enabled = false;
       }
       go.transform.localScale = Vector3.one;
-      go.GetComponent<TenKeyKey>().SetDefaultColor(starting_color);
+      go.GetComponent<TenKeyKey>().SetDefaultColor(Color.green / 2);
       go.GetComponent<TenKeyKey>().ResetColor();
 
       return go;
