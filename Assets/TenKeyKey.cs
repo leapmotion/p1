@@ -108,6 +108,11 @@ namespace P1
 						button.renderer.material.color = color;
 				}
 
+        public void SetDefaultColor(Color color)
+        {
+          original_color = color;
+        }
+
         public void ResetColor()
         {
           button.renderer.material.color = original_color;

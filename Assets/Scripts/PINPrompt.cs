@@ -15,6 +15,7 @@ namespace P1
     private int incorrect_timer = 0;
     private int creation_timer = 0;
     private string new_pin;
+    private Color starting_color = new Color(1.0f, 0.75f, 0.1f);
 
     // Use this for initialization
     void Start()
@@ -34,7 +35,7 @@ namespace P1
         incorrect_timer--;
         if (incorrect_timer == 0)
         {
-          pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
+          pins[pins_index].GetComponent<TenKeyKey>().ResetColor();
         }
       }
 
@@ -49,23 +50,10 @@ namespace P1
           }
           pins.Clear();
 
-          GameObject prompt;
-          prompt = CreatePIN(transform.TransformPoint(new Vector3(-1.5f, 0.0f, 0.0f)), new_pin.Substring(0, 1));
-          prompt.transform.localScale = Vector3.one;
-          pins.Add(prompt);
-          prompt.GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
-          prompt = CreatePIN(transform.TransformPoint(new Vector3(-0.5f, 0.0f, 0.0f)), new_pin.Substring(1, 1));
-          prompt.transform.localScale = Vector3.one;
-          pins.Add(prompt);
-          prompt.GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
-          prompt = CreatePIN(transform.TransformPoint(new Vector3(0.5f, 0.0f, 0.0f)), new_pin.Substring(2, 1));
-          prompt.transform.localScale = Vector3.one;
-          pins.Add(prompt);
-          prompt.GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
-          prompt = CreatePIN(transform.TransformPoint(new Vector3(1.5f, 0.0f, 0.0f)), new_pin.Substring(3, 1));
-          prompt.transform.localScale = Vector3.one;
-          pins.Add(prompt);
-          prompt.GetComponent<TenKeyKey>().UpdateColor(Color.yellow);
+          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(-1.5f, 0.0f, 0.0f)), new_pin.Substring(0, 1)));
+          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(-0.5f, 0.0f, 0.0f)), new_pin.Substring(1, 1)));
+          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(0.5f, 0.0f, 0.0f)), new_pin.Substring(2, 1)));
+          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(1.5f, 0.0f, 0.0f)), new_pin.Substring(3, 1)));
 
           pins_index = 0;
         }
@@ -80,7 +68,7 @@ namespace P1
 
     public void TogglePIN(bool status)
     {
-      if (pins_index > 3)
+      if (pins_index == pins.Count)
       {
         return;
       }
@@ -93,8 +81,8 @@ namespace P1
       } 
       else
       {
-        pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.red);
-        incorrect_timer = 20;
+        //pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.red);
+        //incorrect_timer = 20;
       }
     }
 
@@ -112,6 +100,12 @@ namespace P1
       {
         collider.enabled = false;
       }
+
+      go.transform.localScale = Vector3.one;
+      go.GetComponent<TenKeyKey>().SetDefaultColor(starting_color);
+      go.GetComponent<TenKeyKey>().ResetColor();
+      go.SetActive(true);
+
       return go;
     }
   }

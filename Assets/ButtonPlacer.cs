@@ -154,6 +154,7 @@ namespace P1
                 0
                 );
               GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
+              go.SetActive(true);
               TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
               g.KeypadScale = buttonScale;
               g.label = k.label;
@@ -168,6 +169,8 @@ namespace P1
             pinPrompt.transform.localPosition = new Vector3(0, 2 * buttonSpacing.y + 2 * buttonScale.y);
             pinPrompt.transform.localScale = buttonScale;
             pinPrompt.transform.rotation = transform.rotation;
+
+            transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, buttonSpacing.z + buttonScale.z);
 				}
 
 				public void SetTestFromConfig (string filePath)
