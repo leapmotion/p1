@@ -173,7 +173,8 @@ namespace P1
 
             transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, buttonSpacing.z + buttonScale.z);
 
-            backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (3 * buttonScale.x + 4 * buttonSpacing.x) / 5.0f), (5 * buttonScale.y + 6 * buttonSpacing.y) / 6.0f, 1.0f);
+            backPad.transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
+            backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (3 * buttonScale.x + 4 * buttonSpacing.x) / 5.0f), (5 * buttonScale.y + 6 * buttonSpacing.y) / 6.0f, buttonScale.z);
 				}
 
 				public void SetTestFromConfig (string filePath)
