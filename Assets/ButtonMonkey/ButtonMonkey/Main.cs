@@ -7,12 +7,12 @@ namespace ButtonMonkey
 	{
 		public static void Main (string[] args)
 		{
-			ButtonTrial monkeyDo = new ButtonTrial();
-
 			#if UNITY_EDITOR || UNITY_STANDALONE
 				Console.WriteLine ("No monkeys? No research!");
 				return;
 			#else
+			ButtonTrial monkeyDo = new ButtonTrial();
+
 			int test = 1;
 			while (test <= 4) {
 				// Initial instructions
@@ -21,7 +21,7 @@ namespace ButtonMonkey
 
 				while (true) {
 					ConsoleKeyInfo info = Console.ReadKey ();
-					monkeyDo.WhenPushed (info.KeyChar);
+					monkeyDo.WhenPushed (true, info.KeyChar); //No partial key strokes
 					
 					// Monkey guidance
 					if (monkeyDo.IsComplete ()) {

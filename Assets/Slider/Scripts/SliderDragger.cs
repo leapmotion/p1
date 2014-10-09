@@ -14,6 +14,14 @@ namespace P1
 				private bool isThisHit = false;
 				private int sliderInt;
 
+				private	float snappedXint;
+				private float snappedXpos;
+
+				public GameObject HandleVisMesh;
+				public GameObject HandleVisGRP;
+
+				
+			
 				void OnMouseDown ()
 				{
 						isThisHit = true;
@@ -40,21 +48,46 @@ namespace P1
 								SliderManager.Instance.TextSliderValue.text = sliderInt.ToString ();
 						}
 						origPos = Input.mousePosition;
+
+						Vector3 pos = rigidbody.position;
+						pos.x = Mathf.Clamp(pos.x, 0.0f, 1.0f);
+						rigidbody.position = pos;
+
+					 	if (rigidbody.position.x < 1.0f) {
+							HandleVisGRP.transform.position = rigidbody.position;
+					}
+				}
+				void FixedUpdate(){
+					float sliderValue = SliderManager.Instance.MaxLimit * this.transform.localPosition.x;
+					sliderInt = (int)sliderValue;
+					SliderManager.Instance.TextSliderValue.text = sliderInt.ToString ();
 				}
 
 				void OnMouseUp ()
 				{
-						isThisHit = false;
-						SliderManager.Instance.SliderBarHandleMesh.renderer.material = SliderManager.Instance.SliderHandle;
-
-						float snappedXint = (Mathf.Round (sliderInt / SliderManager.Instance.Interval)) * SliderManager.Instance.Interval;
-						Debug.Log ("snappedXint = " + snappedXint);
-						float snappedXpos = (1f / SliderManager.Instance.MaxLimit) * snappedXint;
-						Debug.Log ("snappedXpos = " + snappedXpos);
-
-						this.transform.localPosition = new Vector3 (snappedXpos, this.transform.localPosition.y, this.transform.localPosition.z);
-						SliderManager.Instance.TextSliderValue.text = snappedXint.ToString ();
-
+					isThisHit = false;
+					SliderManager.Instance.SliderBarHandleMesh.renderer.material = SliderManager.Instance.SliderHandle;
+//					SnapToInterval ();
+				}
+				
+				void OnTriggerEnter(){
+					SliderManager.Instance.SliderBarHandleMesh.renderer.material = SliderManager.Instance.SliderHandleActive;
+				}
+				
+				void OnTriggerExit(){
+					SliderManager.Instance.SliderBarHandleMesh.renderer.material = SliderManager.Instance.SliderHandle;
+//					SnapToInterval ();
+				}
+				
+				void SnapToInterval () {
+					snappedXint = (Mathf.Round (sliderInt / SliderManager.Instance.Interval)) * SliderManager.Instance.Interval;
+					Debug.Log ("snappedXint = " + snappedXint);
+					snappedXpos = (1f / SliderManager.Instance.MaxLimit) * snappedXint;
+					Debug.Log ("snappedXpos = " + snappedXpos);
+					
+					this.transform.localPosition = new Vector3 (snappedXpos, this.transform.localPosition.y, this.transform.localPosition.z);
+					SliderManager.Instance.TextSliderValue.text = snappedXint.ToString ();
+		
 				}
 		}
 }

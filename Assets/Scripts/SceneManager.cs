@@ -8,12 +8,11 @@ namespace P1
 {
 		public class SceneManager : MonoBehaviour
 		{
-				SceneManager instance;
+				public static SceneManager instance; //SINGLETON
 				Texture2D texture_;
 				float creationTime;
 				private float timer_threshold_ = 2.0f;
 				public List<string> scenes;
-				Regex q = new Regex ("(.*)");
 				private string currentScene_;
 
 				public string currentScene {
@@ -30,6 +29,7 @@ namespace P1
 				// Use this for initialization
 				void Start ()
 				{
+						instance = this;
 						DoStart ();
 						InitializeGUI ();
 				}
@@ -40,6 +40,7 @@ namespace P1
 						JSONNode n = Utils.FileToJSON ("Assets/config/scene_config.json");
 						if (n == null)
 								throw new UnityException ("No data");
+						Debug.Log ("Number of scenes: " + n ["scenes"].Count);
 						for (int i = 0; i < n["scenes"].Count; ++i) {
 								scenes.Add (n ["scenes"] [i].Value);
 						}
@@ -47,7 +48,6 @@ namespace P1
 								currentScene_ = Application.loadedLevelName;
 						else
 								currentScene_ = scenes [0];
-						instance = this;
 						creationTime = Time.time;
 				}
 

@@ -101,17 +101,26 @@ namespace P1
 
 				}
 
+<<<<<<< HEAD
+        public void UpdateColor(Color color)
+        {
+          float alpha = button.renderer.material.color.a;
+          color.a = alpha;
+          button.renderer.material.color = color;
+        }
+
+        public void ResetColor()
+        {
+          button.renderer.material.color = original_color;
+        }
+=======
 				public void UpdateColor (Color color)
 				{
 						float alpha = button.renderer.material.color.a;
 						color.a = alpha;
 						button.renderer.material.color = color;
 				}
-
-        public void ResetColor()
-        {
-          button.renderer.material.color = original_color;
-        }
+>>>>>>> e9f8854d6ee59d9e589472ea20f69385c35dbac7
 		#region loop
 
 				State state;
@@ -161,6 +170,7 @@ namespace P1
 				public void OnTenKeyEvent (bool complete, string e)
 				{
 						if (TenKeyEventBroadcaster != null) {
+								Debug.Log ("Event Firing: " + label [0]);
 								TenKeyEventBroadcaster (complete, label [0]);
 						}
 				}

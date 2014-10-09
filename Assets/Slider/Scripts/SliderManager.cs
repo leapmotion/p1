@@ -123,34 +123,36 @@ namespace P1
 
 
 
-				// Use this for initialization
-				void Start ()
-				{
-						JSONNode n = Utils.FileToJSON ("Assets/config/slider_config.json");
-						MinLimit = n ["min"].AsInt;
-						Debug.Log ("Min = " + MinLimit);
+		// Use this for initialization
+		void Start ()
+		{
+				JSONNode n = Utils.FileToJSON ("Assets/config/slider_config.json");
+				MinLimit = n ["min"].AsInt;
+				Debug.Log ("Min = " + MinLimit);
 
-						MaxLimit = n ["max"].AsInt;
-						Debug.Log ("MaxLimit = " + MaxLimit);
-						Interval = n ["interval"].AsInt;
-						BuildTicks ();
+				MaxLimit = n ["max"].AsInt;
+				Debug.Log ("MaxLimit = " + MaxLimit);
+				Interval = n ["interval"].AsInt;
+				if (TicksOnOff == true) {
+					BuildTicks ();
 				}
+		}
 
-				public IEnumerator BuildTicks ()
-				{
-						int tickTotal = MaxLimit / Interval;
-						int count = 0;
-						float tickOffset = 0;
-						while (count < tickTotal + 1) {
-								tickOffset = (1f / MaxLimit) * (count * Interval);
-								Vector3 tickPos = new Vector3 (tickOffset, transform.localPosition.y, transform.localPosition.z);
-								GameObject tick = Instantiate (TickGRP, tickPos, transform.localRotation) as GameObject;
-								tick.transform.parent = this.transform;
-								count++;
-						}
-
-						return null;
-				}
+		
+		public IEnumerator BuildTicks (){
+			int tickTotal = MaxLimit / Interval;
+			int count = 0;
+			float tickOffset = 0;
+			while (count < tickTotal + 1) {
+				tickOffset = ((1f/MaxLimit * transform.localScale.x) * (count * Interval ));
+				Vector3 tickPos = new Vector3(SliderBarHandleMesh.transform.position.x + tickOffset, transform.localPosition.y, transform.localPosition.z);
+				GameObject tick = Instantiate(TickGRP, tickPos, transform.localRotation) as GameObject;
+				tick.transform.parent = this.transform;
+				count++;
+			}
+			
+			return null;
+		}
 	
 				// Update is called once per frame
 				void Update ()
