@@ -167,14 +167,14 @@ namespace P1
               go.transform.rotation = transform.rotation;
             }
 
-            pinPrompt.transform.localPosition = new Vector3(0, 0.8f + 2 * buttonScale.y, buttonScale.z / 2.0f);
+            pinPrompt.transform.localPosition = new Vector3(0, 0.1f + 2 * buttonScale.y + buttonSpacing.y, 0.0f);
             pinPrompt.transform.localScale = buttonScale;
             pinPrompt.transform.rotation = transform.rotation;
 
             transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
 
             backPad.transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
-            backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (2.5f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (4.5f * buttonScale.y + 4.5f * buttonSpacing.y + 1.0f) / 6.0f, buttonScale.z);
+            backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (3.0f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (5.0f * buttonScale.y + 3.5f * buttonSpacing.y + 0.1f) / 5.5f, buttonScale.z);
 				}
 
 				public void SetTestFromConfig (string filePath)
