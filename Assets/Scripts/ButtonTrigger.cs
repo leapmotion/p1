@@ -9,7 +9,6 @@ namespace P1
 				Vector3 original_position;
 				Vector3 correct_basis;
 
-        private bool didHit = false;
         private bool isIndex_ = false;
 
 				// Use this for initialization
@@ -36,17 +35,15 @@ namespace P1
 				void OnTriggerEnter (Collider other)
 				{
 						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
-              if (other.gameObject.name == "Cushion")
+              if (other.gameObject.name == "Trigger")
               {
-                didHit = false;
-                //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
-              }
-              else if (other.gameObject.name == "Trigger")
-              {
-                didHit = true;
                 if (isIndex_)
                 {
-                  //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
+                  transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
+                }
+                else
+                {
+                  transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(false, "Leap");
                 }
               }
 						}
@@ -54,21 +51,11 @@ namespace P1
 
         void OnTriggerExit (Collider other)
 				{
-						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
-              if (other.gameObject.name == "Cushion")
-              {
-                if (isIndex_)
-                {
-                  transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(didHit, "Leap");
-                }
-                else
-                {
-                  transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(false, "Leap");
-                }
-                //transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
-                didHit = false;
-              }
-						}
+            //if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
+            //  if (other.gameObject.name == "Cushion")
+            //  {
+            //  }
+            //}
 				}
 		}
 }
