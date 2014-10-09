@@ -58,32 +58,44 @@ namespace P1
 						m_WidgetHeight = value;
 				}
 		}
-
+		[SerializeField]
+		private float
+			m_WidgetDepth;
+		
+		public float WidgetDepth {
+			get { return m_WidgetDepth; }
+			set {
+				this.transform.localScale = new Vector3 (this.transform.localScale.x, this.transform.localScale.y, value);
+				m_WidgetDepth = value;
+			}
+		}
+		
 		//public float Xpos;
 		//public float Ypos;
+		[SerializeField]
+		private float
+			m_SliderHandleWidth;
+		
+		public float SliderHandleWidth {
+			get { return m_SliderHandleWidth; }
+			set {
+				SliderHandleGRP.transform.localScale = new Vector3 (value, SliderHandleGRP.transform.localScale.y, SliderHandleGRP.transform.localScale.z );
+				SliderHandleVisGRP.transform.localScale = new Vector3 (value, SliderHandleVisGRP.transform.localScale.y, SliderHandleVisGRP.transform.localScale.z );
+				m_SliderHandleWidth = value;
+			}
+		}
 
 		[SerializeField]
 		private float
 				m_SliderHandleHeight;
 
 		public float SliderHandleHeight {
-				get { return m_SliderHandleHeight; }
-				set {
-						this.transform.localScale = new Vector3 (SliderBarHandleMesh.transform.localScale.x, value, SliderBarHandleMesh.transform.localScale.z);
-						m_SliderHandleHeight = value;
-				}
-		}
-
-		[SerializeField]
-		private float
-				m_SliderHandleWidth;
-
-		public float SliderHandleWidth {
-				get { return m_SliderHandleWidth; }
-				set {
-						this.transform.localScale = new Vector3 (SliderBarHandleMesh.transform.localScale.x, SliderBarHandleMesh.transform.localScale.y, value);
-						m_SliderHandleWidth = value;
-				}
+			get { return m_SliderHandleHeight; }
+			set {
+				SliderHandleGRP.transform.localScale = new Vector3 (SliderHandleGRP.transform.localScale.x, value, SliderHandleGRP.transform.localScale.z);
+				SliderHandleVisGRP.transform.localScale = new Vector3 (SliderHandleVisGRP.transform.localScale.x, value, SliderHandleVisGRP.transform.localScale.z);
+				m_SliderHandleHeight = value;
+			}
 		}
 
 		[SerializeField]
@@ -93,11 +105,16 @@ namespace P1
 		public float SliderHandleDepth {
 				get { return m_SliderHandleDepth; }
 				set {
-						this.transform.localScale = new Vector3 (SliderBarHandleMesh.transform.localScale.x, SliderBarHandleMesh.transform.localScale.y);
-						m_SliderHandleDepth = value;
+				SliderHandleGRP.transform.localScale = new Vector3 (SliderHandleGRP.transform.localScale.x, SliderHandleGRP.transform.localScale.y, value);
+				SliderHandleVisGRP.transform.localScale = new Vector3 (SliderHandleVisGRP.transform.localScale.x, SliderHandleVisGRP.transform.localScale.y, value);
+				m_SliderHandleDepth = value;
 				}
 		}
 
+		
+		public GameObject SliderHandleGRP;
+		public GameObject SliderHandleVisGRP;
+		
 		public GameObject SliderBarMesh;
 		public GameObject SliderBarHandleMesh;
 		public Material SliderHandle;
@@ -114,6 +131,7 @@ namespace P1
 		}
 		
 		public void InitializeSlider () {
+
 			JSONNode n = Utils.FileToJSON ("Assets/config/slider_config.json");
 			MinLimit = n ["min"].AsInt;
 			Debug.Log ("Min = " + MinLimit);
@@ -121,12 +139,23 @@ namespace P1
 			MaxLimit = n ["max"].AsInt;
 			Debug.Log ("MaxLimit = " + MaxLimit);
 			Interval = n ["interval"].AsInt;
+			
 			if (TicksOnOff == true) {
 				BuildTicks ();
 			}
+			
+			WidgetWidth = n ["widgetXscale"].AsFloat;
+			WidgetHeight = n ["widgetYscale"].AsFloat;
+			WidgetDepth = n ["widgetZscale"].AsFloat;
+			
+			SliderHandleWidth = n ["sliderHandleWidth"].AsFloat;
+			SliderHandleHeight = n ["sliderHandleWidth"].AsFloat;
+			SliderHandleDepth = n ["sliderHandleWidth"].AsFloat;
+			
 		}
 		
 		public IEnumerator BuildTicks (){
+//			yield return new WaitForSeconds(3.0f);
 			int tickTotal = MaxLimit / Interval;
 			int count = 0;
 			float tickOffset = 0;
