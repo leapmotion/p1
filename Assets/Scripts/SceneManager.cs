@@ -1,62 +1,115 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using SimpleJSON;
+using System.Text.RegularExpressions;
 
-public class SceneManager : MonoBehaviour {
+namespace P1
+{
+		public class SceneManager : MonoBehaviour
+		{
+				SceneManager instance;
+				Texture2D texture_;
+				float creationTime;
+				private float timer_threshold_ = 2.0f;
+				public List<string> scenes;
+				Regex q = new Regex ("(.*)");
+				private string currentScene_;
 
-  Texture2D texture_;
-  private float timer_;
-  private float start_timer_;
-  private float timer_threshold_ = 2.0f;
-  private string stage_to_load_ = "Stage1";
-  private bool load_stage_ = false;
+				public string currentScene {
+						get { return currentScene_;}
+						set {
+								currentScene_ = value; 
+								creationTime = Time.time;
+								sceneLoaded_ = true;
+						}
+				}
 
-	// Use this for initialization
-	void Start () {
-    Rect pixelInset = new Rect(0, 0, Screen.width, Screen.height);
-    guiTexture.color = Color.black;
-    guiTexture.pixelInset = pixelInset;
-    start_timer_ = Time.time;
-	}
+				private bool sceneLoaded_ = false;
+
+				// Use this for initialization
+				void Start ()
+				{
+						DoStart ();
+						InitializeGUI ();
+				}
+
+				public void DoStart ()
+				{ 
+						scenes = new List<string> ();
+						JSONNode n = Utils.FileToJSON ("Assets/config/scene_config.json");
+						if (n == null)
+								throw new UnityException ("No data");
+						for (int i = 0; i < n["scenes"].Count; ++i) {
+								scenes.Add (n ["scenes"] [i].Value);
+						}
+						if (Application.isPlaying)
+								currentScene_ = Application.loadedLevelName;
+						else
+								currentScene_ = scenes [0];
+						instance = this;
+						creationTime = Time.time;
+				}
+
+				void InitializeGUI ()
+				{
+						Rect pixelInset = new Rect (0, 0, Screen.width, Screen.height);
+						guiTexture.color = Color.black;
+						guiTexture.pixelInset = pixelInset;
+				}
 	
-	// Update is called once per frame
-	void Update () {
-    // Implement Fading for easier transition
-    if (Input.GetKeyDown(KeyCode.Alpha1))
-    {
-      stage_to_load_ = "Stage1";
-      start_timer_ = Time.time;
-      load_stage_ = true;
-    }
-    else if (Input.GetKeyDown(KeyCode.Alpha2))
-    {
-      stage_to_load_ = "Stage2";
-      start_timer_ = Time.time;
-      load_stage_ = true;
-    }
-    else if (Input.GetKeyDown(KeyCode.Alpha3))
-    {
-      stage_to_load_ = "Stage3";
-      start_timer_ = Time.time;
-      load_stage_ = true;
-    }
+				// Update is called once per frame
+				void Update ()
+				{
+						// Implement Fading for easier transition
+						if (Input.GetKeyDown (KeyCode.RightArrow)) {
+								Debug.Log ("Going to next");
+								Next ();
+						} else if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+								Debug.Log ("Going to prev");
+								Prev ();
+						}
 
-    timer_ = Time.time;
+						if (sceneLoaded_ && ((Time.time - creationTime) / timer_threshold_) > 1.0f) {
+								Application.LoadLevel (currentScene);
+						}
+				}
+		
+				public void Next ()
+				{
+						int i = currentIndex;
+						if (i < scenes.Count - 1)
+								currentScene = scenes [i + 1];
+				}
+		
+				public void Prev ()
+				{
+						int i = currentIndex;
+						if (i > 0)
+								currentScene = scenes [i - 1];
+				}
 
-    if (load_stage_ && (timer_ - start_timer_) / timer_threshold_ > 1.0f)
-    {
-      Application.LoadLevel(stage_to_load_);
-    }
-	}
+				public int currentIndex {
+						get {
+								int i = 0;
+								while (i < scenes.Count) {
+										if (scenes [i] == currentScene)
+												return i;
+										++i;
+								}
+								return -1;
+						}
+				}
 
-  void OnGUI()
-  {
-    float alpha = 1.0f - Mathf.Clamp((timer_ - start_timer_)/ timer_threshold_, 0.0f, 1.0f);
-    if (load_stage_)
-    {
-      alpha = 1.0f - alpha;
-    }
-    Color color = guiTexture.color;
-    color.a = alpha;
-    guiTexture.color = color;
-  }
+				void OnGUI ()
+				{
+						float alpha = 1.0f - Mathf.Clamp01 ((Time.time - creationTime) / timer_threshold_);
+						if (sceneLoaded_) {
+								alpha = 1.0f - alpha;
+						}
+						Color color = guiTexture.color;
+						color.a = alpha;
+						guiTexture.color = color;
+				}
+		}
 }
