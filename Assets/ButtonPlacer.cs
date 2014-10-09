@@ -69,7 +69,7 @@ namespace P1
 						monkeyDo.TrialEvent += TrialUpdate;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys (), 1);
+						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 				}
 
 				// Called once for each key pushed
@@ -84,7 +84,7 @@ namespace P1
 										test += 1;
 										monkeyDo.Start ();
 										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-										pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys (), 60);
+										pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 								} else {
 										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 										Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());

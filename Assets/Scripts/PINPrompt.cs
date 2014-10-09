@@ -12,8 +12,8 @@ namespace P1
     public GameObject buttonTemplate;
     private List<GameObject> pins = new List<GameObject>();
     private int pins_index = 0;
-    private int creation_timer = 0;
     private string new_pin;
+    private float creation_timer = float.MaxValue;
     private Color starting_color = new Color(1.0f, 0.75f, 0.1f);
 
     // Use this for initialization
@@ -29,41 +29,33 @@ namespace P1
     // Update is called once per frame
     void Update()
     {
-      if (creation_timer > 0)
+      if ((Time.time - creation_timer > 0.5f || pins.Count == 0) && pins_index == -1)
       {
-        creation_timer--;
-        if (creation_timer == 0)
+        foreach (Transform child in transform)
         {
-          foreach (Transform child in transform)
-          {
-            Destroy(child.gameObject);
-          }
-          pins.Clear();
-
-          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(-1.5f, 0.0f, 0.0f)), new_pin.Substring(0, 1)));
-          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(-0.5f, 0.0f, 0.0f)), new_pin.Substring(1, 1)));
-          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(0.5f, 0.0f, 0.0f)), new_pin.Substring(2, 1)));
-          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(1.5f, 0.0f, 0.0f)), new_pin.Substring(3, 1)));
-
-          pins_index = 0;
+          Destroy(child.gameObject);
         }
+        pins.Clear();
+
+        pins.Add(CreatePIN(transform.TransformPoint(new Vector3(-1.5f, 0.0f, 0.0f)), new_pin.Substring(0, 1)));
+        pins.Add(CreatePIN(transform.TransformPoint(new Vector3(-0.5f, 0.0f, 0.0f)), new_pin.Substring(1, 1)));
+        pins.Add(CreatePIN(transform.TransformPoint(new Vector3(0.5f, 0.0f, 0.0f)), new_pin.Substring(2, 1)));
+        pins.Add(CreatePIN(transform.TransformPoint(new Vector3(1.5f, 0.0f, 0.0f)), new_pin.Substring(3, 1)));
+
+        pins_index = 0;
       }
     }
 
-    public void UpdatePIN(string pin, int timer)
+    public void UpdatePIN(string pin)
     {
       new_pin = pin;
-      creation_timer = timer;
+      creation_timer = Time.time;
+      pins_index = -1;
     }
 
     public void TogglePIN(bool status)
     {
-      if (pins_index == pins.Count)
-      {
-        return;
-      }
-
-      if (status)
+      if (pins_index >= 0 && pins_index < pins.Count && status)
       {
         pins[pins_index].GetComponent<TenKeyKey>().UpdateColor(Color.green);
         pins_index++;
