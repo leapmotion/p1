@@ -10,6 +10,7 @@ namespace P1
 				Vector3 correct_basis;
 
         private bool didHit = false;
+        private bool isIndex_ = false;
 
 				// Use this for initialization
 				void Start ()
@@ -26,6 +27,11 @@ namespace P1
 						Vector3 adjusted_basis = Vector3.Project (curr_basis, correct_basis);
 						transform.position = adjusted_basis + original_position;
 				}
+
+        public void FingerEntered(bool isIndex)
+        {
+          isIndex_ = isIndex;
+        }
 
 				void OnTriggerEnter (Collider other)
 				{
@@ -48,7 +54,14 @@ namespace P1
 						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
               if (other.gameObject.name == "Cushion")
               {
-                transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(didHit, "Leap");
+                if (isIndex_)
+                {
+                  transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(didHit, "Leap");
+                }
+                else
+                {
+                  transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(false, "Leap");
+                }
                 transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
                 didHit = false;
               }
