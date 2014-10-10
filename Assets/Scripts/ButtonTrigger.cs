@@ -9,7 +9,8 @@ namespace P1
 				Vector3 original_position;
 				Vector3 correct_basis;
 
-        private bool didHit = false;
+        private bool isIndex_ = false;
+        private bool readyToPress = true;
 
 				// Use this for initialization
 				void Start ()
@@ -27,32 +28,52 @@ namespace P1
 						transform.position = adjusted_basis + original_position;
 				}
 
+        public void FingerEntered(bool isIndex)
+        {
+          isIndex_ = isIndex;
+        }
+
 				void OnTriggerEnter (Collider other)
 				{
 						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
-              if (other.gameObject.name == "Cushion")
+              if (other.gameObject.name == "Trigger")
               {
-                didHit = false;
-                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
-              }
-              else if (other.gameObject.name == "Trigger")
+                if (readyToPress)
+                {
+                  Debug.Log("pressed " + this.transform.parent.parent.GetComponent<TenKeyKey>().label);
+                  if (true)
+                  {
+                    transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
+                    //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
+                  }
+                  else
+                  {
+                    transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(false, "Leap");
+                  }
+                  readyToPress = false;
+                }
+              } 
+              else if (other.gameObject.name == "Cushion") 
               {
-                didHit = true;
-                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
+                //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
               }
 						}
 				}
 
         void OnTriggerExit (Collider other)
 				{
-						if (other.gameObject.layer != LayerMask.NameToLayer ("Mouse")) {
-              if (other.gameObject.name == "Cushion")
-              {
-                transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(didHit, "Leap");
-                transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
-                didHit = false;
-              }
-						}
+          if (other.gameObject.layer != LayerMask.NameToLayer("Mouse"))
+          {
+            if (other.gameObject.name == "Cushion")
+            {
+              readyToPress = true;
+              //transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
+            }
+            else if (other.gameObject.name == "Trigger")
+            {
+              //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
+            }
+          }
 				}
 		}
 }

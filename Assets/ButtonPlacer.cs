@@ -47,6 +47,7 @@ namespace P1
 				int testNum = 1; //DEFAULT: Run one trial
 				ButtonTrial monkeyDo;
 				public GameObject pinPrompt;
+        public GameObject backPad;
 
 #region loop
 
@@ -69,7 +70,7 @@ namespace P1
 						monkeyDo.TrialEvent += TrialUpdate;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys (), 1);
+						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 				}
 
 				// Called once for each key pushed
@@ -84,7 +85,7 @@ namespace P1
 										test += 1;
 										monkeyDo.Start ();
 										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-										pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys (), 60);
+										pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 								} else {
 										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 										Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
@@ -154,6 +155,7 @@ namespace P1
                 0
                 );
               GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
+              go.SetActive(true);
               TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
               g.KeypadScale = buttonScale;
               g.label = k.label;
@@ -165,9 +167,14 @@ namespace P1
               go.transform.rotation = transform.rotation;
             }
 
-            pinPrompt.transform.localPosition = new Vector3(0, 2 * buttonSpacing.y + 2 * buttonScale.y);
+            pinPrompt.transform.localPosition = new Vector3(0, 0.1f + 2 * buttonScale.y + buttonSpacing.y, 0.0f);
             pinPrompt.transform.localScale = buttonScale;
             pinPrompt.transform.rotation = transform.rotation;
+
+            transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
+
+            backPad.transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
+            backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (3.0f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (5.0f * buttonScale.y + 3.5f * buttonSpacing.y + 0.1f) / 5.5f, buttonScale.z);
 				}
 
 				public void SetTestFromConfig (string filePath)

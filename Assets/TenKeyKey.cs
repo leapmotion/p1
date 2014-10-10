@@ -108,6 +108,22 @@ namespace P1
 						button.renderer.material.color = color;
 				}
 
+        public void SetLabelColor(Color color)
+        {
+          foreach (GameObject num_label in labels)
+          {
+            if (num_label.renderer)
+            {
+              num_label.renderer.material.color = color;
+            }
+          }
+        }
+
+        public void SetDefaultColor(Color color)
+        {
+          original_color = color;
+        }
+
         public void ResetColor()
         {
           button.renderer.material.color = original_color;
