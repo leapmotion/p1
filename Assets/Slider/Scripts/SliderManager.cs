@@ -6,6 +6,8 @@ namespace P1
 {
 	public class SliderManager : MonoBehaviour
 	{
+		public string ConfigFileName = "slider_config.json";
+
 
 		[SerializeField]
 		private int
@@ -132,7 +134,7 @@ namespace P1
 		
 		public void InitializeSlider () {
 
-			JSONNode n = Utils.FileToJSON ("Assets/config/slider_config.json");
+			JSONNode n = Utils.FileToJSON ("Assets/config/" + ConfigFileName);
 			MinLimit = n ["min"].AsInt;
 			Debug.Log ("Min = " + MinLimit);
 			

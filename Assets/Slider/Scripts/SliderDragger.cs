@@ -27,7 +27,7 @@ namespace P1
 				}
 				
 				void Awake () {
-					sliderManager =  (SliderManager)GameObject.FindObjectOfType (typeof(SliderManager));
+					sliderManager =  (SliderManager)GetComponentInParent (typeof(SliderManager));
 					if (sliderManager == null) {
 						Debug.LogWarning ("You are missing a Facetopo Manager in the scene.");
 					}
