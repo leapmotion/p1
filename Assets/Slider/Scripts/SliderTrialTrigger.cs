@@ -42,7 +42,8 @@ namespace P1
 					test += 1;
 					monkeyDo.Start ();
 					Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-					pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
+					//pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
+					pinPrompt.GetComponent<PINPrompt> ().UpdatePIN ("1");
 				} else {
 					pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 					Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
