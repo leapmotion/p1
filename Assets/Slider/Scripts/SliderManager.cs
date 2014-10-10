@@ -124,6 +124,9 @@ namespace P1
 		public float SliderSpeed;
 		public bool TicksOnOff;
 		public GameObject TickGRP;
+		
+		public TextMesh TextNumberPrompt;
+		public Material TextNumberBack;
 
 
 		// Use this for initialization
@@ -153,7 +156,6 @@ namespace P1
 			SliderHandleWidth = n ["sliderHandleWidth"].AsFloat;
 			SliderHandleHeight = n ["sliderHandleWidth"].AsFloat;
 			SliderHandleDepth = n ["sliderHandleWidth"].AsFloat;
-			
 		}
 		
 		public IEnumerator BuildTicks (){
