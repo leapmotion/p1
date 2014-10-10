@@ -37,10 +37,12 @@ namespace P1
         }
         pins.Clear();
 
-        pins.Add(CreatePIN(transform.TransformPoint(new Vector3(-1.5f, 0.0f, 0.0f)), new_pin.Substring(0, 1)));
-        pins.Add(CreatePIN(transform.TransformPoint(new Vector3(-0.5f, 0.0f, 0.0f)), new_pin.Substring(1, 1)));
-        pins.Add(CreatePIN(transform.TransformPoint(new Vector3(0.5f, 0.0f, 0.0f)), new_pin.Substring(2, 1)));
-        pins.Add(CreatePIN(transform.TransformPoint(new Vector3(1.5f, 0.0f, 0.0f)), new_pin.Substring(3, 1)));
+        float starting_position = - (new_pin.Length - 1) * 0.5f;
+        for (int i = 0; i < new_pin.Length; ++i)
+        {
+          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(starting_position + i, 0.0f, 0.0f)), new_pin.Substring(i, 1)));
+        }
+          
 
         pins_index = 0;
       }
