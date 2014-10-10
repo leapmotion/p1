@@ -25,47 +25,53 @@ namespace P1
 			
 		}
 		
-
-		
-		public void InintializeSliderTrial (){
+		public void Start() {
+			DoStart();
 		}
 	
+		public void DoStart ()
+		{
+			monkeyDo = new ButtonTrial ();
+			//if (grid == null) {	
+			//    grid = GetComponent<GFRectGrid> ();
+			//}
+			//SetGridFromConfig ("Assets/config/grid_config.json");
+			
+			monkeyDo.SetTestFromConfig (Application.dataPath);
+			monkeyDo.TrialEvent += TrialUpdate;
+			
+			monkeyDo.Start ();
+			Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+			pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
+		}
+		
 		// Called once for each key pushed
 		void  TrialUpdate (ButtonTrial trial, bool correct)
 		{
-			if (trial.TrialComplete ()) {
-				if (test < testNum) {
-					if (test > 0) {
-						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-					}
-					// Initial instructions
-					test += 1;
-					monkeyDo.Start ();
-					Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-					//pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
-					pinPrompt.GetComponent<PINPrompt> ().UpdatePIN ("1");
-				} else {
-					pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-					Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
-					string path = Application.dataPath + "/TestResults/" + testPath;
-					Directory.CreateDirectory (path);
-					path += string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
-					File.WriteAllText (path, monkeyDo.ToString ());
-					Debug.Log ("Autopsy report written to: " + path);
-					
-					//TODO: Applaud Monkey *IN-SCENE*
-					if (SceneManager.instance)
-					{
-						SceneManager.instance.Next();
-					}
+			if (monkeyDo.StageComplete ()) {
+				// Show final correct result
+				pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+				Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+				
+				if (SceneManager.instance) {
+					SceneManager.instance.Next ();
 				}
 			} else {
-				if (monkeyDo.WasCorrect ()) {
+				if (monkeyDo.TrialComplete ()) {
+					// Show final correct result
 					pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-					Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+					
+					monkeyDo.Start ();
+					Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
+					pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 				} else {
-					pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
-					Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+					if (monkeyDo.WasCorrect ()) {
+						Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+					} else {
+						Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
+					}
 				}
 			}
 		}
@@ -95,8 +101,19 @@ namespace P1
 		}
 		
 		void Update (){
-			if(Input.GetKey(KeyCode.T)){
-				TrialUpdate(monkeyDo, true);
+//			Debug.Log ("Update");
+			if(Input.GetKey(KeyCode.U)){
+				Debug.Log ("U");
+				monkeyDo.WhenPushed (true, '0');
+				monkeyDo.WhenPushed (true, '1');
+				monkeyDo.WhenPushed (true, '2');
+				monkeyDo.WhenPushed (true, '3');
+				monkeyDo.WhenPushed (true, '4');
+				monkeyDo.WhenPushed (true, '5');
+				monkeyDo.WhenPushed (true, '6');
+				monkeyDo.WhenPushed (true, '7');
+				monkeyDo.WhenPushed (true, '8');
+				monkeyDo.WhenPushed (true, '9');
 			}
 		}
 		

@@ -1,4 +1,9 @@
 {
+	"results_dir": "user",
 	"trial_count": 3,
-	"results_dir": "ghare"
+	"slider" {
+		"trial_count": 10,
+		"min_tick": 0,
+		"max_tick": 10
+	}
 }
