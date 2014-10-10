@@ -43,7 +43,6 @@ namespace P1
 				public GameObject buttonTemplate;
 				//public GFRectGrid grid;
 				int test;
-				string testPath = ""; //DEFAULT: Record in TestResults
 				int testNum = 1; //DEFAULT: Run one trial
 				ButtonTrial monkeyDo;
 				public GameObject pinPrompt;
@@ -64,7 +63,7 @@ namespace P1
 						//    grid = GetComponent<GFRectGrid> ();
 						//}
 						SetGridFromConfig ("Assets/config/grid_config.json");
-						SetTestFromConfig ("Assets/config/test_config.json");
+						monkeyDo.SetTestFromConfig (Application.dataPath);
 						test = 1;
 
 						monkeyDo.TrialEvent += TrialUpdate;
@@ -168,14 +167,6 @@ namespace P1
 
 						backPad.transform.localPosition = new Vector3 (0.0f, 0.0f, buttonScale.z);
 						backPad.transform.localScale = new Vector3 (Mathf.Max (buttonScale.x * 0.75f, (3.0f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (5.0f * buttonScale.y + 3.5f * buttonSpacing.y + 0.1f) / 5.5f, buttonScale.z);
-				}
-
-				public void SetTestFromConfig (string filePath)
-				{
-						JSONNode data = Utils.FileToJSON (filePath);
-						testNum = data ["trial_count"].AsInt;
-						monkeyDo.SetRecordFile(Application.dataPath + "/TestResults/" + data ["results_dir"].Value,"ButtonTest");
-						Debug.Log ("monkeyDo.GetRecordpath = " + monkeyDo.GetRecordPath());
 				}
 		
 		#endregion
