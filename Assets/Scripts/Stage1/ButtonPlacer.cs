@@ -27,7 +27,7 @@ namespace P1
 		{
 
 				private Vector3 buttonScale;
-        private Vector3 buttonSpacing;
+				private Vector3 buttonSpacing;
 				public KeyDef[] keys = new KeyDef[]{
 					new KeyDef ("0", 0, -2),
 					new KeyDef ("1", -1, 1),
@@ -47,22 +47,22 @@ namespace P1
 				int testNum = 1; //DEFAULT: Run one trial
 				ButtonTrial monkeyDo;
 				public GameObject pinPrompt;
-        public GameObject backPad;
+				public GameObject backPad;
 
 #region loop
 
 				// Use this for initialization
 				void Start ()
 				{
-					DoStart ();
+						DoStart ();
 				}
 
 				public void DoStart ()
 				{
 						monkeyDo = new ButtonTrial ();
-            //if (grid == null) {	
-            //    grid = GetComponent<GFRectGrid> ();
-            //}
+						//if (grid == null) {	
+						//    grid = GetComponent<GFRectGrid> ();
+						//}
 						SetGridFromConfig ("Assets/config/grid_config.json");
 						SetTestFromConfig ("Assets/config/test_config.json");
 						test = 1;
@@ -96,10 +96,9 @@ namespace P1
 										Debug.Log ("Autopsy report written to: " + path);
 
 										//TODO: Applaud Monkey *IN-SCENE*
-                    if (SceneManager.instance)
-                    {
-                      SceneManager.instance.Next();
-                    }
+										if (SceneManager.instance) {
+												SceneManager.instance.Next ();
+										}
 								}
 						} else {
 								if (monkeyDo.WasCorrect ()) {
@@ -124,14 +123,14 @@ namespace P1
 				{
 						JSONNode data = Utils.FileToJSON (filePath);
 
-            float x, y, z;
+						float x, y, z;
 
 						x = data ["spacing"] ["x"].AsFloat;
 						y = data ["spacing"] ["y"].AsFloat;
 						z = data ["spacing"] ["z"].AsFloat;
 
 						//grid.spacing = new Vector3 (x, y, z);
-            buttonSpacing = new Vector3(x, y, z);
+						buttonSpacing = new Vector3 (x, y, z);
 
 						x = data ["buttonScale"] ["x"].AsFloat;
 						y = data ["buttonScale"] ["y"].AsFloat;
@@ -139,45 +138,44 @@ namespace P1
 
 						buttonScale = new Vector3 (x, y, z);
 
-            x = data["position"]["x"].AsFloat;
-            y = data["position"]["y"].AsFloat;
-            z = data["position"]["z"].AsFloat;
+						x = data ["position"] ["x"].AsFloat;
+						y = data ["position"] ["y"].AsFloat;
+						z = data ["position"] ["z"].AsFloat;
 
-            transform.position = new Vector3(x, y, z);
-            transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+						transform.position = new Vector3 (x, y, z);
+						transform.rotation = Quaternion.LookRotation (transform.position - Camera.main.transform.position);
 
-            float sensitivity = data["button"]["sensitivity"].AsFloat;
+						float sensitivity = data ["button"] ["sensitivity"].AsFloat;
 
-            foreach (KeyDef k in keys)
-            {
-              //Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
-              Vector3 localPos = new Vector3(
+						foreach (KeyDef k in keys) {
+								//Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
+								Vector3 localPos = new Vector3 (
                 k.i * buttonSpacing.x + k.i * buttonScale.x,
                 k.j * buttonSpacing.y + k.j * buttonScale.y,
                 0
-                );
-              GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
-              go.SetActive(true);
-              TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
-              g.SetTriggerSensitivity(sensitivity);
-              g.KeypadScale = buttonScale;
-              g.label = k.label;
-              go.transform.parent = transform;
-              go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = transform.TransformPoint(localPos);
-              g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate(monkeyDo.WhenPushed);
-              go.transform.localPosition = localPos;
-              go.transform.localScale = buttonScale;
-              go.transform.rotation = transform.rotation;
-            }
+								);
+								GameObject go = ((GameObject)Instantiate (buttonTemplate, transform.TransformPoint (localPos), Quaternion.identity));
+								go.SetActive (true);
+								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
+								g.SetTriggerSensitivity (sensitivity);
+								g.KeypadScale = buttonScale;
+								g.label = k.label;
+								go.transform.parent = transform;
+								go.gameObject.transform.FindChild ("button").FindChild ("default").GetComponent<SpringJoint> ().connectedAnchor = transform.TransformPoint (localPos);
+								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (monkeyDo.WhenPushed);
+								go.transform.localPosition = localPos;
+								go.transform.localScale = buttonScale;
+								go.transform.rotation = transform.rotation;
+						}
 
-            pinPrompt.transform.localPosition = new Vector3(0, 0.1f + 2 * buttonScale.y + buttonSpacing.y, 0.0f);
-            pinPrompt.transform.localScale = buttonScale;
-            pinPrompt.transform.rotation = transform.rotation;
+						pinPrompt.transform.localPosition = new Vector3 (0, 0.1f + 2 * buttonScale.y + buttonSpacing.y, 0.0f);
+						pinPrompt.transform.localScale = buttonScale;
+						pinPrompt.transform.rotation = transform.rotation;
 
-            transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+						transform.FindChild ("Cube").transform.localPosition = new Vector3 (0.0f, 0.0f, 0.0f);
 
-            backPad.transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
-            backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (3.0f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (5.0f * buttonScale.y + 3.5f * buttonSpacing.y + 0.1f) / 5.5f, buttonScale.z);
+						backPad.transform.localPosition = new Vector3 (0.0f, 0.0f, buttonScale.z);
+						backPad.transform.localScale = new Vector3 (Mathf.Max (buttonScale.x * 0.75f, (3.0f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (5.0f * buttonScale.y + 3.5f * buttonSpacing.y + 0.1f) / 5.5f, buttonScale.z);
 				}
 
 				public void SetTestFromConfig (string filePath)
