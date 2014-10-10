@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
+using SimpleJSON;
 
 namespace ButtonMonkey
 {
@@ -11,7 +14,8 @@ namespace ButtonMonkey
 				ButtonCounter counter;
 				bool correct;
 				float current;
-				string report;
+				string history;
+				string recordPath;
 				Stopwatch timer;
 
 				// Initialize to completed state
@@ -22,11 +26,13 @@ namespace ButtonMonkey
 						counter = new ButtonCounter ();
 						correct = false;
 						current = 0.0f;
-						report = "";
+						history = "";
+						recordPath = "";
 
 						timer = new Stopwatch ();
 				}
-		
+
+				//TODO: Move generation to a separate file (will be distinct for other tests).
 				// Generate a random sequence of 4 keys
 				// subject to the condition that no row is repeated
 				public void Start ()
@@ -58,6 +64,18 @@ namespace ButtonMonkey
 						timer.Start ();
 				}
 
+				public void SetRecordFile (string path, string name)
+				{
+						Directory.CreateDirectory (path);
+						recordPath = path + "/" + name + string.Format ("-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+						File.WriteAllText (recordPath, "No Data from Trials");
+				}
+
+				public string GetRecordPath ()
+				{
+						return recordPath;
+				}
+
 				//Events are broadcast AFTER trial state has been updated
 				public delegate void TrialUpdate (ButtonTrial trial,bool correct);
 
@@ -79,8 +97,8 @@ namespace ButtonMonkey
 										step += 1;
 										if (IsComplete ()) {
 												counter.CommitTrial ();
-												report += "Trial: " + GetTrialKeys () + "\n";
-												report += counter.ToString () + "\n";
+												history += "Trial: " + GetTrialKeys () + "\n";
+												history += counter.ToString () + "\n";
 										} else {
 												counter.ChangeTarget (keys [step].ToString () [0]);
 										}
@@ -91,6 +109,11 @@ namespace ButtonMonkey
 								if (TrialEvent != null) {
 										TrialEvent (this, correct);
 								}
+						}
+			
+						if (recordPath.Length > 0) {
+								// Record partial results
+								File.WriteAllText (recordPath, this.ToString ());
 						}
 				}
 
@@ -134,7 +157,12 @@ namespace ButtonMonkey
 				//Print results in CSV format
 				public override string ToString ()
 				{
-						return report;
+						string record = history;
+						if (!IsComplete ()) {
+								record += "Trial: " + GetTrialKeys () + "\n";
+								record += counter.ToString () + "\n";
+						}
+						return record;
 				}
 		}
 }
