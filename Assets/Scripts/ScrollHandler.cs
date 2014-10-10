@@ -101,8 +101,10 @@ namespace P1
         if (allowScroll_ && activeHandParts > 0 && content)
         {
           Vector3 position_change = activeHand_.GetPalmPosition() - start_palm_position_;
-          position_change.z = 0.0f;
           content.transform.position = start_content_position + position_change;
+          Vector3 local_position = content.transform.localPosition;
+          local_position.z = 0.0f;
+          content.transform.localPosition = local_position;
         }
       }
     }
