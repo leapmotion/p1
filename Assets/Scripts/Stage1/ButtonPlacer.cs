@@ -146,6 +146,8 @@ namespace P1
             transform.position = new Vector3(x, y, z);
             transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
 
+            float sensitivity = data["button"]["x"].AsFloat;
+
             foreach (KeyDef k in keys)
             {
               //Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
@@ -165,6 +167,7 @@ namespace P1
               go.transform.localPosition = localPos;
               go.transform.localScale = buttonScale;
               go.transform.rotation = transform.rotation;
+
             }
 
             pinPrompt.transform.localPosition = new Vector3(0, 0.1f + 2 * buttonScale.y + buttonSpacing.y, 0.0f);
