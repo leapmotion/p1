@@ -146,7 +146,7 @@ namespace P1
             transform.position = new Vector3(x, y, z);
             transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
 
-            float sensitivity = data["button"]["x"].AsFloat;
+            float sensitivity = data["button"]["sensitivity"].AsFloat;
 
             foreach (KeyDef k in keys)
             {
@@ -159,6 +159,7 @@ namespace P1
               GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
               go.SetActive(true);
               TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
+              g.SetTriggerSensitivity(sensitivity);
               g.KeypadScale = buttonScale;
               g.label = k.label;
               go.transform.parent = transform;
@@ -167,7 +168,6 @@ namespace P1
               go.transform.localPosition = localPos;
               go.transform.localScale = buttonScale;
               go.transform.rotation = transform.rotation;
-
             }
 
             pinPrompt.transform.localPosition = new Vector3(0, 0.1f + 2 * buttonScale.y + buttonSpacing.y, 0.0f);
