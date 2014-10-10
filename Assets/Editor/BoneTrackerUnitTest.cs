@@ -66,39 +66,39 @@ namespace P1
 			GameObject addedAtMaxTime = new GameObject("bone3");
 			t.TallyGameObject(addedAtTimeZero);
 			
-			Debug.Log ("R1: " + t.Report());
+//			Debug.Log ("R1: " + t.Report());
 			Assert.AreEqual(1, t.boneCount, "R1 after first bone added, has 1 bones");
 
 			t.time.now = BoneTracker.MAX_BONE_STALE_TIME - 0.0001f;
 			t.TallyGameObject (addedJustBeforeMaxTime);
 			t.RetireOldBones();
 			
-			Debug.Log ("R2: " + t.Report());
+		//	Debug.Log ("R2: " + t.Report());
 			Assert.AreEqual(2, t.boneCount, "R2 after second bone added, has 2 bones");
 			
 			t.time.now = BoneTracker.MAX_BONE_STALE_TIME;
 			t.TallyGameObject (addedAtMaxTime);
 			t.RetireOldBones();
 			
-			Debug.Log ("R3: " + t.Report());
+		//	Debug.Log ("R3: " + t.Report());
 			Assert.AreEqual(3, t.boneCount, "R3 after third bone added has 3 bones");
 			
 			t.time.now = BoneTracker.MAX_BONE_STALE_TIME + 0.0001f;
 			t.RetireOldBones();
 			
-			Debug.Log ("R4: " + t.Report());
+		//	Debug.Log ("R4: " + t.Report());
 			Assert.AreEqual(2, t.boneCount, "R4 just after stale time has 2 bones");
 			
 			t.time.now = BoneTracker.MAX_BONE_STALE_TIME * 2;
 			t.RetireOldBones();
 			
-			Debug.Log ("R5: " + t.Report());
+		//	Debug.Log ("R5: " + t.Report());
 			Assert.AreEqual(1, t.boneCount, "R5 after 2 x stale time has  1 bones");
 			
 			t.time.now = BoneTracker.MAX_BONE_STALE_TIME * 2 + 0.00001f;
 			t.RetireOldBones();
 			
-			Debug.Log ("R6: " + t.Report());
+		//	Debug.Log ("R6: " + t.Report());
 			Assert.AreEqual(0, t.boneCount, "R6 after 2 x stale time + has  0 bones");
 		}
 		

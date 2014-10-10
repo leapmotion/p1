@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,46 +8,76 @@ namespace P1
 		{
 				TwitterReader tr;
 				public GameObject items;
-				List<TwitterListStatus> statuses = new List<TwitterListStatus> ();
+				List<TwitterStatusButton> statuses = new List<TwitterStatusButton> ();
 				const int MAX_TWEETS = 7;
 				bool targetSet = false;
+				public string tweetSource;
+				const string TWITTER_LIST_TARGET_STATE = "listTriggerState";
+
+		#if UNITY_EDITOR || UNITY_STANDALONE
+#endif
+
 #region loop
 		
 				// Use this for initialization
 				void Start ()
 				{
-						if (!StateList.HasList ("listTriggerState"))
-								InitListTriggerState ();
-						tr = new TwitterReader ("Assets/data/justin_tweets.json");
-						foreach (TwitterStatus s in tr.statuses) {
-								AddStatus (s);
-						}
+						InitState ();
+						if (tweetSource != "")
+								ReadTweets (tweetSource);
 				}
 		
 				// Update is called once per frame
 				void Update ()
 				{
 						if (!targetSet) {
-								targetSet = true;
-								statuses [Random.Range (0, statuses.Count - 1)].state.Change ("target");
+								SetRandomTarget ();
 						}
 				}
 
 #endregion
 
-				void InitListTriggerState ()
+				public void InitState ()
 				{
-						new StateList ("listTriggerState", "base", "scrolling");
+						if (!StateList.HasList (TWITTER_LIST_TARGET_STATE))
+								InitListTriggerState ();
 				}
 
-				void AddStatus (TwitterStatus s)
+				public void SetRandomTarget ()
+				{
+						statuses [Random.Range (0, statuses.Count - 1)].targetState.Change ("target");
+						targetSet = true;
+				}
+
+				public void ReadTweets (string source)
+				{
+						tr = new TwitterReader (source);
+						foreach (Tweet s in tr.statuses) {
+								AddStatus (s);
+						}
+				}
+
+				void InitListTriggerState ()
+				{
+						new StateList (TWITTER_LIST_TARGET_STATE, "base", "scrolling");
+				}
+
+				void AddStatus (Tweet s)
 				{
 						if (statuses.Count >= MAX_TWEETS)
 								return;
-						GameObject go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
+
+						GameObject go;
+
+						#if UNITY_EDITOR
+			            go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
+						#else 
+						go = new GameObject ();
+						go.AddComponent ("TwitterStatusButton");
 						go.transform.parent = items.transform;
+						#endif
 			
-						TwitterListStatus status = go.GetComponent<TwitterListStatus> ();
+						TwitterStatusButton status = go.GetComponent<TwitterStatusButton> ();
 						status.list = this;
 						status.status = s;
 						status.index = statuses.Count;
@@ -55,7 +85,7 @@ namespace P1
 						statuses.Add (status);
 				}
 
-				public TwitterListStatus PrevStatus (TwitterListStatus s)
+				public TwitterStatusButton PrevStatus (TwitterStatusButton s)
 				{
 						if (s.index <= 0) {
 								return null;
@@ -63,12 +93,27 @@ namespace P1
 						return statuses [s.index - 1];
 				}
 
-				public void TargetSet (TwitterListStatus status)
+#region aggregate state changes
+/**
+ * these states can only be true for a single button;clears sets for other buttons
+ */
+		
+				public void TargetSet (TwitterStatusButton status)
 				{
-						foreach (TwitterListStatus s in statuses) {
+						foreach (TwitterStatusButton s in statuses) {
 								if (s.index != status.index)
-										s.state.Change ("base");
+										s.targetState.Change ("base");
 						}
 				}
+		
+				public void HoverSet (TwitterStatusButton status)
+				{
+						foreach (TwitterStatusButton s in statuses) {
+								if (s.index != status.index)
+										s.hoverState.Change ("base");
+						}
+				}
+
+#endregion
 		}
 }

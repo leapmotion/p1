@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace P1
 {
-		public class TwitterStatus
+		public class Tweet
 		{
 				public string text;
 				public string date;
@@ -29,7 +29,7 @@ namespace P1
 						"Dec"
 				};
 
-				public TwitterStatus (string t, string d)
+				public Tweet (string t, string d)
 				{
 						text = t;
 						date = d;
@@ -67,7 +67,7 @@ namespace P1
 						return -1;
 				}
 
-		public TwitterStatus (JSONNode n): 	this (n ["text"].Value, n ["created_at"].Value)
+		public Tweet (JSONNode n): 	this (n ["text"].Value, n ["created_at"].Value)
 				{
 					
 				}

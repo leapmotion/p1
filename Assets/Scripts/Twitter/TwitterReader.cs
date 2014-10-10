@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using SimpleJSON;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace P1
 		public class TwitterReader
 		{
 
-				public List<TwitterStatus> statuses = new List<TwitterStatus> ();
+				public List<Tweet> statuses = new List<Tweet> ();
 
 		#region constructor
 		
@@ -27,7 +27,7 @@ namespace P1
 
 				void AddStatus (JSONNode n)
 				{
-						statuses.Add (new TwitterStatus (n));
+						statuses.Add (new Tweet (n));
 				}
 
 		#endregion

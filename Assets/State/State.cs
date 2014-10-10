@@ -73,13 +73,7 @@ namespace P1
 		
 				/// <summary>An event that gets fired </summary>
 				public event StateChangedDelegate StateChangedEvent;
-		/*
-				public void StateChanged (StateListItem fromItem, StateListItem toItem)
-				{
-						if (StateChangedEvent != null) // fire the event
-								StateChangedEvent (new StateChange (fromItem, toItem, list, true));
-				}
-*/
+
 				public void StateChanged (StateListItem fromItem, StateListItem toItem, bool allowed = true)
 				{
 						if (StateChangedEvent != null) // fire the event

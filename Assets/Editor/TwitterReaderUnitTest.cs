@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -47,7 +47,7 @@ namespace P1
 		
 				public void MonthUnitTest ()
 				{
-						Assert.AreEqual (3, TwitterStatus.StrToMonth ("Mar"), "march is the third month");
+						Assert.AreEqual (3, Tweet.StrToMonth ("Mar"), "march is the third month");
 			
 				}
 #endregion
