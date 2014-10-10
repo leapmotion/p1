@@ -10,7 +10,6 @@ namespace P1
   {
 
     public GameObject buttonTemplate;
-    public bool useConfigScale = true;
     private List<GameObject> pins = new List<GameObject>();
     private int pins_index = 0;
     private string new_pin;
@@ -20,14 +19,6 @@ namespace P1
     // Use this for initialization
     void Start()
     {
-      if (useConfigScale)
-      {
-        JSONNode data = Utils.FileToJSON("Assets/config/grid_config.json");
-        float x = data["buttonScale"]["x"].AsFloat;
-        float y = data["buttonScale"]["y"].AsFloat;
-        float z = data["buttonScale"]["z"].AsFloat;
-        transform.localScale = new Vector3(x, y, z);
-      }
     }
 
     // Update is called once per frame
