@@ -40,7 +40,6 @@ namespace P1
 						JSONNode n = Utils.FileToJSON ("Assets/config/scene_config.json");
 						if (n == null)
 								throw new UnityException ("No data");
-						Debug.Log ("Number of scenes: " + n ["scenes"].Count);
 						for (int i = 0; i < n["scenes"].Count; ++i) {
 								scenes.Add (n ["scenes"] [i].Value);
 						}
