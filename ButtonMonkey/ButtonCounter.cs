@@ -97,7 +97,7 @@ namespace ButtonMonkey
 						complete = new List<PushedTrials> ();
 				}
 		
-				public void CountPush (bool complete, char symbol, float time)
+				public void WhenPushed (bool complete, char symbol, float time)
 				{
 						if (ready == false) {
 								return;
