@@ -146,6 +146,8 @@ namespace P1
             transform.position = new Vector3(x, y, z);
             transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
 
+            float sensitivity = data["button"]["x"].AsFloat;
+
             foreach (KeyDef k in keys)
             {
               //Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
@@ -165,13 +167,14 @@ namespace P1
               go.transform.localPosition = localPos;
               go.transform.localScale = buttonScale;
               go.transform.rotation = transform.rotation;
+
             }
 
             pinPrompt.transform.localPosition = new Vector3(0, 0.1f + 2 * buttonScale.y + buttonSpacing.y, 0.0f);
             pinPrompt.transform.localScale = buttonScale;
             pinPrompt.transform.rotation = transform.rotation;
 
-            transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
+            transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
             backPad.transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
             backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (3.0f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (5.0f * buttonScale.y + 3.5f * buttonSpacing.y + 0.1f) / 5.5f, buttonScale.z);
