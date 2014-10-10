@@ -38,7 +38,6 @@ namespace ButtonMonkey
 						rows.Add (1 + (gen.Next () % 3));
 						rows.Add (4 + (gen.Next () % 3));
 						rows.Add (7 + (gen.Next () % 3));
-						rows.Add (0);
 			
 						// Choose a random ordering of rows
 						keys.Clear ();
