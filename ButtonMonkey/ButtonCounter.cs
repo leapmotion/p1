@@ -69,12 +69,12 @@ namespace ButtonMonkey
 				}
 		}
 
-		public struct PushedTrials
+		public struct AttemptsMade
 		{
 				public char target;
 				public List<ButtonPushed> attempts;
 
-				public PushedTrials (char t, List<ButtonPushed> a)
+				public AttemptsMade (char t, List<ButtonPushed> a)
 				{
 						target = t;
 						attempts = a;
@@ -86,7 +86,7 @@ namespace ButtonMonkey
 				bool ready;
 				char target;
 				List<ButtonPushed> attempts;
-				List<PushedTrials> complete;
+				List<AttemptsMade> complete;
 
 				public ButtonCounter ()
 				{
@@ -94,7 +94,7 @@ namespace ButtonMonkey
 						target = ' ';
 
 						attempts = new List<ButtonPushed> ();
-						complete = new List<PushedTrials> ();
+						complete = new List<AttemptsMade> ();
 				}
 		
 				public void WhenPushed (bool complete, char symbol, float time)
@@ -111,7 +111,7 @@ namespace ButtonMonkey
 
 				public void CommitTrial ()
 				{
-						complete.Add (new PushedTrials (
+						complete.Add (new AttemptsMade (
 				target, 
 				attempts
 						));
@@ -169,10 +169,10 @@ namespace ButtonMonkey
 				public int CompletedSuccessCount {
 						get { 
 								int successes = 0;
-								foreach (PushedTrials trials in complete) {
-										char goal = trials.target;
-										foreach (ButtonPushed push in trials.attempts) {
-												if (push.symbol == goal) {
+								foreach (AttemptsMade c in complete) {
+										char goal = c.target;
+										foreach (ButtonPushed a in c.attempts) {
+												if (a.symbol == goal) {
 														successes += 1;
 												}
 										}
@@ -185,14 +185,14 @@ namespace ButtonMonkey
 				public override string ToString ()
 				{
 						string report = "";
-						foreach (PushedTrials trials in complete) {
-								char goal = trials.target;
-								foreach (ButtonPushed push in trials.attempts) {
-										report += push.RecordFormat (goal);
+						foreach (AttemptsMade c in complete) {
+								char goal = c.target;
+								foreach (ButtonPushed a in c.attempts) {
+										report += a.RecordFormat (goal);
 								}
 						}
-						foreach (ButtonPushed push in attempts) {
-							report += push.RecordFormat (target);
+						foreach (ButtonPushed a in attempts) {
+								report += a.RecordFormat (target);
 						}
 						return report;
 				}

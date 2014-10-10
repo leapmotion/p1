@@ -11,6 +11,19 @@ namespace ButtonMonkey
 		{
 				public List<int> keys;
 				public ButtonCounter counter;
+
+				public override string ToString ()
+				{
+						string report = "";
+						if (keys.Count > 0) {
+								report += "Trial Keys:, ";
+								foreach (int k in keys) {
+										report += k.ToString () + ", ";
+								}
+								report += "\n" + counter.ToString () + "\n";
+						}
+						return report;
+				}
 		}
 
 		public class ButtonTrial
@@ -22,8 +35,7 @@ namespace ButtonMonkey
 				bool correct;
 				int step;
 				// Multiple Trial Records
-				List<ButtonCounter> counters;
-				string history;
+				List<Trial> history;
 				string recordPath;
 				int test;
 				int testNum;
@@ -31,18 +43,24 @@ namespace ButtonMonkey
 				// Initialize to completed state
 				public ButtonTrial ()
 				{
-			
 						timer = new Stopwatch ();
 						// Initialize to Empty Trial
 						trial = new Trial ();
 						current = 0.0f;
 						correct = false;
 						step = 0;
-						counters = new List<ButtonCounter> ();
-						history = "";
+						history = new List<Trial> ();
 						recordPath = "";
 						test = 1;
 						testNum = 0;
+						Initialize ();
+				}
+
+				void Initialize() {
+					step = 0;
+					trial.keys = new List<int> ();
+					trial.counter = new ButtonCounter ();
+					//ASSERT: IsComplete() == true
 				}
 
 				//TODO: Move generation to a separate file (will be distinct for other tests).
@@ -50,6 +68,8 @@ namespace ButtonMonkey
 				// subject to the condition that no row is repeated
 				public void Start ()
 				{
+						Initialize ();
+
 						System.Random gen = new System.Random ();
 			
 						// List a random key from each row
@@ -60,18 +80,15 @@ namespace ButtonMonkey
 						rows.Add (0);
 			
 						// Choose a random ordering of rows
-						trial.keys = new List<int>();
+						trial.keys = new List<int> ();
 						while (rows.Count > 0) {
 								int next = gen.Next () % rows.Count;
 								trial.keys.Add (rows [next]);
 								rows.RemoveAt (next);
 						}
-			
-						// Initialize
-						step = 0;
-						trial.counter = new ButtonCounter ();
 						trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
-			
+
+						// Begin test
 						current = 0.0f;
 						timer.Reset ();
 						timer.Start ();
@@ -104,14 +121,16 @@ namespace ButtonMonkey
 						current = timer.ElapsedMilliseconds / 1000.0f;
 						trial.counter.WhenPushed (complete, label, current);
 
+						UnityEngine.Debug.Log ("Monkey pushed " + label + " for a total push count of " + trial.counter.CurrentAttemptsCount);
+
 						if (complete) {
 								if (label == trial.keys [step].ToString () [0]) {
 										correct = true;
 										step += 1;
 										if (IsComplete ()) {
 												trial.counter.CommitTrial ();
-												history += "Trial: " + GetTrialKeys () + "\n";
-												history += trial.counter.ToString () + "\n";
+												history.Add (trial);
+												Initialize();
 										} else {
 												trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
 										}
@@ -164,18 +183,18 @@ namespace ButtonMonkey
 
 				public bool IsComplete ()
 				{
-						return step > 3;
+						return step >= trial.keys.Count;
 				}
 		
 				//Print results in CSV format
 				public override string ToString ()
 				{
-						string record = history;
-						if (!IsComplete ()) {
-								record += "Trial: " + GetTrialKeys () + "\n";
-								record += trial.counter.ToString () + "\n";
+						string report = "";
+						foreach (Trial h in history) {
+								report += h.ToString ();
 						}
-						return record;
+						report += trial.ToString ();
+						return report;
 				}
 		}
 }
