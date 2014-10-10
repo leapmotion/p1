@@ -56,11 +56,12 @@ namespace ButtonMonkey
 						Initialize ();
 				}
 
-				void Initialize() {
-					step = 0;
-					trial.keys = new List<int> ();
-					trial.counter = new ButtonCounter ();
-					//ASSERT: IsComplete() == true
+				void Initialize ()
+				{
+						step = 0;
+						trial.keys = new List<int> ();
+						trial.counter = new ButtonCounter ();
+						//ASSERT: IsComplete() == true
 				}
 
 				//TODO: Move generation to a separate file (will be distinct for other tests).
@@ -92,6 +93,13 @@ namespace ButtonMonkey
 						current = 0.0f;
 						timer.Reset ();
 						timer.Start ();
+				}
+		
+				public void SetTestFromConfig (string dataPath)
+				{
+						JSONNode config = JSONNode.Parse (File.ReadAllText (dataPath + "/config/test_config.json"));
+						testNum = config ["trial_count"].AsInt;
+						SetRecordFile (dataPath + "/TestResults/" + config ["results_dir"].Value, "ButtonTest");
 				}
 
 				public void SetRecordFile (string path, string name)
@@ -130,7 +138,7 @@ namespace ButtonMonkey
 										if (IsComplete ()) {
 												trial.counter.CommitTrial ();
 												history.Add (trial);
-												Initialize();
+												Initialize ();
 										} else {
 												trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
 										}
