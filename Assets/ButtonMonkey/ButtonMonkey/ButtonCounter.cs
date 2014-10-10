@@ -15,14 +15,66 @@ namespace ButtonMonkey
 						symbol = s;
 						time = t;
 				}
+
+				public string RecordFormat (char goal)
+				{
+						//return goal + ", " + push.symbol + ", " + push.complete.ToString () + ", " + push.time.ToString () + "\n";
+			
+						//Dorin accessibility assistance
+						string report = "";
+						int IsHit = 0;
+						if (goal == symbol) {
+								IsHit = 1;
+						}
+						int rectified = -1; //DEFAULT: Not on key pad
+						switch (symbol) {
+						case '0':
+								rectified = 0;
+								break;
+						case '1':
+								rectified = 1;
+								break;
+						case '2':
+								rectified = 2;
+								break;
+						case '3':
+								rectified = 3;
+								break;
+						case '4':
+								rectified = 4;
+								break;
+						case '5':
+								rectified = 5;
+								break;
+						case '6':
+								rectified = 6;
+								break;
+						case '7':
+								rectified = 7;
+								break;
+						case '8':
+								rectified = 8;
+								break;
+						case '9':
+								rectified = 9;
+								break;
+						default:
+								break; //DEFAULT
+						}
+						if (rectified >= 0 && !complete) {
+								rectified += 10;
+						}
+						report += goal + ", " + rectified.ToString () + ", " + IsHit.ToString () + ", " + time.ToString () + "\n";
+						return report;
+				}
 		}
 
-		public struct PushedTrials
+		public struct AttemptsMade
 		{
 				public char target;
 				public List<ButtonPushed> attempts;
 
-				public PushedTrials (char t, List<ButtonPushed> a)
+				public AttemptsMade (char t, List<ButtonPushed> a)
 				{
 						target = t;
 						attempts = a;
@@ -34,7 +86,7 @@ namespace ButtonMonkey
 				bool ready;
 				char target;
 				List<ButtonPushed> attempts;
-				List<PushedTrials> complete;
+				List<AttemptsMade> complete;
 
 				public ButtonCounter ()
 				{
@@ -42,10 +94,10 @@ namespace ButtonMonkey
 						target = ' ';
 
 						attempts = new List<ButtonPushed> ();
-						complete = new List<PushedTrials> ();
+						complete = new List<AttemptsMade> ();
 				}
 		
-		public void WhenPushed (bool complete, char symbol, float time)
+				public void WhenPushed (bool complete, char symbol, float time)
 				{
 						if (ready == false) {
 								return;
@@ -59,7 +111,7 @@ namespace ButtonMonkey
 
 				public void CommitTrial ()
 				{
-						complete.Add (new PushedTrials (
+						complete.Add (new AttemptsMade (
 				target, 
 				attempts
 						));
@@ -117,10 +169,10 @@ namespace ButtonMonkey
 				public int CompletedSuccessCount {
 						get { 
 								int successes = 0;
-								foreach (PushedTrials trials in complete) {
-										char goal = trials.target;
-										foreach (ButtonPushed push in trials.attempts) {
-												if (push.symbol == goal) {
+								foreach (AttemptsMade c in complete) {
+										char goal = c.target;
+										foreach (ButtonPushed a in c.attempts) {
+												if (a.symbol == goal) {
 														successes += 1;
 												}
 										}
@@ -133,56 +185,14 @@ namespace ButtonMonkey
 				public override string ToString ()
 				{
 						string report = "";
-						foreach (PushedTrials trials in complete) {
-								char goal = trials.target;
-								foreach (ButtonPushed push in trials.attempts) {
-										//report += goal + ", " + push.symbol + ", " + push.complete.ToString () + ", " + push.time.ToString () + "\n";
-
-										//Dorin accessibility assistance
-										int IsHit = 0;
-										if (goal == push.symbol) {
-											IsHit = 1;
-										}
-										int rectified = -1; //DEFAULT: Not on key pad
-										switch (push.symbol) {
-										case '0':
-												rectified = 0;
-												break;
-										case '1':
-												rectified = 1;
-												break;
-										case '2':
-												rectified = 2;
-												break;
-										case '3':
-												rectified = 3;
-												break;
-										case '4':
-												rectified = 4;
-												break;
-										case '5':
-												rectified = 5;
-												break;
-										case '6':
-												rectified = 6;
-												break;
-										case '7':
-												rectified = 7;
-												break;
-										case '8':
-												rectified = 8;
-												break;
-										case '9':
-												rectified = 9;
-												break;
-										default:
-												break; //DEFAULT
-										}
-										if (rectified >= 0 && !push.complete) {
-											rectified += 10;
-										}
-										report += goal + ", " + rectified.ToString () + ", " + IsHit.ToString () + ", " + push.time.ToString () + "\n";
+						foreach (AttemptsMade c in complete) {
+								char goal = c.target;
+								foreach (ButtonPushed a in c.attempts) {
+										report += a.RecordFormat (goal);
 								}
+						}
+						foreach (ButtonPushed a in attempts) {
+								report += a.RecordFormat (target);
 						}
 						return report;
 				}

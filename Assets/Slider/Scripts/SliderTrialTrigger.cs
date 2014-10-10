@@ -33,7 +33,7 @@ namespace P1
 		// Called once for each key pushed
 		void  TrialUpdate (ButtonTrial trial, bool correct)
 		{
-			if (trial.IsComplete ()) {
+			if (trial.TrialComplete ()) {
 				if (test < testNum) {
 					if (test > 0) {
 						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
@@ -62,10 +62,10 @@ namespace P1
 			} else {
 				if (monkeyDo.WasCorrect ()) {
 					pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-					Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
+					Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
 				} else {
 					pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
-					Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
+					Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
 				}
 			}
 		}

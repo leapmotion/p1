@@ -42,9 +42,6 @@ namespace P1
 				};
 				public GameObject buttonTemplate;
 				//public GFRectGrid grid;
-				int test;
-				string testPath = ""; //DEFAULT: Record in TestResults
-				int testNum = 1; //DEFAULT: Run one trial
 				ButtonTrial monkeyDo;
 				public GameObject pinPrompt;
 				public GameObject backPad;
@@ -64,10 +61,10 @@ namespace P1
 						//    grid = GetComponent<GFRectGrid> ();
 						//}
 						SetGridFromConfig ("Assets/config/grid_config.json");
-						SetTestFromConfig ("Assets/config/test_config.json");
-						test = 1;
-
+			
+						monkeyDo.SetTestFromConfig (Application.dataPath);
 						monkeyDo.TrialEvent += TrialUpdate;
+
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
 						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
@@ -76,37 +73,30 @@ namespace P1
 				// Called once for each key pushed
 				void  TrialUpdate (ButtonTrial trial, bool correct)
 				{
-						if (trial.IsComplete ()) {
-								if (test < testNum) {
-										if (test > 0) {
-												pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-										}
-										// Initial instructions
-										test += 1;
+						if (monkeyDo.StageComplete ()) {
+								// Show final correct result
+								pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+								Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+
+								if (SceneManager.instance) {
+										SceneManager.instance.Next ();
+								}
+						} else {
+								if (monkeyDo.TrialComplete ()) {
+										// Show final correct result
+										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+
 										monkeyDo.Start ();
 										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
 										pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 								} else {
-										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-										Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
-										string path = Application.dataPath + "/TestResults/" + testPath;
-										Directory.CreateDirectory (path);
-										path += string.Format ("ButtonTest-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
-										File.WriteAllText (path, monkeyDo.ToString ());
-										Debug.Log ("Autopsy report written to: " + path);
-
-										//TODO: Applaud Monkey *IN-SCENE*
-										if (SceneManager.instance) {
-												SceneManager.instance.Next ();
+										if (monkeyDo.WasCorrect ()) {
+												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+												pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+										} else {
+												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+												pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
 										}
-								}
-						} else {
-								if (monkeyDo.WasCorrect ()) {
-										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-										Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
-								} else {
-										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
-										Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
 								}
 						}
 				}
@@ -150,9 +140,9 @@ namespace P1
 						foreach (KeyDef k in keys) {
 								//Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
 								Vector3 localPos = new Vector3 (
-                k.i * buttonSpacing.x + k.i * buttonScale.x,
-                k.j * buttonSpacing.y + k.j * buttonScale.y,
-                0
+					                k.i * buttonSpacing.x + k.i * buttonScale.x,
+					                k.j * buttonSpacing.y + k.j * buttonScale.y,
+					                0
 								);
 								GameObject go = ((GameObject)Instantiate (buttonTemplate, transform.TransformPoint (localPos), Quaternion.identity));
 								go.SetActive (true);
@@ -176,16 +166,6 @@ namespace P1
 
 						backPad.transform.localPosition = new Vector3 (0.0f, 0.0f, buttonScale.z);
 						backPad.transform.localScale = new Vector3 (Mathf.Max (buttonScale.x * 0.75f, (3.0f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (5.0f * buttonScale.y + 3.5f * buttonSpacing.y + 0.1f) / 5.5f, buttonScale.z);
-				}
-
-				public void SetTestFromConfig (string filePath)
-				{
-						JSONNode data = Utils.FileToJSON (filePath);
-						testPath = data ["results_dir"].ToString ();
-						// NOTE: JSONNode ToString helpfully interprets both path/ (no quotes in file) and "path/" (quotes in file)
-						// as "path/" (quotes IN string).
-						testPath = testPath.Substring (1, testPath.Length - 2);
-						testNum = data ["trial_count"].AsInt;
 				}
 		
 		#endregion
