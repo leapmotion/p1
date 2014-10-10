@@ -42,8 +42,6 @@ namespace P1
 				};
 				public GameObject buttonTemplate;
 				//public GFRectGrid grid;
-				int test;
-				int testNum = 1; //DEFAULT: Run one trial
 				ButtonTrial monkeyDo;
 				public GameObject pinPrompt;
 				public GameObject backPad;
@@ -63,10 +61,10 @@ namespace P1
 						//    grid = GetComponent<GFRectGrid> ();
 						//}
 						SetGridFromConfig ("Assets/config/grid_config.json");
+			
 						monkeyDo.SetTestFromConfig (Application.dataPath);
-						test = 1;
-
 						monkeyDo.TrialEvent += TrialUpdate;
+
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
 						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
@@ -75,32 +73,30 @@ namespace P1
 				// Called once for each key pushed
 				void  TrialUpdate (ButtonTrial trial, bool correct)
 				{
-						if (trial.IsComplete ()) {
-								if (test < testNum) {
-										if (test > 0) {
-												pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-										}
-										// Initial instructions
-										test += 1;
+						if (monkeyDo.StageComplete ()) {
+								// Show final correct result
+								pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+								Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+
+								if (SceneManager.instance) {
+										SceneManager.instance.Next ();
+								}
+						} else {
+								if (monkeyDo.TrialComplete ()) {
+										// Show final correct result
+										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+
 										monkeyDo.Start ();
 										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
 										pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
 								} else {
-										// Show completed PIN for final trial
-										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-
-										Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
-										if (SceneManager.instance) {
-												SceneManager.instance.Next ();
+										if (monkeyDo.WasCorrect ()) {
+												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+												pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
+										} else {
+												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+												pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
 										}
-								}
-						} else {
-								if (monkeyDo.WasCorrect ()) {
-										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-										Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTargetKey ());
-								} else {
-										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
-										Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTargetKey ());
 								}
 						}
 				}
