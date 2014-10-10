@@ -5,6 +5,8 @@ namespace P1
 {
   public class ScrollDetector : MonoBehaviour
   {
+    public ScrollHandler scrollHandler;
+
     // Use this for initialization
     void Start()
     {
@@ -19,12 +21,12 @@ namespace P1
 
     void OnTriggerEnter(Collider other)
     {
-      Debug.Log("Start Scroll");
+      scrollHandler.SetScroll(true);
     }
 
     void OnTriggerExit(Collider other)
     {
-      Debug.Log("Stop Scroll");
+      scrollHandler.SetScroll(false);
     }
   }
 }
