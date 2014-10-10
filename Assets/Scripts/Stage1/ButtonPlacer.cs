@@ -174,7 +174,7 @@ namespace P1
             pinPrompt.transform.localScale = buttonScale;
             pinPrompt.transform.rotation = transform.rotation;
 
-            transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
+            transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
             backPad.transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
             backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (3.0f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (5.0f * buttonScale.y + 3.5f * buttonSpacing.y + 0.1f) / 5.5f, buttonScale.z);

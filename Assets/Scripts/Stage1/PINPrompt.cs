@@ -77,6 +77,13 @@ namespace P1
       {
         collider.enabled = false;
       }
+      SpringJoint[] joints = go.GetComponentsInChildren<SpringJoint>();
+      foreach (SpringJoint joint in joints)
+      {
+        joint.spring = 0;
+      }
+      ButtonTrigger button_trigger = go.GetComponentInChildren<ButtonTrigger>();
+      button_trigger.transform.localPosition = Vector3.zero;
       go.transform.localScale = Vector3.one;
       go.GetComponent<TenKeyKey>().SetDefaultColor(starting_color);
       go.GetComponent<TenKeyKey>().ResetColor();
