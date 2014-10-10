@@ -51,48 +51,11 @@ namespace ButtonMonkey
 						step = 0;
 						history = new List<Trial> ();
 						recordPath = "";
-						test = 1;
+						test = 0;
 						testNum = 0;
 						Initialize ();
-				}
-
-				void Initialize ()
-				{
-						step = 0;
-						trial.keys = new List<int> ();
-						trial.counter = new ButtonCounter ();
-						//ASSERT: IsComplete() == true
-				}
-
-				//TODO: Move generation to a separate file (will be distinct for other tests).
-				// Generate a random sequence of keys
-				// subject to the condition that no row is repeated
-				public void Start ()
-				{
-						Initialize ();
-
-						System.Random gen = new System.Random ();
-			
-						// List a random key from each row
-						List<int> rows = new List<int> ();
-						rows.Add (1 + (gen.Next () % 3));
-						rows.Add (4 + (gen.Next () % 3));
-						rows.Add (7 + (gen.Next () % 3));
-						rows.Add (0);
-			
-						// Choose a random ordering of rows
-						trial.keys = new List<int> ();
-						while (rows.Count > 0) {
-								int next = gen.Next () % rows.Count;
-								trial.keys.Add (rows [next]);
-								rows.RemoveAt (next);
-						}
-						trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
-
-						// Begin test
-						current = 0.0f;
-						timer.Reset ();
-						timer.Start ();
+						//ASSERT: StageComplete() == true
+						//ASSERT: TrialComplete() == true
 				}
 		
 				public void SetTestFromConfig (string dataPath)
@@ -113,6 +76,49 @@ namespace ButtonMonkey
 				{
 						return recordPath;
 				}
+				
+				void Initialize ()
+				{
+						step = 0;
+						trial.keys = new List<int> ();
+						trial.counter = new ButtonCounter ();
+				}
+
+				public void Start ()
+				{
+						Initialize ();
+						GenerateKeys ();
+						trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
+					
+						// Begin test
+						current = 0.0f;
+						timer.Reset ();
+						timer.Start ();
+				}
+		
+				//TODO: Move generation to a separate file (will be distinct for other tests).
+				// Generate a random sequence of keys
+				// subject to the condition that no row is repeated
+				void GenerateKeys ()
+				{
+						System.Random gen = new System.Random ();
+					
+						// List a random key from each row
+						List<int> rows = new List<int> ();
+						rows.Add (1 + (gen.Next () % 3));
+						rows.Add (4 + (gen.Next () % 3));
+						rows.Add (7 + (gen.Next () % 3));
+						rows.Add (0);
+					
+						// Choose a random ordering of rows
+						trial.keys = new List<int> ();
+						while (rows.Count > 0) {
+								int next = gen.Next () % rows.Count;
+								trial.keys.Add (rows [next]);
+								rows.RemoveAt (next);
+						}
+
+				}
 
 				//Events are broadcast AFTER trial state has been updated
 				public delegate void TrialUpdate (ButtonTrial trial,bool correct);
@@ -121,7 +127,8 @@ namespace ButtonMonkey
 
 				public void WhenPushed (bool complete, char label)
 				{
-						if (IsComplete ()) {
+						if (StageComplete () ||
+			    			TrialComplete()) {
 								//Already complete -> no event
 								return;
 						}
@@ -129,16 +136,15 @@ namespace ButtonMonkey
 						current = timer.ElapsedMilliseconds / 1000.0f;
 						trial.counter.WhenPushed (complete, label, current);
 
-						UnityEngine.Debug.Log ("Monkey pushed " + label + " for a total push count of " + trial.counter.CurrentAttemptsCount);
-
 						if (complete) {
 								if (label == trial.keys [step].ToString () [0]) {
 										correct = true;
 										step += 1;
-										if (IsComplete ()) {
+										if (TrialComplete ()) {
 												trial.counter.CommitTrial ();
 												history.Add (trial);
-												Initialize ();
+												test += 1;
+												// Do not immediately start next test
 										} else {
 												trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
 										}
@@ -146,23 +152,16 @@ namespace ButtonMonkey
 										correct = false;
 								}
 			
+								// Only send events for complete button pushes
 								if (TrialEvent != null) {
 										TrialEvent (this, correct);
 								}
 						}
-			
+
+						// Update test results immediately
 						if (recordPath.Length > 0) {
-								// Record partial results
 								File.WriteAllText (recordPath, this.ToString ());
 						}
-				}
-
-				public char GetTargetKey ()
-				{
-						if (IsComplete ()) {
-								return ' ';
-						}
-						return trial.keys [step].ToString () [0];
 				}
 
 				public string GetTrialKeys ()
@@ -174,9 +173,9 @@ namespace ButtonMonkey
 						return trialKeys;
 				}
 
-				public bool HasAttempt ()
+				public int GetTrialStep ()
 				{
-						return trial.counter.CurrentAttemptsCount > 0;
+						return step;
 				}
 
 				public bool WasCorrect ()
@@ -189,9 +188,14 @@ namespace ButtonMonkey
 						return current;
 				}
 
-				public bool IsComplete ()
+				public bool TrialComplete ()
 				{
 						return step >= trial.keys.Count;
+				}
+
+				public bool StageComplete ()
+				{
+						return test >= testNum;
 				}
 		
 				//Print results in CSV format
@@ -201,7 +205,9 @@ namespace ButtonMonkey
 						foreach (Trial h in history) {
 								report += h.ToString ();
 						}
-						report += trial.ToString ();
+						if (!TrialComplete ()) {
+								report += trial.ToString ();
+						}
 						return report;
 				}
 		}
