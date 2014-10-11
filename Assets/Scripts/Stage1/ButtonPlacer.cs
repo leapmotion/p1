@@ -148,17 +148,24 @@ namespace P1
 
       float sensitivity = data["button"]["sensitivity"].AsFloat;
 
-      int Imin = 0;
-      int Imax = 0;
-      int Jmin = 0;
-      int Jmax = 0;
+      int row = 2; // TODO(wyu): Replace with config
+      int col = 5; // TODO(wyu): Replace with config
+      int num_keys = row * col;
+      float half_w = (float)(col - 1) / 2.0f;
+      float half_h = (float)(row - 1) / 2.0f;
+      Debug.Log(num_keys);
+      Debug.Log(keys.Length);
+      if (num_keys > keys.Length)
+      {
+        num_keys = keys.Length;
+        half_w = 1.0f; // (float)(3 - 1) / 2.0f;
+        half_h = 1.5f; // (float)(4 - 1) / 2.0f;
+      }
 
-      int row = 4; // TODO(wyu): Replace with config
-      int col = 3; // TODO(wyu): Replace with config
-      int num_keys = Mathf.Min(keys.Length, row * col);
-      float x_index = - (float)(col - 1) / 2.0f;
-      float y_index = (float)(row - 1) / 2.0f;
+      Vector3 center = Vector3.zero;
 
+      float x_index = - half_w;
+      float y_index = half_h;
       for (int i = 0; i < num_keys; ++i)
       {
         KeyDef k = keys[i];
@@ -169,8 +176,10 @@ namespace P1
         //  k.j * buttonSpacing.y + k.j * buttonScale.y,
         //  0
         //  );
+       
+        // Construct the matrix of keys based on the rows and cols. The last key will be at the last rol and centered
         Vector3 localPos;
-        if (i == keys.Length - 1)
+        if (i == keys.Length - 1 && half_w == 1.0f && half_h == 1.5f)
         {
           localPos = new Vector3(
             0,
@@ -187,17 +196,12 @@ namespace P1
           );
 
           x_index++;
-          if ((((col - 1) - x_index) / 2.0f) < 0.25f || ((x_index - (col - 1)) / 2.0f) > 0.25f)
+          if (x_index > (half_w + 0.25f))
           {
-            x_index = -(float)(col - 1) / 2.0f;
+            x_index = -half_w;
             y_index--;
           }
         }
-        
-        Imin = (int)Mathf.Min(k.i, Imin);
-        Imax = (int)Mathf.Max(k.i, Imax);
-        Jmin = (int)Mathf.Min(k.j, Jmin);
-        Jmax = (int)Mathf.Max(k.j, Jmax);
 
         GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
         go.SetActive(true);
@@ -213,44 +217,37 @@ namespace P1
         go.transform.rotation = transform.rotation;
       }
 
+      // PromptLandscape
+      // True - Left->Right
+      // False - Top->Down
+      bool isLandscape = data["button"]["promptLandscape"].AsBool;
+      float prompt_h = (isLandscape) ? 1.0f : 4.0f;
+      float prompt_w = (isLandscape) ? 4.0f : 1.0f;
+      float prompt_padding = 0.1f;
+
       // PromptPos
       // 0 - Top
       // 1 - Bottom
       // 2 - Right
       // 3 - Left
       int promptPos = data["button"]["promptPos"].AsInt;
-      Vector3 promptPosition = Vector3.zero;
-
-      // PromptLandscape
-      // True - Left->Right
-      // False - Top->Down
-      bool isLandscape = data["button"]["promptLandscape"].AsBool;
-      float y_size = 0.0f;
-      float x_size = 0.0f;
-      if (isLandscape)
-      {
-        x_size = 2.5f;
-        y_size = 1.0f;
-      }
-      else
-      {
-        x_size = 1.0f;
-        y_size = 2.5f;
-      }
-
+      Vector3 promptPosition = center;
       switch (promptPos)
       {
         case 0:
-          promptPosition.y = 0.1f + (Mathf.Abs(Jmax) + y_size) * buttonScale.y + Mathf.Abs(Jmax) * buttonSpacing.y;
+          promptPosition.y += prompt_padding + (half_h + prompt_h / 2 + 0.5f) * buttonScale.y + half_h * buttonSpacing.y;
           break;
         case 1:
-          promptPosition.y = -(0.1f + (Mathf.Abs(Jmin) + y_size) * buttonScale.y + Mathf.Abs(Jmin) * buttonSpacing.y);
+          promptPosition.y -= prompt_padding + (half_h + prompt_h / 2 + 0.5f) * buttonScale.y + half_h * buttonSpacing.y;
           break;
         case 2:
-          promptPosition.x = 0.1f + (Mathf.Abs(Imax) + x_size) * buttonScale.x + Mathf.Abs(Imax) * buttonSpacing.x;
+          promptPosition.x += prompt_padding + (half_w + prompt_w / 2 + 0.5f) * buttonScale.x + half_w * buttonSpacing.x;
           break;
         case 3:
-          promptPosition.x = -(0.1f + (Mathf.Abs(Imin) + x_size) * buttonScale.x + Mathf.Abs(Imin) * buttonSpacing.x);
+          promptPosition.x -= prompt_padding + (half_w + prompt_w / 2 + 0.5f) * buttonScale.x + half_w * buttonSpacing.x;
+          break;
+        default:
+          promptPosition.y += prompt_padding + (half_h + prompt_h / 2 + 0.5f) * buttonScale.y + half_h * buttonSpacing.y;
           break;
       }
       pinPrompt.transform.localPosition = promptPosition;

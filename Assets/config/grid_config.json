@@ -17,10 +17,10 @@
   "button": {
     "sensitivity": 1.2,
     "promptPos": 0,
-    "promptLandscape": true
+    "promptLandscape": false
   }
   "grid": {
     "row": 3,
-    "col": 3
+    "col": 4
   }
 }
