@@ -16,6 +16,11 @@
 	}
   "button": {
     "sensitivity": 1.2,
-    "promptPos": 2
+    "promptPos": 0,
+    "promptLandscape": true
+  }
+  "grid": {
+    "row": 3,
+    "col": 3
   }
 }

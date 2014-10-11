@@ -15,6 +15,7 @@ namespace P1
     private string new_pin;
     private float creation_timer = float.MaxValue;
     private Color starting_color = new Color(1.0f, 0.5f, 0.15f);
+    private bool is_landscape_ = true;
 
     // Use this for initialization
     void Start()
@@ -35,12 +36,24 @@ namespace P1
         float starting_position = - (new_pin.Length - 1) * 0.5f;
         for (int i = 0; i < new_pin.Length; ++i)
         {
-          pins.Add(CreatePIN(transform.TransformPoint(new Vector3(starting_position + i, 0.0f, 0.0f)), new_pin.Substring(i, 1)));
+          if (is_landscape_)
+          {
+            pins.Add(CreatePIN(transform.TransformPoint(new Vector3(starting_position + i, 0.0f, 0.0f)), new_pin.Substring(i, 1)));
+          }
+          else
+          {
+            pins.Add(CreatePIN(transform.TransformPoint(new Vector3(0.0f, - (starting_position + i), 0.0f)), new_pin.Substring(i, 1)));
+          }
         }
           
 
         pins_index = 0;
       }
+    }
+
+    public void SetOrientation(bool isLandscape)
+    {
+      is_landscape_ = isLandscape;
     }
 
     public void UpdatePIN(string pin)

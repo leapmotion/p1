@@ -189,24 +189,43 @@ namespace P1
       // 3 - Left
       int promptPos = data["button"]["promptPos"].AsInt;
       Vector3 promptPosition = Vector3.zero;
+
+      // PromptLandscape
+      // True - Left->Right
+      // False - Top->Down
+      bool isLandscape = data["button"]["promptLandscape"].AsBool;
+      float y_size = 0.0f;
+      float x_size = 0.0f;
+      if (isLandscape)
+      {
+        x_size = 2.5f;
+        y_size = 1.0f;
+      }
+      else
+      {
+        x_size = 1.0f;
+        y_size = 2.5f;
+      }
+
       switch (promptPos)
       {
         case 0:
-          promptPosition.y = 0.1f + (Mathf.Abs(Jmax) + 1) * buttonScale.y + Mathf.Abs(Jmax) * buttonSpacing.y; // Jmax + 1 because there's 1 button in the prompt in the y-axis
+          promptPosition.y = 0.1f + (Mathf.Abs(Jmax) + y_size) * buttonScale.y + Mathf.Abs(Jmax) * buttonSpacing.y;
           break;
         case 1:
-          promptPosition.y = -(0.1f + (Mathf.Abs(Jmin) + 1) * buttonScale.y + Mathf.Abs(Jmin) * buttonSpacing.y);// Jmax + 1 because there's 1 button in the prompt in the y-axis
+          promptPosition.y = -(0.1f + (Mathf.Abs(Jmin) + y_size) * buttonScale.y + Mathf.Abs(Jmin) * buttonSpacing.y);
           break;
         case 2:
-          promptPosition.x = 0.1f + (Mathf.Abs(Imax) + 2) * buttonScale.x + Mathf.Abs(Imax) * buttonSpacing.x;
+          promptPosition.x = 0.1f + (Mathf.Abs(Imax) + x_size) * buttonScale.x + Mathf.Abs(Imax) * buttonSpacing.x;
           break;
         case 3:
-          promptPosition.x = -(0.1f + (Mathf.Abs(Imin) + 2) * buttonScale.x + Mathf.Abs(Imin) * buttonSpacing.x);
+          promptPosition.x = -(0.1f + (Mathf.Abs(Imin) + x_size) * buttonScale.x + Mathf.Abs(Imin) * buttonSpacing.x);
           break;
       }
       pinPrompt.transform.localPosition = promptPosition;
       pinPrompt.transform.localScale = buttonScale;
       pinPrompt.transform.rotation = transform.rotation;
+      pinPrompt.GetComponent<PINPrompt>().SetOrientation(isLandscape);
 
       transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
