@@ -12,7 +12,7 @@ namespace P1
 				public float moveLimit = 1;
 				private Vector3 origPos;
 				private bool isThisHit = false;
-				private int sliderInt;
+				public int sliderInt;
 
 				private	float snappedXint;
 				private float snappedXpos;
@@ -21,6 +21,7 @@ namespace P1
 				public GameObject HandleVisGRP;
 				
 				private SliderManager sliderManager;
+		
 
 				void Start() {
 
@@ -29,8 +30,9 @@ namespace P1
 				void Awake () {
 					sliderManager =  (SliderManager)GetComponentInParent (typeof(SliderManager));
 					if (sliderManager == null) {
-						Debug.LogWarning ("You are missing a Facetopo Manager in the scene.");
+						Debug.LogWarning ("You are missing a Slider Manager in the scene.");
 					}
+
 				}
 		
 			

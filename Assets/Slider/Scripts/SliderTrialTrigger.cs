@@ -18,17 +18,30 @@ namespace P1
 		int testNum = 1; //DEFAULT: Run one trial
 		ButtonTrial monkeyDo;
 		public GameObject pinPrompt;
+		private SliderManager sliderManager;
+		private SliderDragger sliderDragger;
+		
+		
 		
 		SliderTrialTrigger() {
 			monkeyDo = new ButtonTrial();
 			monkeyDo.TrialEvent += TrialUpdate;
+
 			
 		}
 		
 		public void Start() {
 			DoStart();
+			sliderManager = (SliderManager)FindObjectOfType (typeof(SliderManager));
+			if (sliderManager == null) {
+				Debug.LogWarning ("You are missing a Slider Manager in the scene.");
+			}
+			sliderDragger =  (SliderDragger)FindObjectOfType (typeof(SliderDragger));
+			if (sliderDragger == null) {
+				Debug.LogWarning ("You are missing a Slider Dragger in the scene.");
+			}
 		}
-	
+		
 		public void DoStart ()
 		{
 			monkeyDo = new ButtonTrial ();
@@ -102,19 +115,13 @@ namespace P1
 		
 		void Update (){
 //			Debug.Log ("Update");
-			if(Input.GetKey(KeyCode.U)){
-				Debug.Log ("U");
-				monkeyDo.WhenPushed (true, '0');
-				monkeyDo.WhenPushed (true, '1');
-				monkeyDo.WhenPushed (true, '2');
-				monkeyDo.WhenPushed (true, '3');
-				monkeyDo.WhenPushed (true, '4');
-				monkeyDo.WhenPushed (true, '5');
-				monkeyDo.WhenPushed (true, '6');
-				monkeyDo.WhenPushed (true, '7');
-				monkeyDo.WhenPushed (true, '8');
-				monkeyDo.WhenPushed (true, '9');
+			if(Input.GetKeyUp(KeyCode.T)){
+				Debug.Log ("sliderInt = " + sliderDragger.sliderInt);
+				char x = sliderDragger.sliderInt.ToString()[0];
+				Debug.Log ("char x = " + x);
+				monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
 			}
+
 		}
 		
 	}

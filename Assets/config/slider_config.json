@@ -1,5 +1,5 @@
 {
-	"min": 1,
+	"min": 0,
 	"max": 10,
 	"interval": 1,
 	"use_ticks" : true,

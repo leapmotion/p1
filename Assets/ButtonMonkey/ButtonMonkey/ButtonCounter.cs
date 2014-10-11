@@ -99,6 +99,7 @@ namespace ButtonMonkey
 		
 				public void WhenPushed (bool complete, char symbol, float time)
 				{
+				UnityEngine.Debug.Log("BUttonCounter.WhenPushed symbol = " + symbol);
 						if (ready == false) {
 								return;
 						}

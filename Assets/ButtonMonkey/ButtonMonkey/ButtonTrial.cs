@@ -127,6 +127,7 @@ namespace ButtonMonkey
 
 				public void WhenPushed (bool complete, char label)
 				{
+				UnityEngine.Debug.Log ("ButtonTrial.WhenPushed label = " + label);
 						if (StageComplete () ||
 			    			TrialComplete()) {
 								//Already complete -> no event
