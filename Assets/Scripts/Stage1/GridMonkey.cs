@@ -12,7 +12,7 @@ namespace P1
 
 						int row = config ["grid"] ["row"].AsInt;
 						int col = config ["grid"] ["col"].AsInt;
-            int pins = config["grid"]["pins"].AsInt;
+            int pins = config ["grid"]["pins"].AsInt;
 
 						// List a random pick from each row
 						List<int> picks = new List<int> ();
