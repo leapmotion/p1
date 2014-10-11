@@ -16,11 +16,11 @@ namespace P1
 		int test;
 		string testPath = ""; //DEFAULT: Record in TestResults
 		int testNum = 1; //DEFAULT: Run one trial
-		ButtonTrial monkeyDo;
+		SliderMonkey monkeyDo;
 		public GameObject pinPrompt;
 		
 		SliderTrialTrigger() {
-			monkeyDo = new ButtonTrial();
+			monkeyDo = new SliderMonkey();
 			monkeyDo.TrialEvent += TrialUpdate;
 			
 		}
@@ -31,7 +31,6 @@ namespace P1
 	
 		public void DoStart ()
 		{
-			monkeyDo = new ButtonTrial ();
 			//if (grid == null) {	
 			//    grid = GetComponent<GFRectGrid> ();
 			//}
