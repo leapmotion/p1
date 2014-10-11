@@ -15,7 +15,6 @@ namespace P1
 	
 		int test;
 		string testPath = ""; //DEFAULT: Record in TestResults
-		int testNum = 1; //DEFAULT: Run one trial
 		ButtonTrial monkeyDo;
 		public GameObject pinPrompt;
 		private SliderManager sliderManager;
@@ -110,7 +109,6 @@ namespace P1
 			// NOTE: JSONNode ToString helpfully interprets both path/ (no quotes in file) and "path/" (quotes in file)
 			// as "path/" (quotes IN string).
 			testPath = testPath.Substring (1, testPath.Length - 2);
-			testNum = data ["trial_count"].AsInt;
 		}
 		
 		void Update (){

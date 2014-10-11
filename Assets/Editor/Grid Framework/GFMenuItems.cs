@@ -80,9 +80,9 @@ public static class GFMenuItems {
 	}
 	[MenuItem("Component/Grid Framework/Debug/GridDebugger")]
 	public static void AddGridDebugger(){
-		foreach(GameObject go in Selection.gameObjects){
-			//CheckComponent<GridDebugger> (go);
-		}
+    //foreach(GameObject go in Selection.gameObjects){
+    //  CheckComponent<GridDebugger> (go);
+    //}
 	}
 
 	[MenuItem("Component/Grid Framework/Debug/HexConversionDebugger", true)]
@@ -91,9 +91,9 @@ public static class GFMenuItems {
 	}
 	[MenuItem("Component/Grid Framework/Debug/HexConversionDebugger")]
 	public static void AddHexConversionDebugger(){
-		foreach(GameObject go in Selection.gameObjects){
-			//CheckComponent<HexConversionDebugger> (go);
-		}
+    //foreach(GameObject go in Selection.gameObjects){
+    //  CheckComponent<HexConversionDebugger> (go);
+    //}
 	}
 
 	[MenuItem("Component/Grid Framework/Debug/PolarConversionDebugger", true)]
@@ -102,9 +102,9 @@ public static class GFMenuItems {
 	}
 	[MenuItem("Component/Grid Framework/Debug/PolarConversionDebugger")]
 	public static void AddPolarConversionDebugger(){
-		foreach(GameObject go in Selection.gameObjects){
-			//CheckComponent<PolarConversionDebugger> (go);
-		}
+    //foreach(GameObject go in Selection.gameObjects){
+    //  CheckComponent<PolarConversionDebugger> (go);
+    //}
 	}
 	#endregion
 
