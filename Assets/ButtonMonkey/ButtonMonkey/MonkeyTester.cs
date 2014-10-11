@@ -9,7 +9,7 @@ namespace ButtonMonkey
 {
 		public struct Trial
 		{
-				public ButtonCounter counter;
+				public MonkeyCounter counter;
 				public List<int> keys;
 
 				public override string ToString ()
@@ -26,7 +26,7 @@ namespace ButtonMonkey
 				}
 		}
 
-		public class ButtonTrial
+		public class MonkeyTester
 		{
 				Stopwatch timer;
 				// Single Trial Variables
@@ -41,7 +41,7 @@ namespace ButtonMonkey
 				int testNum;
 
 				// Initialize to completed state
-				public ButtonTrial ()
+				public MonkeyTester ()
 				{
 						timer = new Stopwatch ();
 						// Initialize to Empty Trial
@@ -78,7 +78,7 @@ namespace ButtonMonkey
 				void Initialize ()
 				{
 						step = 0;
-						trial.counter = new ButtonCounter ();
+						trial.counter = new MonkeyCounter ();
 						if (config != null) {
 								trial.keys = GenerateKeys ();
 								trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
@@ -98,13 +98,13 @@ namespace ButtonMonkey
 				}
 
 				//Events are broadcast AFTER trial state has been updated
-				public delegate void TrialUpdate (ButtonTrial trial);
+				public delegate void TrialUpdate (MonkeyTester trial);
 
 				public event TrialUpdate TrialEvent;
 
 				public void WhenPushed (bool complete, char label)
 				{
-				UnityEngine.Debug.Log ("ButtonTrial.WhenPushed label = " + label);
+						UnityEngine.Debug.Log ("MonkeyTester.WhenPushed label = " + label);
 						if (StageComplete () ||
 								TrialComplete ()) {
 								//Already complete -> no event

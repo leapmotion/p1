@@ -71,7 +71,7 @@ namespace P1
     }
 
     // Called once for each key pushed
-    void TrialUpdate(ButtonTrial trial)
+    void TrialUpdate(MonkeyTester trial)
     {
       if (monkeyDo.StageComplete())
       {

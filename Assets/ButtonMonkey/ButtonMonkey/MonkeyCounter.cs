@@ -81,14 +81,14 @@ namespace ButtonMonkey
 				}
 		}
 
-		public class ButtonCounter
+		public class MonkeyCounter
 		{
 				bool ready;
 				char target;
 				List<ButtonPushed> attempts;
 				List<AttemptsMade> complete;
 
-				public ButtonCounter ()
+				public MonkeyCounter ()
 				{
 						ready = false;
 						target = ' ';

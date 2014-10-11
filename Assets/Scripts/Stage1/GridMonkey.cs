@@ -4,7 +4,7 @@ using ButtonMonkey;
 
 namespace P1
 {
-		public class GridMonkey : ButtonTrial
+		public class GridMonkey : MonkeyTester
 		{
 				protected override List<int> GenerateKeys ()
 				{

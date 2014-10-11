@@ -13,7 +13,7 @@ namespace ButtonMonkey
 		/// </summary>
 		public void InitialExpectationsTest ()
 		{
-			ButtonCounter monkeyDo = new ButtonCounter();
+			MonkeyCounter monkeyDo = new MonkeyCounter();
 			Assert.AreEqual (0, monkeyDo.CurrentAttemptsCount);
 			Assert.AreEqual (0, monkeyDo.CompletedTrialsCount);
 			Assert.AreEqual (0, monkeyDo.CurrentSuccessCount);
@@ -26,7 +26,7 @@ namespace ButtonMonkey
 		/// </summary>
 		public void NoTargetTest ()
 		{
-			ButtonCounter monkeyDo = new ButtonCounter();
+			MonkeyCounter monkeyDo = new MonkeyCounter();
 
 			monkeyDo.WhenPushed (true, '0', 0.0f);
 
@@ -42,7 +42,7 @@ namespace ButtonMonkey
 		/// </summary>
 		public void FailureTest ()
 		{
-			ButtonCounter monkeyDo = new ButtonCounter();
+			MonkeyCounter monkeyDo = new MonkeyCounter();
 			
 			monkeyDo.ChangeTarget('0');
 			monkeyDo.WhenPushed (true, '1', 0.0f);
@@ -59,7 +59,7 @@ namespace ButtonMonkey
 		/// </summary>
 		public void FailureSuccessTest ()
 		{
-			ButtonCounter monkeyDo = new ButtonCounter();
+			MonkeyCounter monkeyDo = new MonkeyCounter();
 			
 			monkeyDo.ChangeTarget('0');
 			monkeyDo.WhenPushed (true, '1', 0.0f);
@@ -77,7 +77,7 @@ namespace ButtonMonkey
 		/// </summary>
 		public void SuccessTest ()
 		{
-			ButtonCounter monkeyDo = new ButtonCounter();
+			MonkeyCounter monkeyDo = new MonkeyCounter();
 			
 			monkeyDo.ChangeTarget('0');
 			monkeyDo.WhenPushed (true, '0', 0.1f);
@@ -94,7 +94,7 @@ namespace ButtonMonkey
 		/// </summary>
 		public void SuccessFailureTest ()
 		{
-			ButtonCounter monkeyDo = new ButtonCounter();
+			MonkeyCounter monkeyDo = new MonkeyCounter();
 			
 			monkeyDo.ChangeTarget('0');
 			monkeyDo.WhenPushed (true, '0', 0.0f);
@@ -115,7 +115,7 @@ namespace ButtonMonkey
 		/// </summary>
 		public void TimeReflectionTest ()
 		{
-			ButtonCounter monkeyDo = new ButtonCounter();
+			MonkeyCounter monkeyDo = new MonkeyCounter();
 			
 			monkeyDo.ChangeTarget('0');
 			monkeyDo.WhenPushed (true, '0', 1.0f);

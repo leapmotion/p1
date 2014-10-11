@@ -9,7 +9,7 @@ namespace P1
 		public class KeyPadTrial : MonoBehaviour
 		{
 				Stopwatch timer;
-				public ButtonCounter counter;
+				public MonkeyCounter counter;
 
 				public LeapButton b0;
 				public LeapButton b1;
@@ -26,7 +26,7 @@ namespace P1
 
 				KeyPadTrial ()
 				{
-						counter = new ButtonCounter ();
+						counter = new MonkeyCounter ();
 						timer = new Stopwatch ();
 				}
 
