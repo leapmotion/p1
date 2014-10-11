@@ -85,7 +85,7 @@ namespace P1
 		int colliderCount = 0;
 		bool isHandNearSlider = false;
 		void OnTriggerEnter (){
-			Debug.Log ("OnTriggerEnter isHandNearSlider = " + isHandNearSlider);
+//			Debug.Log ("OnTriggerEnter isHandNearSlider = " + isHandNearSlider);
 			
 			isHandNearSlider = true;
 			colliderCount++;
