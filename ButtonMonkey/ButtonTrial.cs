@@ -9,8 +9,8 @@ namespace ButtonMonkey
 {
 		public struct Trial
 		{
-				public List<int> keys;
 				public ButtonCounter counter;
+				public List<int> keys;
 
 				public override string ToString ()
 				{
@@ -57,78 +57,55 @@ namespace ButtonMonkey
 						//ASSERT: StageComplete() == true
 						//ASSERT: TrialComplete() == true
 				}
-		
-				public void SetTestFromConfig (string dataPath)
-				{
-						JSONNode config = JSONNode.Parse (File.ReadAllText (dataPath + "/config/test_config.json"));
-						testNum = config ["trial_count"].AsInt;
-						SetRecordFile (dataPath + "/TestResults/" + config ["results_dir"].Value, "ButtonTest");
-				}
 
-				public void SetRecordFile (string path, string name)
+				// Configured generation of target keys
+				protected virtual List<int> GenerateKeys ()
 				{
-						Directory.CreateDirectory (path);
-						recordPath = path + "/" + name + string.Format ("-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+						return new List<int> ();
+				}
+			
+				protected JSONNode config;
+
+				public void ConfigureTest (string dataPath, string testName)
+				{
+						config = JSONNode.Parse (File.ReadAllText (dataPath + "/config/" + testName + "_config.json"));
+						testNum = config ["test"] ["number"].AsInt;
+						Directory.CreateDirectory (dataPath + "/TestResults/");
+						recordPath = dataPath + "/TestResults/" + string.Format (testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
 						File.WriteAllText (recordPath, "No Data from Trials");
-				}
-
-				public string GetRecordPath ()
-				{
-						return recordPath;
 				}
 				
 				void Initialize ()
 				{
 						step = 0;
-						trial.keys = new List<int> ();
 						trial.counter = new ButtonCounter ();
+						if (config != null) {
+								trial.keys = GenerateKeys ();
+								trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
+						} else {
+								trial.keys = new List<int> ();
+						}
 				}
 
 				public void Start ()
 				{
 						Initialize ();
-						GenerateKeys ();
-						trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
 					
 						// Begin test
 						current = 0.0f;
 						timer.Reset ();
 						timer.Start ();
 				}
-		
-				//TODO: Move generation to a separate file (will be distinct for other tests).
-				// Generate a random sequence of keys
-				// subject to the condition that no row is repeated
-				void GenerateKeys ()
-				{
-						System.Random gen = new System.Random ();
-					
-						// List a random key from each row
-						List<int> rows = new List<int> ();
-						rows.Add (1 + (gen.Next () % 3));
-						rows.Add (4 + (gen.Next () % 3));
-						rows.Add (7 + (gen.Next () % 3));
-						rows.Add (0);
-					
-						// Choose a random ordering of rows
-						trial.keys = new List<int> ();
-						while (rows.Count > 0) {
-								int next = gen.Next () % rows.Count;
-								trial.keys.Add (rows [next]);
-								rows.RemoveAt (next);
-						}
-
-				}
 
 				//Events are broadcast AFTER trial state has been updated
-				public delegate void TrialUpdate (ButtonTrial trial,bool correct);
+				public delegate void TrialUpdate (ButtonTrial trial);
 
 				public event TrialUpdate TrialEvent;
 
 				public void WhenPushed (bool complete, char label)
 				{
 						if (StageComplete () ||
-			    			TrialComplete()) {
+								TrialComplete ()) {
 								//Already complete -> no event
 								return;
 						}
@@ -154,7 +131,7 @@ namespace ButtonMonkey
 			
 								// Only send events for complete button pushes
 								if (TrialEvent != null) {
-										TrialEvent (this, correct);
+										TrialEvent (this);
 								}
 						}
 
