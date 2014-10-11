@@ -154,6 +154,10 @@ namespace P1
       int Jmin = 0;
       int Jmax = 0;
 
+      int row = 4; // TODO(wyu): Replace with config
+      int col = 3; // TODO(wyu): Replace with config
+      int num_keys = Mathf.Min(10, row * col);
+
       foreach (KeyDef k in keys)
       {
         //Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));

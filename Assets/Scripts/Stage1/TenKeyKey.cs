@@ -72,7 +72,7 @@ namespace P1
         }
         catch (UnityException e)
         {
-          Debug.Log("Cannot set letter for value " + value);
+          Debug.Log(e + ": Cannot set letter for value " + value);
         }
       }
     }

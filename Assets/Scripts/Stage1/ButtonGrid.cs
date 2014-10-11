@@ -11,7 +11,6 @@ namespace P1
     private float size = 2.0f;
     private float spacing = 0.2f;
     private float depth = -5.0f;
-    private Color button_color_ = Color.black;
 
     // Use this for initialization
     void Start()
