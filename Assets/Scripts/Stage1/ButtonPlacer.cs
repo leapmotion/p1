@@ -148,74 +148,6 @@ namespace P1
 
       float sensitivity = data["button"]["sensitivity"].AsFloat;
 
-      int row = 2; // TODO(wyu): Replace with config
-      int col = 5; // TODO(wyu): Replace with config
-      int num_keys = row * col;
-      float half_w = (float)(col - 1) / 2.0f;
-      float half_h = (float)(row - 1) / 2.0f;
-      Debug.Log(num_keys);
-      Debug.Log(keys.Length);
-      if (num_keys > keys.Length)
-      {
-        num_keys = keys.Length;
-        half_w = 1.0f; // (float)(3 - 1) / 2.0f;
-        half_h = 1.5f; // (float)(4 - 1) / 2.0f;
-      }
-
-      Vector3 center = Vector3.zero;
-
-      float x_index = - half_w;
-      float y_index = half_h;
-      for (int i = 0; i < num_keys; ++i)
-      {
-        KeyDef k = keys[i];
-        
-        //Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
-        //Vector3 localPos = new Vector3(
-        //  k.i * buttonSpacing.x + k.i * buttonScale.x,
-        //  k.j * buttonSpacing.y + k.j * buttonScale.y,
-        //  0
-        //  );
-       
-        // Construct the matrix of keys based on the rows and cols. The last key will be at the last rol and centered
-        Vector3 localPos;
-        if (i == keys.Length - 1 && half_w == 1.0f && half_h == 1.5f)
-        {
-          localPos = new Vector3(
-            0,
-            y_index * (buttonSpacing.y + buttonScale.y),
-            0
-          );
-        }
-        else
-        {
-          localPos = new Vector3(
-          x_index * (buttonSpacing.x + buttonScale.x),
-          y_index * (buttonSpacing.y + buttonScale.y),
-          0
-          );
-
-          x_index++;
-          if (x_index > (half_w + 0.25f))
-          {
-            x_index = -half_w;
-            y_index--;
-          }
-        }
-
-        GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
-        go.SetActive(true);
-        TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
-        g.SetTriggerSensitivity(sensitivity);
-        g.KeypadScale = buttonScale;
-        g.label = k.label;
-        go.transform.parent = transform;
-        go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = transform.TransformPoint(localPos);
-        g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate(monkeyDo.WhenPushed);
-        go.transform.localPosition = localPos;
-        go.transform.localScale = buttonScale;
-        go.transform.rotation = transform.rotation;
-      }
 
       // PromptLandscape
       // True - Left->Right
@@ -231,6 +163,94 @@ namespace P1
       // 2 - Right
       // 3 - Left
       int promptPos = data["button"]["promptPos"].AsInt;
+
+      int row = data["grid"]["row"].AsInt;
+      int col = data["grid"]["col"].AsInt;
+      int num_keys = row * col;
+      if (num_keys > keys.Length)
+      {
+        num_keys = keys.Length;
+        row = 4;
+        col = 3;
+      }
+      float half_h = (float)(row - 1) / 2.0f;
+      float half_w = (float)(col - 1) / 2.0f;
+
+      float prompt_rel_h = 0.0f;
+      float prompt_rel_w = 0.0f;
+      switch (promptPos)
+      {
+        case 0: // Top
+          prompt_rel_h += prompt_h + prompt_padding;
+          break;
+        case 1: // Bottom
+          prompt_rel_h -= prompt_h + prompt_padding;
+          break;
+        case 2: // Right
+          prompt_rel_w += prompt_w + prompt_padding;
+          break;
+        case 3: // Left
+          prompt_rel_w -= prompt_w + prompt_padding;
+          break;
+        default: // Default: Top
+          prompt_rel_h += prompt_h + prompt_padding;
+          break;
+      }
+
+      Vector3 center = new Vector3(
+        - prompt_rel_w / 2.0f,
+        - prompt_rel_h / 2.0f,
+        0
+        );
+
+      transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+
+      //backPad.transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z / 3.0f);
+      //backPad.transform.localScale = new Vector3((prompt_w + half_w * 2) / 4.0f, (prompt_h + half_h * 2) / 4.0f, buttonScale.z);
+
+      float x_index = - half_w;
+      float y_index = half_h;
+      for (int i = 0; i < num_keys; ++i)
+      {
+        KeyDef k = keys[i];
+       
+        // Construct the matrix of keys based on the rows and cols. The last key will be at the last rol and centered
+        Vector3 localPos = center;
+        float x_coord = 0.0f;
+        float y_coord = 0.0f;
+        float z_coord = 0.0f;
+        if (i == keys.Length - 1 && half_w == 1.0f && half_h == 1.5f)
+        {
+          y_coord = y_index * (buttonSpacing.y + buttonScale.y);
+        }
+        else
+        {
+          x_coord = x_index * (buttonSpacing.x + buttonScale.x);
+          y_coord = y_index * (buttonSpacing.y + buttonScale.y);
+
+          x_index++;
+          if (x_index > (half_w + 0.25f))
+          {
+            x_index = -half_w;
+            y_index--;
+          }
+        }
+        localPos += new Vector3(x_coord, y_coord, z_coord);
+
+        GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
+        go.SetActive(true);
+        TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
+        g.SetTriggerSensitivity(sensitivity);
+        g.KeypadScale = buttonScale;
+        g.label = k.label;
+        go.transform.parent = transform;
+        go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = transform.TransformPoint(localPos);
+        g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate(monkeyDo.WhenPushed);
+        go.transform.localPosition = localPos;
+        go.transform.localScale = buttonScale;
+        go.transform.rotation = transform.rotation;
+      }
+
       Vector3 promptPosition = center;
       switch (promptPos)
       {
@@ -254,11 +274,6 @@ namespace P1
       pinPrompt.transform.localScale = buttonScale;
       pinPrompt.transform.rotation = transform.rotation;
       pinPrompt.GetComponent<PINPrompt>().SetOrientation(isLandscape);
-
-      transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-
-      backPad.transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z);
-      backPad.transform.localScale = new Vector3(Mathf.Max(buttonScale.x * 0.75f, (3.0f * buttonScale.x + 3.5f * buttonSpacing.x) / 5.0f), (5.0f * buttonScale.y + 3.5f * buttonSpacing.y + 0.1f) / 5.5f, buttonScale.z);
     }
 
     public void SetTestFromConfig(string filePath)
