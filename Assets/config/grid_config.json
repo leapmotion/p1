@@ -1,7 +1,6 @@
 {
   "test": {
-    "number": 3,
-    "pickZero": true
+    "number": 3
   },
   "position": {
     "x": 0.0,
@@ -24,7 +23,7 @@
     "promptLandscape": true
   }
   "grid": {
-    "row": 4,
+    "row": 2,
     "col": 3
   }
 }

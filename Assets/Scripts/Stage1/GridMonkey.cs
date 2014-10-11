@@ -9,22 +9,27 @@ namespace P1
 				protected override List<int> GenerateKeys ()
 				{
 						System.Random gen = new System.Random ();
+
+						int row = config ["grid"] ["row"].AsInt;
+						int col = config ["grid"] ["col"].AsInt;
 				
-						// List a random key from each row
-						List<int> rows = new List<int> ();
-						rows.Add (1 + (gen.Next () % 3));
-						rows.Add (4 + (gen.Next () % 3));
-						rows.Add (7 + (gen.Next () % 3));
-						if (config ["test"]["pickZero"].AsBool) {
-								rows.Add (0);
+						// List a random pick from each row
+						List<int> picks = new List<int> ();
+						for (int r = 0; r < row; ++r) {
+								if (1 + (r * col) < 10) {
+										picks.Add (1 + (r * col) + (gen.Next () % col));
+								} else {
+										picks.Add (0);
+										break;
+								}
 						}
 				
 						// Choose a random ordering of rows
 						List<int> keys = new List<int> ();
-						while (rows.Count > 0) {
-								int next = gen.Next () % rows.Count;
-								keys.Add (rows [next]);
-								rows.RemoveAt (next);
+						while (picks.Count > 0) {
+								int next = gen.Next () % picks.Count;
+								keys.Add (picks [next]);
+								picks.RemoveAt (next);
 						}
 						return keys;
 				}

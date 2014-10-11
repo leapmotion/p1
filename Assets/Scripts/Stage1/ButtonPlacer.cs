@@ -42,7 +42,6 @@ namespace P1
 				};
     public GameObject buttonTemplate;
     //public GFRectGrid grid;
-    string testPath = ""; //DEFAULT: Record in TestResults
     GridMonkey monkeyDo;
     public GameObject pinPrompt;
     public GameObject backPad;
