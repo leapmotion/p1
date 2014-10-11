@@ -150,17 +150,17 @@ namespace P1
       // PromptLandscape
       // True - Left->Right
       // False - Top->Down
-      bool isLandscape = data["button"]["promptLandscape"].AsBool;
+      bool isLandscape = data["prompt"]["isLandscape"].AsBool;
       float prompt_h = (isLandscape) ? 1.0f : 4.0f;
       float prompt_w = (isLandscape) ? 4.0f : 1.0f;
-      float prompt_padding = data["button"]["promptPadding"].AsFloat;
+      float prompt_padding = data["prompt"]["padding"].AsFloat;
 
       // PromptPos
       // 0 - Top
       // 1 - Bottom
       // 2 - Right
       // 3 - Left
-      int promptPos = data["button"]["promptPos"].AsInt;
+      int promptPos = data["prompt"]["position"].AsInt;
 
       int row = data["grid"]["row"].AsInt;
       int col = data["grid"]["col"].AsInt;
