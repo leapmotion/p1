@@ -19,11 +19,13 @@
   },
   "button": {
     "sensitivity": 1.2,
-    "promptPos": 1,
-    "promptLandscape": true
+    "promptPos": 3,
+    "promptLandscape": true,
+    "promptPadding": 0.5
   }
   "grid": {
-    "row": 2,
-    "col": 3
+    "row": 3,
+    "col": 4,
+    "pins": 4
   }
 }

@@ -153,7 +153,7 @@ namespace P1
       bool isLandscape = data["button"]["promptLandscape"].AsBool;
       float prompt_h = (isLandscape) ? 1.0f : 4.0f;
       float prompt_w = (isLandscape) ? 4.0f : 1.0f;
-      float prompt_padding = 0.1f;
+      float prompt_padding = data["button"]["promptPadding"].AsFloat;
 
       // PromptPos
       // 0 - Top
