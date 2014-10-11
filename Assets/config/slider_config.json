@@ -3,12 +3,12 @@
     "number": 3
   },
   "min": 0,
-  "max": 9,
+  "max": 5,
   "interval": 1,
   "use_ticks" : true,
-  "widgetXscale" : 2,
-  "widgetYscale" : 2,
-  "widgetZscale" : 2,
+  "widgetXscale" : 3,
+  "widgetYscale" : 3,
+  "widgetZscale" : 3,
   "sliderHandleWidth" : 1,
   "sliderHandleHeight" : 1,
   "sliderHandleDepth" : 1
