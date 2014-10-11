@@ -45,7 +45,7 @@ namespace P1
     int test;
     string testPath = ""; //DEFAULT: Record in TestResults
     int testNum = 1; //DEFAULT: Run one trial
-    ButtonTrial monkeyDo;
+    GridMonkey monkeyDo;
     public GameObject pinPrompt;
     public GameObject backPad;
 
@@ -59,13 +59,13 @@ namespace P1
 
     public void DoStart()
     {
-      monkeyDo = new ButtonTrial();
+      monkeyDo = new GridMonkey();
       //if (grid == null) {	
       //    grid = GetComponent<GFRectGrid> ();
       //}
       SetGridFromConfig("Assets/config/grid_config.json");
 
-      monkeyDo.SetTestFromConfig(Application.dataPath);
+	  monkeyDo.ConfigureTest(Application.dataPath, "grid");
       monkeyDo.TrialEvent += TrialUpdate;
 
       monkeyDo.Start();
@@ -74,7 +74,7 @@ namespace P1
     }
 
     // Called once for each key pushed
-    void TrialUpdate(ButtonTrial trial, bool correct)
+    void TrialUpdate(ButtonTrial trial)
     {
       if (monkeyDo.StageComplete())
       {

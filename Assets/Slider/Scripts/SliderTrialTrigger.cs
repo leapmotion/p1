@@ -37,7 +37,7 @@ namespace P1
 			//}
 			//SetGridFromConfig ("Assets/config/grid_config.json");
 			
-			monkeyDo.SetTestFromConfig (Application.dataPath);
+			monkeyDo.ConfigureTest (Application.dataPath, "slider");
 			monkeyDo.TrialEvent += TrialUpdate;
 			
 			monkeyDo.Start ();
@@ -46,7 +46,7 @@ namespace P1
 		}
 		
 		// Called once for each key pushed
-		void  TrialUpdate (ButtonTrial trial, bool correct)
+		void  TrialUpdate (ButtonTrial trial)
 		{
 			if (monkeyDo.StageComplete ()) {
 				// Show final correct result
