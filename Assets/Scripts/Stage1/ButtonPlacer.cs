@@ -131,7 +131,8 @@ namespace P1
       //grid.spacing = new Vector3 (x, y, z);
       x = data["buttonScale"]["x"].AsFloat;
       y = data["buttonScale"]["y"].AsFloat;
-      buttonScale = new Vector3(x, y, 0.0f);
+      z = data["buttonScale"]["z"].AsFloat;
+      buttonScale = new Vector3(x, y, z);
 
       x = data["position"]["x"].AsFloat;
       y = data["position"]["y"].AsFloat;
