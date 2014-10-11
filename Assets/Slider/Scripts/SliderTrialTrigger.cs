@@ -21,12 +21,9 @@ namespace P1
 		private SliderDragger sliderDragger;
 		
 		
-		
 		SliderTrialTrigger() {
 			monkeyDo = new ButtonTrial();
 			monkeyDo.TrialEvent += TrialUpdate;
-
-			
 		}
 		
 		public void Start() {
@@ -88,7 +85,13 @@ namespace P1
 			}
 		}
 		bool isHandInTestTrigger = false;
+		int colliderCount = 0;
+		bool isHandNearSlider = false;
 		void OnTriggerEnter (){
+			Debug.Log ("OnTriggerEnter isHandNearSlider = " + isHandNearSlider);
+			
+			isHandNearSlider = true;
+			colliderCount++;
 			// if its a hand
 			//start or advance test
 		}
@@ -97,6 +100,14 @@ namespace P1
 		}
 		
 		void OnTriggerExit () {
+			colliderCount--;
+			if(colliderCount == 0 && isHandNearSlider == true){
+				Debug.Log ("OnTriggerExit isHandNearSlider = " + isHandNearSlider);
+				isHandNearSlider = false;
+				char x = sliderDragger.sliderInt.ToString()[0];
+				Debug.Log ("char x = " + x);
+				monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
+			}
 			//if the hand leaves
 			//end and/or advance test
 		}
