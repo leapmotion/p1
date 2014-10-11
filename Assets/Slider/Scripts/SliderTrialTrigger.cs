@@ -13,16 +13,14 @@ namespace P1
 	
 	public class SliderTrialTrigger : MonoBehaviour {
 	
-		int test;
-		string testPath = ""; //DEFAULT: Record in TestResults
-		ButtonTrial monkeyDo;
+		SliderMonkey monkeyDo;
 		public GameObject pinPrompt;
 		private SliderManager sliderManager;
 		private SliderDragger sliderDragger;
 		
 		
 		SliderTrialTrigger() {
-			monkeyDo = new ButtonTrial();
+			monkeyDo = new SliderMonkey();
 			monkeyDo.TrialEvent += TrialUpdate;
 		}
 		
@@ -40,13 +38,12 @@ namespace P1
 		
 		public void DoStart ()
 		{
-			monkeyDo = new ButtonTrial ();
 			//if (grid == null) {	
 			//    grid = GetComponent<GFRectGrid> ();
 			//}
 			//SetGridFromConfig ("Assets/config/grid_config.json");
 			
-			monkeyDo.SetTestFromConfig (Application.dataPath);
+			monkeyDo.ConfigureTest (Application.dataPath, "slider");
 			monkeyDo.TrialEvent += TrialUpdate;
 			
 			monkeyDo.Start ();
@@ -55,7 +52,7 @@ namespace P1
 		}
 		
 		// Called once for each key pushed
-		void  TrialUpdate (ButtonTrial trial, bool correct)
+		void  TrialUpdate (ButtonTrial trial)
 		{
 			if (monkeyDo.StageComplete ()) {
 				// Show final correct result
@@ -110,16 +107,6 @@ namespace P1
 			}
 			//if the hand leaves
 			//end and/or advance test
-		}
-		
-		
-		public void SetTestFromConfig (string filePath)
-		{
-			JSONNode data = Utils.FileToJSON (filePath);
-			testPath = data ["results_dir"].ToString ();
-			// NOTE: JSONNode ToString helpfully interprets both path/ (no quotes in file) and "path/" (quotes in file)
-			// as "path/" (quotes IN string).
-			testPath = testPath.Substring (1, testPath.Length - 2);
 		}
 		
 		void Update (){
