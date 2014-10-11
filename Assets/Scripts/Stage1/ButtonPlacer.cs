@@ -29,7 +29,6 @@ namespace P1
     private Vector3 buttonScale;
     private Vector3 buttonSpacing;
     public KeyDef[] keys = new KeyDef[]{
-					new KeyDef ("0", 0, -2),
 					new KeyDef ("1", -1, 1),
 					new KeyDef ("2", 0, 1),
 					new KeyDef ("3", 1, 1),
@@ -38,7 +37,8 @@ namespace P1
 					new KeyDef ("6", 1, 0),
 					new KeyDef ("7", -1, -1),
 					new KeyDef ("8", 0, -1),
-					new KeyDef ("9", 1, -1)
+					new KeyDef ("9", 1, -1),
+					new KeyDef ("0", 0, -2)
 				};
     public GameObject buttonTemplate;
     //public GFRectGrid grid;
@@ -155,17 +155,45 @@ namespace P1
 
       int row = 4; // TODO(wyu): Replace with config
       int col = 3; // TODO(wyu): Replace with config
-      int num_keys = Mathf.Min(10, row * col);
+      int num_keys = Mathf.Min(keys.Length, row * col);
+      float x_index = - (float)(col - 1) / 2.0f;
+      float y_index = (float)(row - 1) / 2.0f;
 
-      foreach (KeyDef k in keys)
+      for (int i = 0; i < num_keys; ++i)
       {
+        KeyDef k = keys[i];
+        
         //Vector3 pos = grid.GridToWorld (new Vector3 (k.i, k.j, 0));
-        Vector3 localPos = new Vector3(
-          k.i * buttonSpacing.x + k.i * buttonScale.x,
-          k.j * buttonSpacing.y + k.j * buttonScale.y,
+        //Vector3 localPos = new Vector3(
+        //  k.i * buttonSpacing.x + k.i * buttonScale.x,
+        //  k.j * buttonSpacing.y + k.j * buttonScale.y,
+        //  0
+        //  );
+        Vector3 localPos;
+        if (i == keys.Length - 1)
+        {
+          localPos = new Vector3(
+            0,
+            y_index * (buttonSpacing.y + buttonScale.y),
+            0
+          );
+        }
+        else
+        {
+          localPos = new Vector3(
+          x_index * (buttonSpacing.x + buttonScale.x),
+          y_index * (buttonSpacing.y + buttonScale.y),
           0
           );
 
+          x_index++;
+          if ((((col - 1) - x_index) / 2.0f) < 0.25f || ((x_index - (col - 1)) / 2.0f) > 0.25f)
+          {
+            x_index = -(float)(col - 1) / 2.0f;
+            y_index--;
+          }
+        }
+        
         Imin = (int)Mathf.Min(k.i, Imin);
         Imax = (int)Mathf.Max(k.i, Imax);
         Jmin = (int)Mathf.Min(k.j, Jmin);
