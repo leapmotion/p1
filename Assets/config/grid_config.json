@@ -9,13 +9,11 @@
   },
   "spacing": {
     "x": 0.8,
-     "y": 0.8, 
-     "z": 0.2
+    "y": 0.8
   },
   "buttonScale": {
     "x": 1.0,
-     "y": 1.0,
-     "z": 1.0
+    "y": 1.0
   },
   "button": {
     "sensitivity": 1.2

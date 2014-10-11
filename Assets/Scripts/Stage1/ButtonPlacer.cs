@@ -126,26 +126,20 @@ namespace P1
 
       x = data["spacing"]["x"].AsFloat;
       y = data["spacing"]["y"].AsFloat;
-      z = data["spacing"]["z"].AsFloat;
+      buttonSpacing = new Vector3(x, y, 0.0f);
 
       //grid.spacing = new Vector3 (x, y, z);
-      buttonSpacing = new Vector3(x, y, z);
-
       x = data["buttonScale"]["x"].AsFloat;
       y = data["buttonScale"]["y"].AsFloat;
-      z = data["buttonScale"]["z"].AsFloat;
-
-      buttonScale = new Vector3(x, y, z);
+      buttonScale = new Vector3(x, y, 0.0f);
 
       x = data["position"]["x"].AsFloat;
       y = data["position"]["y"].AsFloat;
       z = data["position"]["z"].AsFloat;
-
       transform.position = new Vector3(x, y, z);
       transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
 
       float sensitivity = data["button"]["sensitivity"].AsFloat;
-
 
       // PromptLandscape
       // True - Left->Right
