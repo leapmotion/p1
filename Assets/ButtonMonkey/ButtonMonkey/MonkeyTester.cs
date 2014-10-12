@@ -72,8 +72,9 @@ namespace ButtonMonkey
 						//config = JSONNode.Parse (File.ReadAllText (dataPath + "/config/" + testName + "_config.json"));
             config = Utils.FileToJSON(testName);
 						testNum = config ["test"] ["number"].AsInt;
-						Directory.CreateDirectory ("/TestResults/");
-						recordPath = "/TestResults/" + string.Format (testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+            string testPath = Environment.CurrentDirectory + "/TestResults/";
+						Directory.CreateDirectory (testPath);
+            recordPath = testPath + string.Format(testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
 						File.WriteAllText (recordPath, "No Data from Trials");
 				}
 				

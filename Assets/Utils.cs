@@ -78,7 +78,6 @@ namespace P1
         directory = Application.dataPath + "/config/";
       }
       return JSON.Parse(File.ReadAllText(directory + filename));
-      
     }
 
 #endregion
