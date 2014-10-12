@@ -13,7 +13,7 @@ namespace ButtonMonkey
 
 				public void TrialConfigLoaderTest ()
 				{
-						TrialConfigLoader l = new TrialConfigLoader ("Assets/testFiles/config/trial_config.json");
+						TrialConfigLoader l = new TrialConfigLoader ("trial_config.json");
 						Assert.AreEqual (7, l.testDigits, "seven test digits");
 						Assert.AreEqual (9, l.trialCount, "nine trials");
 				}

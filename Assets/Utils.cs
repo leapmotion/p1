@@ -73,9 +73,7 @@ namespace P1
     // Use this for initialization
     public static JSONNode FileToJSON(string filename)
     {
-      string jsonString;
-      jsonString = File.ReadAllText(filename);
-      return JSON.Parse(jsonString);
+      return JSON.Parse(File.ReadAllText(Application.dataPath + "/config/" + filename));
       
     }
 

@@ -37,7 +37,7 @@ namespace P1
 				public void DoStart ()
 				{ 
 						scenes = new List<string> ();
-						JSONNode n = Utils.FileToJSON ("Assets/config/scene_config.json");
+						JSONNode n = Utils.FileToJSON ("scene_config.json");
 						if (n == null)
 								throw new UnityException ("No data");
 						for (int i = 0; i < n["scenes"].Count; ++i) {

@@ -38,12 +38,7 @@ namespace P1
 		
 		public void DoStart ()
 		{
-			//if (grid == null) {	
-			//    grid = GetComponent<GFRectGrid> ();
-			//}
-			//SetGridFromConfig ("Assets/config/grid_config.json");
-			
-			monkeyDo.ConfigureTest (Application.dataPath, "slider");
+			monkeyDo.ConfigureTest ("slider_config.json");
 			monkeyDo.TrialEvent += TrialUpdate;
 			
 			monkeyDo.Start ();

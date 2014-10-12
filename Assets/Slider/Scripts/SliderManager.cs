@@ -137,7 +137,7 @@ namespace P1
 		
 		public void InitializeSlider () {
 
-			JSONNode n = Utils.FileToJSON ("Assets/config/" + ConfigFileName);
+			JSONNode n = Utils.FileToJSON(ConfigFileName);
 			MinLimit = n ["min"].AsInt;
 			Debug.Log ("Min = " + MinLimit);
 			
