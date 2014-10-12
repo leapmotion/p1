@@ -71,11 +71,13 @@ namespace P1
 #region file io
     
     // Use this for initialization
-    public static JSONNode FileToJSON(string filename)
+    public static JSONNode FileToJSON(string filename, string directory = ".")
     {
-      string jsonString;
-      jsonString = File.ReadAllText(filename);
-      return JSON.Parse(jsonString);
+      if (directory == ".")
+      {
+        directory = Application.dataPath + "/config/";
+      }
+      return JSON.Parse(File.ReadAllText(directory + filename));
       
     }
 

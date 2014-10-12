@@ -60,9 +60,9 @@ namespace P1
       //if (grid == null) {	
       //    grid = GetComponent<GFRectGrid> ();
       //}
-      SetGridFromConfig("Assets/config/grid_config.json");
+      SetGridFromConfig("grid_config.json");
 
-	  monkeyDo.ConfigureTest(Application.dataPath, "grid");
+	    monkeyDo.ConfigureTest("grid_config.json");
       monkeyDo.TrialEvent += TrialUpdate;
 
       monkeyDo.Start();

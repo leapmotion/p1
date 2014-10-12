@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using SimpleJSON;
+using P1;
 
 namespace ButtonMonkey
 {
@@ -66,12 +67,13 @@ namespace ButtonMonkey
 			
 				protected JSONNode config;
 
-				public void ConfigureTest (string dataPath, string testName)
+				public void ConfigureTest (string testName)
 				{
-						config = JSONNode.Parse (File.ReadAllText (dataPath + "/config/" + testName + "_config.json"));
+						//config = JSONNode.Parse (File.ReadAllText (dataPath + "/config/" + testName + "_config.json"));
+            config = Utils.FileToJSON(testName);
 						testNum = config ["test"] ["number"].AsInt;
-						Directory.CreateDirectory (dataPath + "/TestResults/");
-						recordPath = dataPath + "/TestResults/" + string.Format (testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+						Directory.CreateDirectory ("/TestResults/");
+						recordPath = "/TestResults/" + string.Format (testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
 						File.WriteAllText (recordPath, "No Data from Trials");
 				}
 				
