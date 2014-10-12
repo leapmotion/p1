@@ -19,7 +19,7 @@ namespace ButtonMonkey
 						testDigits = n ["test_digts"].AsInt;
 				}
 		
-				public TrialConfigLoader (): this("Assets/config/trial_config.json")
+				public TrialConfigLoader (): this("trial_config.json")
 				{
 			
 				}
