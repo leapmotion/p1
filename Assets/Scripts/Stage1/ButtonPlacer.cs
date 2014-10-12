@@ -57,11 +57,7 @@ namespace P1
     public void DoStart()
     {
       monkeyDo = new GridMonkey();
-      //if (grid == null) {	
-      //    grid = GetComponent<GFRectGrid> ();
-      //}
       SetGridFromConfig("grid_config.json");
-
 	    monkeyDo.ConfigureTest("grid_config.json");
       monkeyDo.TrialEvent += TrialUpdate;
 
