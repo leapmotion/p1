@@ -12,39 +12,36 @@ namespace P1
 
 						int row = config ["grid"] ["row"].AsInt;
 						int col = config ["grid"] ["col"].AsInt;
-            int pins = config ["grid"]["pins"].AsInt;
+						int pins = config ["grid"] ["pins"].AsInt;
 
-						// List a random pick from each row
-						List<int> picks = new List<int> ();
-            for (int p = 0; p < pins; ++p)
-            {
-              int num = (int)((p % row) * col + gen.Next() % col + 1);
-              if (num < 10)
-              {
-                picks.Add(num);
-              }
-              else
-              {
-                picks.Add(0);
-              }
-            }
-
-            //for (int r = 0; r < row; ++r) {
-            //    if (1 + (r * col) < 10) {
-            //        picks.Add (1 + (r * col) + (gen.Next () % col));
-            //    } else {
-            //        picks.Add (0);
-            //        break;
-            //    }
-            //}
-				
-						// Choose a random ordering of rows
+						//Generate a selection of random numbers from each row.
+						//NOTE: In the case that there are more rows than pins
+						//some rows will not be represented in the key sequence.
+						//NOTE: In the case that there are fewer rows than pins
+						//it will necessary to draw multiple times from a row.
+						//ASSERT: The occurance of a row cannot exceed that of any
+						//other row by more than 1.
+						//ASSERT: The frequency of occurance of each row == pins / rows.
 						List<int> keys = new List<int> ();
-						while (picks.Count > 0) {
-								int next = gen.Next () % picks.Count;
-								keys.Add (picks [next]);
-								picks.RemoveAt (next);
+						while (keys.Count < pins) {
+								List<int> picks = new List<int> ();
+								for (int r = 0; r < row; ++r) {
+										int num = 1 + (r * col) + (gen.Next () % col);
+										if (num < 10) {
+												picks.Add (num);
+										} else {
+												picks.Add (0);
+										}
+								}
+				
+								// Choose a random ordering of rows
+								while (picks.Count > 0 && keys.Count < pins) {
+										int next = gen.Next () % picks.Count;
+										keys.Add (picks [next]);
+										picks.RemoveAt (next);
+								}
 						}
+
 						return keys;
 				}
 		}
