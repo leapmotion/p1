@@ -34,7 +34,8 @@ namespace P1
       handController.transform.rotation = activeCamera.transform.rotation * handController.transform.rotation;
 
       JSONNode data = Utils.FileToJSON("all_config.json");
-      
+      handController.transform.localScale = Vector3.one * 20 * data["hand"]["scale"].AsInt;
+      handController.GetComponent<HandController>().handMovementScale = Vector3.one * data["hand"]["speed"].AsInt;
 	  }
 	
 	  // Update is called once per frame
