@@ -10,8 +10,8 @@ namespace P1
 				{
 						System.Random gen = new System.Random ();
 
-						int min = config ["min"].AsInt;
-						int max = config ["max"].AsInt;
+						int min = testConfig ["min"].AsInt;
+						int max = testConfig ["max"].AsInt;
 
 						// Choose a single random number in the specified range
 						int next = (gen.Next () % (max - min)) + min;

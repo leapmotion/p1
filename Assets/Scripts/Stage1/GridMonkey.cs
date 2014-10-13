@@ -10,9 +10,9 @@ namespace P1
 				{
 						System.Random gen = new System.Random ();
 
-						int row = config ["grid"] ["row"].AsInt;
-						int col = config ["grid"] ["col"].AsInt;
-						int pins = config ["grid"] ["pins"].AsInt;
+						int row = testConfig ["grid"] ["row"].AsInt;
+						int col = testConfig ["grid"] ["col"].AsInt;
+						int pins = testConfig ["grid"] ["pins"].AsInt;
 
 						//Generate a selection of random numbers from each row.
 						//NOTE: In the case that there are more rows than pins
