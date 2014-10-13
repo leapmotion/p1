@@ -12,6 +12,7 @@ namespace P1
 				public float moveLimit = 1;
 				private Vector3 origPos;
 				private bool isThisHit = false;
+				private int prevSliderInt;
 				public int sliderInt;
 
 				private	float snappedXint;
@@ -20,9 +21,10 @@ namespace P1
 				public GameObject HandleVisMesh;
 				public GameObject HandleVisGRP;
 				
+				public AudioSource sliderClickSound;
+				
 				private SliderManager sliderManager;
 		
-
 				void Start() {
 
 				}
@@ -46,6 +48,7 @@ namespace P1
 	
 				void Update ()
 				{
+						prevSliderInt = sliderInt;
 						if (Input.GetMouseButton (0) && isThisHit == true) {
 								deltaX = origPos.x - Input.mousePosition.x;
 								moveAmountX = moveIncrement * ((Mathf.Abs (deltaX) * sliderManager.SliderSpeed));
@@ -69,15 +72,20 @@ namespace P1
 
 						if (rigidbody.position.x < 1.0f  * sliderManager.transform.localScale.x) {
 							HandleVisGRP.transform.position = rigidbody.position;
-					}
-				}
-				void FixedUpdate(){
+						}
+
+		}
+		void FixedUpdate(){
 					float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
 					sliderInt = (int)(sliderValue +.5f);
 					sliderManager.TextSliderValue.text = sliderInt.ToString ();
-				}
-
-				void OnMouseUp ()
+					if(prevSliderInt != sliderInt){
+						Debug.Log("Click Sound");
+						sliderClickSound.Play();
+					}
+		}
+		
+		void OnMouseUp ()
 				{
 					isThisHit = false;
 					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandle;
