@@ -105,6 +105,8 @@ namespace P1
 			char x = sliderDragger.sliderInt.ToString()[0];
 			Debug.Log ("char x = " + x);
 			monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
+			sliderDragger.sliderInt = 0;
+			sliderManager.SliderHandleGRP.transform.localPosition = new Vector3 (0.0f, sliderManager.SliderHandleGRP.transform.localPosition.y, sliderManager.SliderHandleGRP.transform.localPosition.z);
 		}
 		public HandController theHands;
 		
