@@ -101,10 +101,11 @@ namespace P1
 //			}
 //		}
 		
-		void StepThroughTrial (){
+		IEnumerator StepThroughTrial (){
 			char x = sliderDragger.sliderInt.ToString()[0];
 			Debug.Log ("char x = " + x);
 			monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
+			yield return new WaitForSeconds(1.0f);
 			sliderDragger.sliderInt = 0;
 			sliderManager.SliderHandleGRP.transform.localPosition = new Vector3 (0.0f, sliderManager.SliderHandleGRP.transform.localPosition.y, sliderManager.SliderHandleGRP.transform.localPosition.z);
 		}
@@ -115,7 +116,7 @@ namespace P1
 			if (prevHandCount > 0 && theHands.GetFrame().Hands.Count == 0) {
 				// Trigger the function to check if slider is at right spot
 				Debug.Log ("Triggering StepThroughTrial");
-				StepThroughTrial();
+				StartCoroutine( StepThroughTrial());
 			}
 			
 			//@Frame - 1 (Last frame)
