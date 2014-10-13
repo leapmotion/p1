@@ -13,7 +13,7 @@ namespace P1
 		
 				public void ReaderUnitTest ()
 				{
-						TwitterReader tr = new TwitterReader ("Assets/testFiles/data/justin_tweets.json");
+						TwitterReader tr = new TwitterReader ("justin_tweets.json");
 						Assert.AreEqual (6, tr.statuses.Count, "has five statuses");
 			
 				}
@@ -22,7 +22,7 @@ namespace P1
 		
 				public void ReaderContentUnitTest ()
 				{
-						TwitterReader tr = new TwitterReader ("Assets/testFiles/data/justin_tweets.json");
+						TwitterReader tr = new TwitterReader ("justin_tweets.json");
 			Assert.AreEqual ("RT @JeremyBieber: today we explore this ancient world #blessed",
 			                 tr.statuses [0].text, "text of first status");
 				}
@@ -36,7 +36,7 @@ namespace P1
 		
 				public void ReaderDateUnitTest ()
 				{
-						TwitterReader tr = new TwitterReader ("Assets/testFiles/data/justin_tweets.json");
+						TwitterReader tr = new TwitterReader ("justin_tweets.json");
 						Assert.AreEqual (10, tr.statuses [0].time.Month, "First tweet is february");
 						Assert.AreEqual (8, tr.statuses [0].time.Day, "First tweet is on the sixth");
 						Assert.AreEqual (2014, tr.statuses [0].time.Year, "First tweet is at 2012");
