@@ -12,6 +12,7 @@ namespace P1
     public GameObject normalCamera;
     public GameObject riftCamera;
     public GameObject handController;
+    public GameObject fadeScreen;
     public GameObject splashScreen;
     public GameObject focusPoint;
 
@@ -73,28 +74,42 @@ namespace P1
       relativeTime = Time.time;
     }
 
-    private void InitializeSplashScreen(float fieldOfView, float aspect)
+    private void CheckForHands()
+    {
+      if (handController.GetComponent<HandController>().GetFrame().Hands.Count == 0)
+      {
+        // No hands detected
+        ToggleSplashScreen(true);
+      }
+      else
+      {
+        ToggleSplashScreen(false);
+      }
+    }
+
+    private void InitializeScreens(float fieldOfView, float aspect)
     {
       float distance_from_camera = activeCamera.nearClipPlane + 0.1f;
       float y_scale = 2 * distance_from_camera * Mathf.Tan((Mathf.PI * fieldOfView / 180.0f) / 2.0f);
       float x_scale = y_scale * aspect;
+      fadeScreen.transform.parent = activeCamera.transform;
+      fadeScreen.transform.localPosition = new Vector3(0.0f, 0.0f, distance_from_camera);
+      fadeScreen.transform.rotation = activeCamera.transform.rotation * fadeScreen.transform.rotation;
+      fadeScreen.transform.localScale = new Vector3(x_scale, y_scale, 1.0f);
+
       splashScreen.transform.parent = activeCamera.transform;
       splashScreen.transform.localPosition = new Vector3(0.0f, 0.0f, distance_from_camera);
       splashScreen.transform.rotation = activeCamera.transform.rotation * splashScreen.transform.rotation;
       splashScreen.transform.localScale = new Vector3(x_scale, y_scale, 1.0f);
     }
 
-    private void UpdateSplashScreen() 
+    public void ToggleSplashScreen(bool active)
     {
-      float alpha = 1.0f - Mathf.Clamp01((Time.time - relativeTime) / timeThreshold);
-      if (!sceneLoaded)
-      {
-        alpha = 1.0f - alpha;
-      }
-      Color color = splashScreen.renderer.material.color;
-      color.a = alpha;
-      splashScreen.renderer.material.color = color;
+      
+    }
 
+    private void UpdateFadeScreen() 
+    {
       if (Input.GetKeyDown(KeyCode.RightArrow))
       {
         Debug.Log("Going to Next Scene");
@@ -105,6 +120,15 @@ namespace P1
         Debug.Log("Going to Prev Scene");
         PrevScene();
       }
+
+      float alpha = 1.0f - Mathf.Clamp01((Time.time - relativeTime) / timeThreshold);
+      if (!sceneLoaded)
+      {
+        alpha = 1.0f - alpha;
+      }
+      Color color = fadeScreen.renderer.material.color;
+      color.a = alpha;
+      fadeScreen.renderer.material.color = color;
 
       if (!sceneLoaded && alpha > 0.99f)
         Application.LoadLevel(currentScene);
@@ -154,7 +178,7 @@ namespace P1
       handController.transform.localScale = Vector3.one * 20 * data["hand"]["scale"].AsInt;
       handController.GetComponent<HandController>().handMovementScale = Vector3.one * data["hand"]["speed"].AsInt;
 
-      InitializeSplashScreen(170.0f, 1.0f); // Initialize at 170.0f field of view to compensate for uninitiated field of view
+      InitializeScreens(170.0f, 1.0f); // Initialize at 170.0f field of view to compensate for uninitiated field of view
 
       LoadScenes();
 	  }
@@ -167,12 +191,16 @@ namespace P1
         if (initialized == 1)
         {
           float aspect = (isConnected) ? activeCamera.aspect * 2.0f : activeCamera.aspect;
-          InitializeSplashScreen(activeCamera.fieldOfView, aspect);
+          InitializeScreens(activeCamera.fieldOfView, aspect);
         }
         initialized++;
       }
 
-      UpdateSplashScreen();
+      UpdateFadeScreen();
+      if (sceneLoaded)
+      {
+        CheckForHands();
+      }
 
       if (focusPoint)
       {
