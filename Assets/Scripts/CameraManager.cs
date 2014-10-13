@@ -19,8 +19,8 @@ namespace P1
     private Camera activeCamera;
     private int initialized = 0;
 
-    private List<string> scenes;
-    private bool sceneLoaded = false;
+    public List<string> scenes;
+    private bool sceneLoaded = true;
     private float timeThreshold = 2.0f; // 2 seconds
     private float relativeTime;
     private string currentScene_;
@@ -31,7 +31,6 @@ namespace P1
       {
         currentScene_ = value;
         relativeTime = Time.time;
-        sceneLoaded = true;
       }
     }
     public int currentIndex
@@ -55,7 +54,7 @@ namespace P1
       return activeCamera;
     }
 
-    private void LoadScenes()
+    public void LoadScenes()
     {
       scenes = new List<string>();
       JSONNode scene_data = Utils.FileToJSON("scene_config.json");
@@ -88,25 +87,47 @@ namespace P1
     private void UpdateSplashScreen() 
     {
       float alpha = 1.0f - Mathf.Clamp01((Time.time - relativeTime) / timeThreshold);
-      if (sceneLoaded)
+      if (!sceneLoaded)
       {
         alpha = 1.0f - alpha;
       }
+      Color color = splashScreen.renderer.material.color;
+      color.a = alpha;
+      splashScreen.renderer.material.color = color;
 
+      if (Input.GetKeyDown(KeyCode.RightArrow))
+      {
+        Debug.Log("Going to Next Scene");
+        NextScene();
+      }
+      else if (Input.GetKeyDown(KeyCode.LeftArrow))
+      {
+        Debug.Log("Going to Prev Scene");
+        PrevScene();
+      }
+
+      if (!sceneLoaded && alpha > 0.99f)
+        Application.LoadLevel(currentScene);
     }
 
     public void PrevScene()
     {
       int i = currentIndex;
       if (i > 0)
+      {
         currentScene = scenes[i - 1];
+        sceneLoaded = false;
+      }
     }
 
     public void NextScene()
     {
       int i = currentIndex;
-      if (i < scenes.Count - 1)
-        currentScene = scenes[i - 1];
+      if (i > -1 && (i + 1) < scenes.Count)
+      {
+        currentScene = scenes[i + 1];
+        sceneLoaded = false;
+      }
     }
 
 	  // Use this for initialization
@@ -129,13 +150,11 @@ namespace P1
       handController.transform.parent = activeCamera.transform;
       handController.transform.rotation = activeCamera.transform.rotation * handController.transform.rotation;
 
-      InitializeSplashScreen(170.0f, 1.0f); // Initialize at 170.0f field of view to compensate for uninitiated field of view
-
       JSONNode data = Utils.FileToJSON("all_config.json");
       handController.transform.localScale = Vector3.one * 20 * data["hand"]["scale"].AsInt;
       handController.GetComponent<HandController>().handMovementScale = Vector3.one * data["hand"]["speed"].AsInt;
 
-      
+      InitializeSplashScreen(170.0f, 1.0f); // Initialize at 170.0f field of view to compensate for uninitiated field of view
 
       LoadScenes();
 	  }
@@ -153,10 +172,7 @@ namespace P1
         initialized++;
       }
 
-      if (initialized > 1)
-      {
-        UpdateSplashScreen();
-      }
+      UpdateSplashScreen();
 
       if (focusPoint)
       {

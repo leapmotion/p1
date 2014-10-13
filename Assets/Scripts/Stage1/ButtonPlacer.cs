@@ -74,9 +74,9 @@ namespace P1
         // Show final correct result
         pinPrompt.GetComponent<PINPrompt>().TogglePIN(true);
         Debug.Log("Autopsy report for monkey:\n" + monkeyDo.ToString());
-        if (SceneManager.instance)
+        if (CameraManager.instance)
         {
-          SceneManager.instance.Next();
+          CameraManager.instance.NextScene();
         }
       }
       else
