@@ -8,8 +8,10 @@ namespace P1
   public class CameraManager : MonoBehaviour {
     public GameObject normalCamera;
     public GameObject riftCamera;
-    public GameObject focusPoint;
     public GameObject handController;
+    public GameObject focusPoint;
+
+    private Camera activeCamera;
 
 	  // Use this for initialization
 	  void Start () {
@@ -20,16 +22,19 @@ namespace P1
       {
         riftCamera.SetActive(true);
         normalCamera.SetActive(false);
-        handController.transform.parent = riftCamera.GetComponent<OVRCameraController>().CameraMain.transform;
-        handController.transform.rotation = riftCamera.GetComponent<OVRCameraController>().CameraMain.transform.rotation * handController.transform.rotation;
+        activeCamera = riftCamera.GetComponent<OVRCameraController>().CameraMain;
       }
       else
       {
         riftCamera.SetActive(false);
         normalCamera.SetActive(true);
-        handController.transform.parent = normalCamera.transform;
-        handController.transform.rotation = normalCamera.transform.rotation * handController.transform.rotation;
+        activeCamera = normalCamera.camera;
       }
+      handController.transform.parent = activeCamera.transform;
+      handController.transform.rotation = activeCamera.transform.rotation * handController.transform.rotation;
+
+      JSONNode data = Utils.FileToJSON("all_config.json");
+      
 	  }
 	
 	  // Update is called once per frame
@@ -38,8 +43,8 @@ namespace P1
       {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-          riftCamera.transform.rotation = Quaternion.LookRotation(focusPoint.transform.position - riftCamera.transform.position);
-          normalCamera.transform.rotation = Quaternion.LookRotation(focusPoint.transform.position - normalCamera.transform.position);
+          activeCamera.transform.rotation = Quaternion.LookRotation(focusPoint.transform.position - activeCamera.transform.position);
+          OVRDevice.ResetOrientation();
         }
       }
 	  }
