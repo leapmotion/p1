@@ -38,7 +38,7 @@ namespace P1
 		
 		public void DoStart ()
 		{
-			monkeyDo.ConfigureTest ("slider_config.json");
+			monkeyDo.ConfigureTest ("slider");
 			monkeyDo.TrialEvent += TrialUpdate;
 			
 			monkeyDo.Start ();

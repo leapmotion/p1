@@ -58,7 +58,7 @@ namespace P1
     {
       monkeyDo = new GridMonkey();
       SetGridFromConfig("grid_config.json");
-	    monkeyDo.ConfigureTest("grid_config.json");
+	  monkeyDo.ConfigureTest("grid");
       monkeyDo.TrialEvent += TrialUpdate;
 
       monkeyDo.Start();
