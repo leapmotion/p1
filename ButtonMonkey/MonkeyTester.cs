@@ -17,9 +17,9 @@ namespace ButtonMonkey
 				{
 						string report = "";
 						if (keys.Count > 0) {
-								report += "Trial Keys:, ";
+								report += "Trial Keys: ";
 								foreach (int k in keys) {
-										report += k.ToString () + ", ";
+										report += k.ToString () + ".";
 								}
 								report += "\n" + counter.ToString () + "\n";
 						}
