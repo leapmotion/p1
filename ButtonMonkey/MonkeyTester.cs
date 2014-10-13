@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using SimpleJSON;
-using P1;
 
 namespace ButtonMonkey
 {
@@ -67,14 +66,16 @@ namespace ButtonMonkey
 			
 				protected JSONNode config;
 
+				/// <summary>
+				/// Configures the test using ./Assets/config/<test>_config.json
+				/// Stores test results in ./TestResults/<test>-<year>-<month>-<day>_<hour>-<minute>-<second>-<AM/PM>.csv
+				/// </summary>
 				public void ConfigureTest (string testName)
 				{
-						//config = JSONNode.Parse (File.ReadAllText (dataPath + "/config/" + testName + "_config.json"));
-            config = Utils.FileToJSON(testName);
+						config = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/" + testName + "_config.json"));
 						testNum = config ["test"] ["number"].AsInt;
-            string testPath = Environment.CurrentDirectory + "/TestResults/";
-						Directory.CreateDirectory (testPath);
-            recordPath = testPath + string.Format(testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+						Directory.CreateDirectory (Environment.CurrentDirectory + "/TestResults/");
+						recordPath = Environment.CurrentDirectory + "/TestResults/" + string.Format (testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
 						File.WriteAllText (recordPath, "No Data from Trials");
 				}
 				
@@ -107,7 +108,6 @@ namespace ButtonMonkey
 
 				public void WhenPushed (bool complete, char label)
 				{
-						UnityEngine.Debug.Log ("MonkeyTester.WhenPushed label = " + label);
 						if (StageComplete () ||
 								TrialComplete ()) {
 								//Already complete -> no event
