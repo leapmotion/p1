@@ -17,7 +17,7 @@ namespace P1
 		public GameObject pinPrompt;
 		private SliderManager sliderManager;
 		private SliderDragger sliderDragger;
-		
+		private int prevHandCount = 0;
 		
 		SliderTrialTrigger() {
 			monkeyDo = new SliderMonkey();
@@ -76,42 +76,55 @@ namespace P1
 				}
 			}
 		}
-		bool isHandInTestTrigger = false;
-		int colliderCount = 0;
-		bool isHandNearSlider = false;
-		void OnTriggerEnter (){
-//			Debug.Log ("OnTriggerEnter isHandNearSlider = " + isHandNearSlider);
-			
-			isHandNearSlider = true;
-			colliderCount++;
-			// if its a hand
-			//start or advance test
-		}
+//		bool isHandInTestTrigger = false;
+//		int colliderCount = 0;
+//		bool isHandNearSlider = false;
+//		void OnTriggerEnter (){
+////			Debug.Log ("OnTriggerEnter isHandNearSlider = " + isHandNearSlider);
+//			
+//			isHandNearSlider = true;
+//			colliderCount++;
+//			// if its a hand
+//			//start or advance test
+//		}
+//		
+//		void OnTriggerStay () {
+//		}
+//		
+//		void OnTriggerExit () {
+//			colliderCount--;
+//			if(colliderCount == 0 && isHandNearSlider == true){
+//				Debug.Log ("OnTriggerExit isHandNearSlider = " + isHandNearSlider);
+//				isHandNearSlider = false;
+//				StepThroughTrial();
+//
+//			}
+//		}
 		
-		void OnTriggerStay () {
+		void StepThroughTrial (){
+			char x = sliderDragger.sliderInt.ToString()[0];
+			Debug.Log ("char x = " + x);
+			monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
 		}
-		
-		void OnTriggerExit () {
-			colliderCount--;
-			if(colliderCount == 0 && isHandNearSlider == true){
-				Debug.Log ("OnTriggerExit isHandNearSlider = " + isHandNearSlider);
-				isHandNearSlider = false;
-				char x = sliderDragger.sliderInt.ToString()[0];
-				Debug.Log ("char x = " + x);
-				monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
-			}
-			//if the hand leaves
-			//end and/or advance test
-		}
+		public HandController theHands;
 		
 		void Update (){
-//			Debug.Log ("Update");
-			if(Input.GetKeyUp(KeyCode.T)){
-				Debug.Log ("sliderInt = " + sliderDragger.sliderInt);
-				char x = sliderDragger.sliderInt.ToString()[0];
-				Debug.Log ("char x = " + x);
-				monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
+			//@Frame (Current frame)
+			if (prevHandCount > 0 && theHands.GetFrame().Hands.Count == 0) {
+				// Trigger the function to check if slider is at right spot
+				Debug.Log ("Triggering StepThroughTrial");
+				StepThroughTrial();
 			}
+			
+			//@Frame - 1 (Last frame)
+			prevHandCount = theHands.GetFrame().Hands.Count;
+//			Debug.Log ("prevHandCount = " + prevHandCount);
+//			if(Input.GetKeyUp(KeyCode.T)){
+//				Debug.Log ("sliderInt = " + sliderDragger.sliderInt);
+//				char x = sliderDragger.sliderInt.ToString()[0];
+//				Debug.Log ("char x = " + x);
+//				monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
+//			}
 
 		}
 		

@@ -49,22 +49,22 @@ namespace P1
 				void Update ()
 				{
 						prevSliderInt = sliderInt;
-						if (Input.GetMouseButton (0) && isThisHit == true) {
-								deltaX = origPos.x - Input.mousePosition.x;
-								moveAmountX = moveIncrement * ((Mathf.Abs (deltaX) * sliderManager.SliderSpeed));
-	
-								if (Input.mousePosition.x > origPos.x && transform.localPosition.x < moveLimit) {
-										Debug.Log ("moveAmountX = " + moveAmountX);
-										this.transform.Translate (moveAmountX, 0f, 0f);
-								}
-								if (Input.mousePosition.x < origPos.x && transform.localPosition.x > 0) {
-										this.transform.Translate (-moveAmountX, 0f, 0f);
-								}
-								float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
-								sliderInt = (int)(sliderValue);
-								sliderManager.TextSliderValue.text = sliderInt.ToString ();
-						}
-						origPos = Input.mousePosition;
+//						if (Input.GetMouseButton (0) && isThisHit == true) {
+//								deltaX = origPos.x - Input.mousePosition.x;
+//								moveAmountX = moveIncrement * ((Mathf.Abs (deltaX) * sliderManager.SliderSpeed));
+//	
+//								if (Input.mousePosition.x > origPos.x && transform.localPosition.x < moveLimit) {
+//										Debug.Log ("moveAmountX = " + moveAmountX);
+//										this.transform.Translate (moveAmountX, 0f, 0f);
+//								}
+//								if (Input.mousePosition.x < origPos.x && transform.localPosition.x > 0) {
+//										this.transform.Translate (-moveAmountX, 0f, 0f);
+//								}
+//								float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
+//								sliderInt = (int)(sliderValue);
+//								sliderManager.TextSliderValue.text = sliderInt.ToString ();
+//						}
+//						origPos = Input.mousePosition;
 
 						Vector3 pos = rigidbody.position;
 						pos.x = Mathf.Clamp(pos.x, 0.0f, 1.0f * sliderManager.transform.localScale.x);
@@ -76,11 +76,11 @@ namespace P1
 
 		}
 		void FixedUpdate(){
-					float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
+			float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
 					sliderInt = (int)(sliderValue +.5f);
 					sliderManager.TextSliderValue.text = sliderInt.ToString ();
 					if(prevSliderInt != sliderInt){
-						Debug.Log("Click Sound");
+//						Debug.Log("Click Sound");
 						sliderClickSound.Play();
 					}
 		}
