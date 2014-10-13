@@ -1,0 +1,6 @@
+{
+	"friction": 0.97,
+	"move_scale": 400,
+	"move_scale_counter": 800,
+	"max_tweets": 50
+}

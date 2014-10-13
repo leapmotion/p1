@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using SimpleJSON;
 
 namespace P1
 {
@@ -9,23 +10,26 @@ namespace P1
 				TwitterReader tr;
 				public GameObject items;
 				public List<TwitterStatusButton> statusButtons = new List<TwitterStatusButton> ();
-				const int MAX_TWEETS = 7;
+				static int MAX_TWEETS = 0;
 				bool targetSet = false;
 				public string tweetSource;
 				const string TWITTER_LIST_TARGET_STATE = "listTriggerState";
 				bool inEditor = false;
-				const float MOVE_SCALE_COUNTER = 300f;
-				const float MOVE_SCALE = 300f;
-				const float FRICTION = 0.97f;
+				static float MOVE_SCALE_COUNTER = 100f;
+				static float MOVE_SCALE = 50;
+				static float FRICTION = 0.9f;
 
 #region loop
 		
 				// Use this for initialization
 				void Start ()
 				{
+						LoadConfigs ();
 						InitState ();
 						if (tweetSource != "")
 								ReadTweets (tweetSource);
+
+
 				}
 		
 				// Update is called once per frame
@@ -38,6 +42,20 @@ namespace P1
 				}
 
 #endregion
+
+				public void LoadConfigs ()
+				{
+						LoadConfigs ("Assets/config/twitter_list.json");
+				}
+
+				public void LoadConfigs (string s)
+				{
+						JSONNode n = Utils.FileToJSON (s);
+						MOVE_SCALE = n ["move_scale"].AsFloat;
+						MOVE_SCALE_COUNTER = n ["move_scale_counter"].AsFloat;
+						FRICTION = n ["friction"].AsFloat;
+						MAX_TWEETS = n ["max_tweets"].AsInt;
+				}
 
 				public void InitState ()
 				{
