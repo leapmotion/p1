@@ -96,8 +96,9 @@ namespace P1
 						#endif
 
 						if (!inEditor) {
-								go = new GameObject ();
-								go.AddComponent ("TwitterStatusButton");
+								//go = new GameObject ();
+								//go.AddComponent ("TwitterStatusButton");
+                go = (GameObject)Instantiate(Resources.Load("TwitterListStatus"));
 						}
 						go.transform.parent = items.transform;
 						go.transform.rotation = transform.rotation;
