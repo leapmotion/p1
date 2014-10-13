@@ -8,14 +8,15 @@ namespace P1
 		{
 				TwitterReader tr;
 				public GameObject items;
-				List<TwitterStatusButton> statuses = new List<TwitterStatusButton> ();
+				public List<TwitterStatusButton> statusButtons = new List<TwitterStatusButton> ();
 				const int MAX_TWEETS = 7;
 				bool targetSet = false;
 				public string tweetSource;
 				const string TWITTER_LIST_TARGET_STATE = "listTriggerState";
-
-		#if UNITY_EDITOR || UNITY_STANDALONE
-#endif
+				bool inEditor = false;
+				const float MOVE_SCALE_COUNTER = 300f;
+				const float MOVE_SCALE = 300f;
+				const float FRICTION = 0.97f;
 
 #region loop
 		
@@ -33,6 +34,7 @@ namespace P1
 						if (!targetSet) {
 								SetRandomTarget ();
 						}
+						rigidbody.velocity *= FRICTION;
 				}
 
 #endregion
@@ -45,7 +47,7 @@ namespace P1
 
 				public void SetRandomTarget ()
 				{
-						statuses [Random.Range (0, statuses.Count - 1)].targetState.Change ("target");
+						statusButtons [Random.Range (0, statusButtons.Count - 1)].targetState.Change ("target");
 						targetSet = true;
 				}
 
@@ -64,25 +66,31 @@ namespace P1
 
 				void AddStatus (Tweet s)
 				{
-						if (statuses.Count >= MAX_TWEETS)
+						if (statusButtons.Count >= MAX_TWEETS)
 								return;
 
 						GameObject go;
 
 						#if UNITY_EDITOR
 			            go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
-						#else 
-						go = new GameObject ();
-						go.AddComponent ("TwitterStatusButton");
-						go.transform.parent = items.transform;
+			
+			inEditor = true;
 						#endif
+
+						if (!inEditor) {
+								go = new GameObject ();
+								go.AddComponent ("TwitterStatusButton");
+						}
+						go.transform.parent = items.transform;
+						go.transform.rotation = transform.rotation;
+						go.transform.localScale = Vector3.one;
 			
 						TwitterStatusButton status = go.GetComponent<TwitterStatusButton> ();
 						status.list = this;
 						status.status = s;
-						status.index = statuses.Count;
+						status.index = statusButtons.Count;
 
-						statuses.Add (status);
+						statusButtons.Add (status);
 				}
 
 				public TwitterStatusButton PrevStatus (TwitterStatusButton s)
@@ -90,7 +98,7 @@ namespace P1
 						if (s.index <= 0) {
 								return null;
 						}
-						return statuses [s.index - 1];
+						return statusButtons [s.index - 1];
 				}
 
 #region aggregate state changes
@@ -100,20 +108,22 @@ namespace P1
 		
 				public void TargetSet (TwitterStatusButton status)
 				{
-						foreach (TwitterStatusButton s in statuses) {
+						foreach (TwitterStatusButton s in statusButtons) {
 								if (s.index != status.index)
 										s.targetState.Change ("base");
 						}
 				}
-		
-				public void HoverSet (TwitterStatusButton status)
-				{
-						foreach (TwitterStatusButton s in statuses) {
-								if (s.index != status.index)
-										s.hoverState.Change ("base");
-						}
-				}
 
 #endregion
+
+				public void MoveList (Vector3 movement)
+				{
+						float s;
+						if ((movement.y > 0) != (rigidbody.velocity.y > 0))
+								s = MOVE_SCALE_COUNTER;
+						else 
+								s = MOVE_SCALE;
+						rigidbody.AddForce (movement * s);
+				}
 		}
 }

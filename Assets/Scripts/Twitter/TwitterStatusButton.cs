@@ -10,7 +10,7 @@ namespace P1
 				TwitterList list_;
 				Tweet status_;
 				int index_;
-				static float MIN_HEIGHT = 0;
+				static float HEIGHT = 2;
 				const float MIN_WIDTH = 25;
 				const float MARGIN_HEIGHT = 0.5f;
 				const float MARGIN_WIDTH = 1.5f;
@@ -18,15 +18,13 @@ namespace P1
 				public	TextMeshPro text;
 				public GameObject background;
 				public GameObject backgroundActive;
-				public GameObject grips;
 				public float h;
 				public float w;
 				Color baseColor;
 				public Color targetColor = Color.black;
 				public State targetState;
-				public State hoverState;
-				const string STATE_NAME_TLS_HOVER = "twitter status button hover state";
 				const string STATE_NAME_TLS = "twitter status button trigger state";
+				public GripManager gripManager;
 
 				public Tweet status {
 						get { return status_; }
@@ -76,24 +74,19 @@ namespace P1
 
 				public void InitBackground ()
 				{
-						grips.SetActive (false);
+						gripManager = GetComponentInChildren<GripManager> ();
 						baseColor = background.renderer.material.color;
-						if (MIN_HEIGHT <= 0)
-								MIN_HEIGHT = background.renderer.bounds.size.y;
+						if (HEIGHT <= 0)
+								HEIGHT = background.renderer.bounds.size.y;
 				}
 		
 				public void InitState ()
 				{
 						if (!StateList.HasList (STATE_NAME_TLS))
 								InitTLS ();
-						if (!StateList.HasList (STATE_NAME_TLS_HOVER))
-								InitTLSHover ();
-
 						targetState = new State (STATE_NAME_TLS);
-						hoverState = new State (STATE_NAME_TLS_HOVER);
 
 						targetState.StateChangedEvent += OnTLSStateChange;
-						hoverState.StateChangedEvent += OnTLSHoverStateChange;
 				}
 
 #endregion
@@ -123,36 +116,9 @@ namespace P1
 		
 #endregion
 
-#region hover
-		
-				void OnTLSHoverStateChange (StateChange change)
-				{
-						switch (change.toState.name) {
-						case "base": 
-								background.SetActive (true);
-								backgroundActive.SetActive (false);
-								grips.SetActive (false);
-								break;
-				
-						case "hover": 
-								background.SetActive (false);
-								backgroundActive.SetActive (true);
-								list.HoverSet (this); // neutralize any old hovers
-								grips.SetActive (true);
-								break;
-						}
-				}
-
-				void InitTLSHover ()
-				{
-						new StateList (STATE_NAME_TLS_HOVER, "base", "hover");
-				}
-		
-#endregion
-
 #region dimensions
 
-				public float height { get { return MARGIN_HEIGHT + Mathf.Max (text.bounds.size.y, MIN_HEIGHT); } }
+				public float height { get { return MARGIN_HEIGHT + Mathf.Max (text.bounds.size.y, HEIGHT); } }
 		
 				public float width { get { return MARGIN_WIDTH + Mathf.Max (text.bounds.size.x, MIN_WIDTH); } }
 		
@@ -160,10 +126,15 @@ namespace P1
 				{
 						h = height;
 						w = width;
-						transform.localPosition = new Vector3 (0, index * -(MIN_HEIGHT + MARGIN_HEIGHT), 0);
+						transform.localPosition = new Vector3 (0, index * -(HEIGHT + MARGIN_HEIGHT), 0);
 				}
 
 #endregion
+
+		public void MoveList (Vector3 movement)
+		{
+			list.MoveList(movement);
+		}
 
 		}
 }

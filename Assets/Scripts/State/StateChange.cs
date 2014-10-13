@@ -15,12 +15,19 @@ namespace P1
 				public StateList list;
 				public bool allowed;
 
+				public bool unchanged { get { return fromState.name == toState.name; } }
+
 				public  StateChange (StateListItem fromS, StateListItem toS, StateList li, bool a)
 				{
 						fromState = fromS;
 						toState = toS;
 						list = li;
 						allowed = a;
+				}
+
+				public string ToString ()
+				{
+						return " [change]  " + fromState.name + " ... " + toState.name + ": " + (allowed ? "" : " (not allowed)") + (unchanged ? " (unchanged)" : "");
 				}
 
 		}

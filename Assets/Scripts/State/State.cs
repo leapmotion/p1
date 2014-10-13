@@ -8,25 +8,26 @@ namespace P1
 		{
 
 				StateList list;
-				public StateListItem currentItem;
+				public StateListItem myState;
+				public string state { get { return myState == null ? "" : myState.name; } }
 
 				public State (string name)
 				{
 						list = StateList.GetList (name);
-						currentItem = list.First ();
+						myState = list.First ();
 				}
 
 				public State (string name, string itemName)
 				{
 						list = StateList.GetList (name);
-						currentItem = list.Item (itemName);
+						myState = list.Item (itemName);
 				}
 		
 				public bool Change (string name, bool force)
 				{
 						if (force) {
 								if (list.Contains (name)) {
-										currentItem = list.Item (name);
+										myState = list.Item (name);
 										return true;
 								} else {
 										return false;
@@ -47,19 +48,19 @@ namespace P1
 //												Debug.Log ("--- enforcing change limits for changing to " + item.ToString ());
 												foreach (StateListItem allowedItem in list.controlledStateChanges[item]) {
 														//	Debug.Log ("... can change from state " + allowedItem.ToString ());
-														if (allowedItem.Equals (currentItem)) {
+														if (allowedItem.Equals (myState)) {
 																//Debug.Log (".... and that is what we are trying to do!");
-																StateChanged (currentItem, item);
-																currentItem = item;
+																StateChanged (myState, item);
+																myState = item;
 																return true;					
 														}
 												}
-												StateChanged (currentItem, item, false);
+												StateChanged (myState, item, false);
 												return false;
 										}
 
-										StateChanged (currentItem, item);
-										currentItem = item;
+										StateChanged (myState, item);
+										myState = item;
 										return true;
 								}
 

@@ -16,7 +16,7 @@ namespace P1
 		#endregion
 
 #region constructors
-
+		
 				public StateList (string n, params string[] i)
 				{
 						name = n;
@@ -26,6 +26,11 @@ namespace P1
 						}
 						items = iList.ToArray ();
 						lists.Add (n, this);
+				}
+
+				public static StateList Create (string n, params string[] i)
+				{
+						return new StateList (n, i);
 				}
 		#endregion
 
@@ -91,7 +96,7 @@ namespace P1
 										}
 								}
 						}
-						controlledStateChanges.Add (toItem, fromItems.ToArray());
+						controlledStateChanges.Add (toItem, fromItems.ToArray ());
 
 				}
 

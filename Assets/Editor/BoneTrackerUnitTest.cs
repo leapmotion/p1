@@ -31,6 +31,7 @@ namespace P1
 		}
 		
 		[Test]
+		[Ignore("not using finger 1")]
 		public void BTboneEnterBone1Test ()
 		{
 			BoneTracker t = newBoneTracker();
@@ -40,6 +41,7 @@ namespace P1
 		
 		
 		[Test]
+ [Ignore("not using finger 2")]
 		public void BTboneEnterBone2Test ()
 		{
 			BoneTracker t = newBoneTracker();
@@ -53,6 +55,17 @@ namespace P1
 			BoneTracker t = newBoneTracker();
 			t.TallyGameObject(new GameObject("bone3"));
 			Assert.AreEqual(1, t.boneCount, "if a bone object found, has 1 bones");
+		}
+		
+		
+		[Test]
+		public void BTboneEnterDuplicateButtonTest ()
+		{
+			BoneTracker t = newBoneTracker();
+			GameObject bone3 = new GameObject("bone3");
+			t.TallyGameObject(bone3);
+			t.TallyGameObject(bone3);
+			Assert.AreEqual(1, t.boneCount, "if the same object enters twice, has 1 bones");
 		}
 		
 #region  time dependant tests
