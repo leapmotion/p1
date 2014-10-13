@@ -74,7 +74,7 @@ namespace P1
 			StateList.Clear ();
 			new StateList ("dogs", "Yorkie", "Terrier", "Dauschound");
 			State state = new State("dogs");
-			Assert.AreEqual( "Yorkie", state.currentItem.ToString (), "The state is a member of the 'dogs' stateList and has been initialized to its first item");
+			Assert.AreEqual( "Yorkie", state.myState.ToString (), "The state is a member of the 'dogs' stateList and has been initialized to its first item");
 		}
 		
 		[Test]
@@ -84,7 +84,7 @@ namespace P1
 			new StateList ("dogs", "Yorkie", "Terrier", "Dauschound");
 			State state = new State("dogs");
 			state.Change ("Terrier");
-			Assert.AreEqual( "Terrier", state.currentItem.ToString (), "Can change the state");
+			Assert.AreEqual( "Terrier", state.myState.ToString (), "Can change the state");
 			
 }
 		

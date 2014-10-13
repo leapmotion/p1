@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -41,7 +41,7 @@ namespace P1
 		public void StateCreationTest ()
 				{
 						State state = new State ("dogs");
-						Assert.AreEqual ("Yorkie", state.currentItem.ToString (), "The state is a member of the 'dogs' stateList and has been initialized to its first item");
+						Assert.AreEqual ("Yorkie", state.state, "The state is a member of the 'dogs' stateList and has been initialized to its first item");
 				}
 		
 				[Test]
@@ -66,7 +66,7 @@ namespace P1
 						State state = new State ("dogs");
 						state.Change ("Poodle", true);
 						state.Change ("Yorkie", true);
-						Assert.IsTrue (state.currentItem.Equals ("Yorkie"), "can force a change against constraints");
+						Assert.IsTrue (state.myState.Equals ("Yorkie"), "can force a change against constraints");
 				}
 		
 				[Test]
@@ -79,9 +79,9 @@ namespace P1
 						State state = new State ("dogs");
 						state.Change ("Poodle");
 						state.Change ("Terrier");
-						Assert.AreEqual (state.currentItem.ToString (), "Poodle", "State cannot be changed to Tarrier from Poodle");
+						Assert.AreEqual (state.state, "Poodle", "State cannot be changed to Tarrier from Poodle");
 						state.Change ("Terrier", true);
-						Assert.AreEqual (state.currentItem.ToString (), "Terrier", "State changed to terrier from poodle, forcibly");
+						Assert.AreEqual (state.state, "Terrier", "State changed to terrier from poodle, forcibly");
 			
 				}
 		
@@ -118,14 +118,14 @@ namespace P1
 						state.StateChangedEvent += watcher.OnStateChange;
 			
 						Assert.IsTrue (state.Change ("Terrier"), "Can change from Yorkie to Terrier");
-						Assert.AreEqual ("Terrier", state.currentItem.ToString (), "changed to Terrier");
+						Assert.AreEqual ("Terrier", state.state, "changed to Terrier");
 			
 						Assert.IsTrue (state.Change ("Poodle"), "Can change from Terrier to Poodle");
-						Assert.AreEqual ("Poodle", state.currentItem.ToString (), "changed to Poodle");
+						Assert.AreEqual ("Poodle", state.state, "changed to Poodle");
 						Assert.IsTrue (watcher.change.allowed, "Watcher reflects allowed change");
 
 						Assert.IsFalse (state.Change ("Terrier"), "Cannot change from Poodle to Terrier");
-						Assert.AreEqual ("Poodle", state.currentItem.ToString (), "still a Poodle");
+						Assert.AreEqual ("Poodle", state.state, "still a Poodle");
 						Assert.AreEqual ("Terrier", watcher.change.toState.name, "Watcher reflects attempted change to Terrier");
 						Assert.IsFalse (watcher.change.allowed, "Watcher reflects prohibition of attempted change");
 				}
@@ -145,13 +145,13 @@ namespace P1
 						state.StateChangedEvent += watcher.OnStateChange;
 			
 						state.Change ("Terrier");
-						Assert.AreEqual ("Terrier", state.currentItem.ToString (), "changed to Terrier");
+						Assert.AreEqual ("Terrier", state.state, "changed to Terrier");
 			
 						state.Change ("Poodle");
-						Assert.AreEqual ("Poodle", state.currentItem.ToString (), "changed to Poodle");
+						Assert.AreEqual ("Poodle", state.state, "changed to Poodle");
 			
 						state.Change ("Terrier");
-						Assert.AreEqual ("Poodle", state.currentItem.ToString (), "still a Poodle");
+						Assert.AreEqual ("Poodle", state.state, "still a Poodle");
 			
 				}
 		
