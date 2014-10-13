@@ -1,15 +1,15 @@
 {
   "test": {
-    "number": 3
+    "number": 11
   },
   "position": {
     "x": 0.0,
-    "y": -3.5,
-    "z": 3.5
+    "y": -5.0,
+    "z": 5.0
   },
   "spacing": {
-    "x": 0.8,
-    "y": 0.8
+    "x": 2.5,
+    "y": 2.5
   },
   "buttonScale": {
     "x": 1.0,
@@ -20,12 +20,12 @@
     "sensitivity": 1.2
   }
   "prompt": {
-    "position": 3,
+    "position": 0,
     "isLandscape": true,
     "padding": 0.5
   }
   "grid": {
-    "row": 4,
+    "row": 3,
     "col": 3,
     "pins": 4
   }
