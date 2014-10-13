@@ -9,6 +9,8 @@ namespace P1
 		public class SceneManager : MonoBehaviour
 		{
 				public static SceneManager instance; //SINGLETON
+        public GameObject splashScreen;
+
 				Texture2D texture_;
 				float creationTime;
 				private float timer_threshold_ = 2.0f;
@@ -52,9 +54,9 @@ namespace P1
 
 				void InitializeGUI ()
 				{
-						Rect pixelInset = new Rect (0, 0, Screen.width, Screen.height);
-						guiTexture.color = Color.black;
-						guiTexture.pixelInset = pixelInset;
+            //Rect pixelInset = new Rect (0, 0, Screen.width, Screen.height);
+            //guiTexture.color = Color.black;
+            //guiTexture.pixelInset = pixelInset;
 				}
 	
 				// Update is called once per frame
@@ -100,15 +102,15 @@ namespace P1
 						}
 				}
 
-				void OnGUI ()
-				{
-						float alpha = 1.0f - Mathf.Clamp01 ((Time.time - creationTime) / timer_threshold_);
-						if (sceneLoaded_) {
-								alpha = 1.0f - alpha;
-						}
-						Color color = guiTexture.color;
-						color.a = alpha;
-						guiTexture.color = color;
-				}
+        //void OnGUI ()
+        //{
+        //    float alpha = 1.0f - Mathf.Clamp01 ((Time.time - creationTime) / timer_threshold_);
+        //    if (sceneLoaded_) {
+        //        alpha = 1.0f - alpha;
+        //    }
+        //    Color color = guiTexture.color;
+        //    color.a = alpha;
+        //    guiTexture.color = color;
+        //}
 		}
 }
