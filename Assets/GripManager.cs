@@ -127,7 +127,6 @@ namespace P1
 						if (enteringFinger != null) {
 								grippingFinger = enteringFinger;
 								gripState.Change (GRIPSTATE_2GRIPPED);
-								Debug.Log ("... gripping for finger : " + enteringFinger.GetLeapFinger ().Id);
 						}
 				}
 		
@@ -152,10 +151,7 @@ namespace P1
 								return;
 						int lfid = leavingFinger.GetLeapFinger ().Id;
 						if (lfid == grippingFinger.GetLeapFinger ().Id) {
-								Debug.Log (string.Format ("gripper {0} Leaving finger id {1}", id, lfid));
 								gripState.Change (GRIPSTATE_0BASE);
-						} else {
-								Debug.Log (string.Format ("gripper {0} Ignoring leaving finger {1}", id, lfid));
 						}
 				}
 
@@ -176,7 +172,7 @@ namespace P1
 								return;
 						}
 
-						Debug.Log ("GripStateChange for item #" + statusButton.index + ": " + change.toState.name);
+					//	Debug.Log ("GripStateChange for item #" + statusButton.index + ": " + change.toState.name);
 
 						switch (change.toState.name) {
 						case GRIPSTATE_2GRIPPED:
