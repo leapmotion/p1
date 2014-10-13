@@ -101,7 +101,7 @@ namespace P1
 
       screen.transform.parent = activeCamera.transform;
       screen.transform.localPosition = new Vector3(0.0f, 0.0f, distance_from_camera);
-      screen.transform.rotation = activeCamera.transform.rotation * screen.transform.rotation;
+      screen.transform.localRotation = Quaternion.identity;
       screen.transform.localScale = new Vector3(x_scale, y_scale, 1.0f);
     }
 
