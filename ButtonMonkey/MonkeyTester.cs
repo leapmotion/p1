@@ -36,7 +36,7 @@ namespace ButtonMonkey
 				int step;
 				// Multiple Trial Records
 				List<Trial> history;
-				string recordPath;
+				string recordFile;
 				int test;
 				int testNum;
 
@@ -50,7 +50,7 @@ namespace ButtonMonkey
 						correct = false;
 						step = 0;
 						history = new List<Trial> ();
-						recordPath = "";
+						recordFile = "";
 						test = 0;
 						testNum = 0;
 						Initialize ();
@@ -64,26 +64,43 @@ namespace ButtonMonkey
 						return new List<int> ();
 				}
 			
-				protected JSONNode config;
+				protected JSONNode testConfig;
 
 				/// <summary>
 				/// Configures the test using ./Assets/config/<test>_config.json
-				/// Stores test results in ./TestResults/<test>-<year>-<month>-<day>_<hour>-<minute>-<second>-<AM/PM>.csv
+				/// Stores test results in ./TestResults/<userName>/<test>-<year>-<month>-<day>_<hour>-<minute>-<second>-<AM/PM>.csv
+				/// Copies all configurations into same directory as test results.
 				/// </summary>
 				public void ConfigureTest (string testName)
 				{
-						config = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/" + testName + "_config.json"));
-						testNum = config ["test"] ["number"].AsInt;
-						Directory.CreateDirectory (Environment.CurrentDirectory + "/TestResults/");
-						recordPath = Environment.CurrentDirectory + "/TestResults/" + string.Format (testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
-						File.WriteAllText (recordPath, "No Data from Trials");
+						//(1) Create unique record directory
+						JSONNode userConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/user_config.json"));
+						string recordPath = Environment.CurrentDirectory + "/TestResults/" + userConfig ["userName"].Value + "/";
+						Directory.CreateDirectory (recordPath);
+
+						//(2) Copy configurations into directory
+						string configPath = Environment.CurrentDirectory + "/Assets/config/";
+						string[] files = Directory.GetFiles (configPath);
+						foreach (string f in files) {
+								string configName = Path.GetFileName (f);
+								string recordName = Path.Combine (recordPath, configName);
+								System.IO.File.Copy (f, recordName, true);
+						}
+			
+						//(3) Read test configuration
+						testConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/" + testName + "_config.json"));
+						testNum = testConfig ["test"] ["number"].AsInt;
+
+						//(4) Create test file
+						recordFile = recordPath + string.Format (testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+						File.WriteAllText (recordFile, "No Data from Trials");
 				}
 				
 				void Initialize ()
 				{
 						step = 0;
 						trial.counter = new MonkeyCounter ();
-						if (config != null) {
+						if (testConfig != null) {
 								trial.keys = GenerateKeys ();
 								trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
 						} else {
@@ -140,8 +157,8 @@ namespace ButtonMonkey
 						}
 
 						// Update test results immediately
-						if (recordPath.Length > 0) {
-								File.WriteAllText (recordPath, this.ToString ());
+						if (recordFile.Length > 0) {
+								File.WriteAllText (recordFile, this.ToString ());
 						}
 				}
 
