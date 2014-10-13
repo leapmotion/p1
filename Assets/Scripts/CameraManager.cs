@@ -87,25 +87,27 @@ namespace P1
       }
     }
 
-    private void InitializeScreens(float fieldOfView, float aspect)
+    private void InitializeScreens(float fieldOfView, float aspect) 
     {
-      float distance_from_camera = activeCamera.nearClipPlane + 0.1f;
+      InitializeScreen(fadeScreen, 0.1f, fieldOfView, aspect);
+      InitializeScreen(splashScreen, 0.2f, fieldOfView, aspect);
+    }
+
+    private void InitializeScreen(GameObject screen, float distance, float fieldOfView, float aspect)
+    {
+      float distance_from_camera = activeCamera.nearClipPlane + distance;
       float y_scale = 2 * distance_from_camera * Mathf.Tan((Mathf.PI * fieldOfView / 180.0f) / 2.0f);
       float x_scale = y_scale * aspect;
-      fadeScreen.transform.parent = activeCamera.transform;
-      fadeScreen.transform.localPosition = new Vector3(0.0f, 0.0f, distance_from_camera);
-      fadeScreen.transform.rotation = activeCamera.transform.rotation * fadeScreen.transform.rotation;
-      fadeScreen.transform.localScale = new Vector3(x_scale, y_scale, 1.0f);
 
-      splashScreen.transform.parent = activeCamera.transform;
-      splashScreen.transform.localPosition = new Vector3(0.0f, 0.0f, distance_from_camera);
-      splashScreen.transform.rotation = activeCamera.transform.rotation * splashScreen.transform.rotation;
-      splashScreen.transform.localScale = new Vector3(x_scale, y_scale, 1.0f);
+      screen.transform.parent = activeCamera.transform;
+      screen.transform.localPosition = new Vector3(0.0f, 0.0f, distance_from_camera);
+      screen.transform.rotation = activeCamera.transform.rotation * screen.transform.rotation;
+      screen.transform.localScale = new Vector3(x_scale, y_scale, 1.0f);
     }
 
     public void ToggleSplashScreen(bool active)
     {
-      
+      splashScreen.SetActive(active); 
     }
 
     private void UpdateFadeScreen() 
