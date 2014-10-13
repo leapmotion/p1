@@ -17,6 +17,8 @@ namespace P1
 
 				public bool unchanged { get { return fromState.name == toState.name; } }
 
+				public string state { get { return toState.name; } }
+
 				public  StateChange (StateListItem fromS, StateListItem toS, StateList li, bool a)
 				{
 						fromState = fromS;
