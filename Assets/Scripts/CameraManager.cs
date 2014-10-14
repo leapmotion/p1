@@ -13,7 +13,9 @@ namespace P1
     public GameObject riftCamera;
     public GameObject handController;
     public GameObject fadeScreen;
+    private GameObject fadeScreen2 = null;
     public GameObject splashScreen;
+    private GameObject splashScreen2 = null;
     public GameObject focusPoint;
 
     private bool isConnected = false;
@@ -89,25 +91,37 @@ namespace P1
 
     private void InitializeScreens(float fieldOfView, float aspect) 
     {
-      InitializeScreen(fadeScreen, 0.001f, 179f, aspect);
-      InitializeScreen(splashScreen, 0.002f, fieldOfView, 1.0f);
+      if (isConnected)
+      {
+        InitializeScreen(fadeScreen, 0.0001f, fieldOfView, aspect);
+        InitializeScreen(fadeScreen2, 0.0001f, fieldOfView, aspect, new Vector3(0.064f, 0.0f, 0.0f));
+        InitializeScreen(splashScreen, 0.002f, fieldOfView, 1.0f);
+        InitializeScreen(splashScreen2, 0.002f, fieldOfView, 1.0f, new Vector3(0.064f, 0.0f, 0.0f));
+      }
+      else
+      {
+        InitializeScreen(fadeScreen, 0.001f, fieldOfView, aspect);
+        InitializeScreen(splashScreen, 0.002f, fieldOfView, 1.0f);
+      }
     }
 
-    private void InitializeScreen(GameObject screen, float distance, float fieldOfView, float aspect)
+    private void InitializeScreen(GameObject screen, float distance, float fieldOfView, float aspect, Vector3 offset = default(Vector3))
     {
       float distance_from_camera = activeCamera.nearClipPlane + distance;
       float y_scale = 2 * distance_from_camera * Mathf.Tan((Mathf.PI * fieldOfView / 180.0f) / 2.0f);
       float x_scale = y_scale * aspect;
 
       screen.transform.parent = activeCamera.transform;
-      screen.transform.localPosition = new Vector3(0.0f, 0.0f, distance_from_camera);
+      screen.transform.localPosition = new Vector3(0.0f, 0.0f, distance_from_camera) + offset;
       screen.transform.localRotation = Quaternion.identity;
       screen.transform.localScale = new Vector3(x_scale, y_scale, 1.0f);
     }
 
     public void ToggleSplashScreen(bool active)
     {
-      splashScreen.SetActive(active); 
+      splashScreen.SetActive(active);
+      if (isConnected)
+        splashScreen2.SetActive(active);
     }
 
     private void UpdateFadeScreen() 
@@ -131,6 +145,8 @@ namespace P1
       Color color = fadeScreen.renderer.material.color;
       color.a = alpha;
       fadeScreen.renderer.material.color = color;
+      if (isConnected)
+        fadeScreen2.renderer.material.color = color;
 
       if (!sceneLoaded && alpha > 0.99f)
         Application.LoadLevel(currentScene);
@@ -167,7 +183,9 @@ namespace P1
         riftCamera.SetActive(true);
         normalCamera.SetActive(false);
         activeCamera = riftCamera.GetComponent<OVRCameraController>().CameraMain;
-        x_offset = riftCamera.GetComponent<OVRCameraController>().IPD;
+        x_offset = riftCamera.GetComponent<OVRCameraController>().IPD / 2.0f;
+        splashScreen2 = Instantiate(splashScreen) as GameObject;
+        fadeScreen2 = Instantiate(fadeScreen) as GameObject;
       }
       else
       {
