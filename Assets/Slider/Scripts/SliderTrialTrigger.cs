@@ -106,8 +106,8 @@ namespace P1
 			Debug.Log ("char x = " + x);
 			monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
 			yield return new WaitForSeconds(1.0f);
-			sliderDragger.sliderInt = 0;
-			sliderManager.SliderHandleGRP.transform.localPosition = new Vector3 (0.0f, sliderManager.SliderHandleGRP.transform.localPosition.y, sliderManager.SliderHandleGRP.transform.localPosition.z);
+//			sliderDragger.sliderInt = 0;
+//			sliderManager.SliderHandleGRP.transform.localPosition = new Vector3 (0.0f, sliderManager.SliderHandleGRP.transform.localPosition.y, sliderManager.SliderHandleGRP.transform.localPosition.z);
 		}
 		public HandController theHands;
 		
