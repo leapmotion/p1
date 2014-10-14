@@ -42,7 +42,8 @@ namespace P1
     GridMonkey monkeyDo;
     public GameObject pinPrompt;
     private bool restrain_buttons_ = false;
-    private List<GameObject> key_gameObjects_ = new List<GameObject>();
+    [HideInInspector]
+    public List<GameObject> key_gameObjects_ = new List<GameObject>();
 
     #region loop
 
@@ -92,7 +93,7 @@ namespace P1
         else
         {
           if (monkeyDo.WasCorrect())
-          {
+          { 
             Debug.Log("Good monkey! Next, type: " + monkeyDo.GetTrialKeys()[monkeyDo.GetTrialStep()]);
             pinPrompt.GetComponent<PINPrompt>().TogglePIN(true);
           }
@@ -100,6 +101,7 @@ namespace P1
           {
             Debug.Log("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeys()[monkeyDo.GetTrialStep()]);
             pinPrompt.GetComponent<PINPrompt>().TogglePIN(false);
+            pinPrompt.GetComponent<PINPrompt>().CheckPinIndex(monkeyDo.GetTrialStep());
           }
         }
       }

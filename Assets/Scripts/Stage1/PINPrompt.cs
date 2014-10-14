@@ -45,9 +45,17 @@ namespace P1
             pins.Add(CreatePIN(transform.TransformPoint(new Vector3(0.0f, - (starting_position + i), 0.0f)), new_pin.Substring(i, 1)));
           }
         }
-          
 
         pins_index = 0;
+      }
+    }
+
+    public void CheckPinIndex(int index)
+    {
+      while (pins_index < index && index < pins.Count)
+      {
+        Debug.Log("Fail");
+        TogglePIN(true);
       }
     }
 
