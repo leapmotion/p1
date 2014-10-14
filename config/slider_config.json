@@ -6,9 +6,9 @@
   "max": 10,
   "interval": 1,
   "use_ticks" : true,
-  "widgetXscale" : 3.5,
-  "widgetYscale" : 3.5,
-  "widgetZscale" : 3.5,
+  "widgetXscale" : 1,
+  "widgetYscale" : 1,
+  "widgetZscale" : 1,
   "sliderHandleWidth" : .75,
   "sliderHandleHeight" : .75,
   "sliderHandleDepth" : .75
