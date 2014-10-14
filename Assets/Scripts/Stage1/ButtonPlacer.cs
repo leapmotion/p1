@@ -205,7 +205,6 @@ namespace P1
         GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
         go.SetActive(true);
         TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
-        //g.SetTriggerSensitivity(sensitivity);
         g.KeypadScale = Vector3.one * size;
         g.label = k.label;
         go.transform.parent = transform;

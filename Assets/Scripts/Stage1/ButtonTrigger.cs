@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SimpleJSON;
 
 namespace P1
 {
@@ -10,6 +11,7 @@ namespace P1
 
     private bool isIndex_ = false;
     private bool readyToPress = true;
+    private bool allow_colors_ = true;
 
     public void FingerEntered(bool isIndex)
     {
@@ -29,7 +31,8 @@ namespace P1
             if (isIndex_)
             {
               transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
-              //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
+              if (allow_colors_)
+                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
             }
             else
             {
@@ -40,7 +43,8 @@ namespace P1
         }
         else if (other.gameObject.name == "Cushion")
         {
-          //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
+          if (allow_colors_)
+            transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
         }
       }
     }
@@ -52,11 +56,15 @@ namespace P1
         if (other.gameObject.name == "Cushion")
         {
           readyToPress = true;
-          //transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
+          
+          if (allow_colors_)
+            transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
         }
         else if (other.gameObject.name == "Trigger")
         {
-          //transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
+          
+          if (allow_colors_)
+            transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
         }
       }
     }
@@ -67,6 +75,7 @@ namespace P1
       Vector3 trigger_position = transform.parent.FindChild("Trigger").transform.position;
       original_position = transform.position;
       correct_basis = trigger_position - original_position;
+      allow_colors_ = Utils.FileToJSON("grid_config.json")["grid"]["allowColor"].AsBool;
     }
 
     // Update is called once per frame
