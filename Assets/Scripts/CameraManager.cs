@@ -89,8 +89,8 @@ namespace P1
 
     private void InitializeScreens(float fieldOfView, float aspect) 
     {
-      InitializeScreen(fadeScreen, 0.1f, fieldOfView, aspect);
-      InitializeScreen(splashScreen, 0.2f, fieldOfView, 1.0f);
+      InitializeScreen(fadeScreen, 0.001f, fieldOfView, aspect);
+      InitializeScreen(splashScreen, 0.002f, fieldOfView, 1.0f);
     }
 
     private void InitializeScreen(GameObject screen, float distance, float fieldOfView, float aspect)

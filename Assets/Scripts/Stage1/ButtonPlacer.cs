@@ -25,9 +25,6 @@ namespace P1
 
   public class ButtonPlacer : MonoBehaviour
   {
-
-    private Vector3 buttonScale;
-    private Vector3 buttonSpacing;
     public KeyDef[] keys = new KeyDef[]{
 					new KeyDef ("1", -1, 1),
 					new KeyDef ("2", 0, 1),
@@ -41,10 +38,8 @@ namespace P1
 					new KeyDef ("0", 0, -2)
 				};
     public GameObject buttonTemplate;
-    //public GFRectGrid grid;
     GridMonkey monkeyDo;
     public GameObject pinPrompt;
-    public GameObject backPad;
 
     #region loop
 
@@ -118,53 +113,30 @@ namespace P1
     {
       JSONNode data = Utils.FileToJSON(filePath);
 
-      float x, y, z;
-
-      x = data["spacing"]["x"].AsFloat;
-      y = data["spacing"]["y"].AsFloat;
-      buttonSpacing = new Vector3(x, y, 0.0f);
-
-      //grid.spacing = new Vector3 (x, y, z);
-      x = data["buttonScale"]["x"].AsFloat;
-      y = data["buttonScale"]["y"].AsFloat;
-      z = data["buttonScale"]["z"].AsFloat;
-      buttonScale = new Vector3(x, y, z);
-
-      x = data["position"]["x"].AsFloat;
-      y = data["position"]["y"].AsFloat;
-      z = data["position"]["z"].AsFloat;
-      transform.position = new Vector3(x, y, z);
+      float angle = data["grid"]["angle"].AsFloat;
+      float distance = data["grid"]["distance"].AsFloat;
+      transform.position = Quaternion.Euler(-angle, 0.0f, 0.0f) * Vector3.forward * distance;
       transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
 
-      float sensitivity = data["button"]["sensitivity"].AsFloat;
+      float size = data["button"]["size"].AsFloat;
 
-      // PromptLandscape
+      transform.FindChild("Cube").transform.localPosition = Vector3.zero;
+      transform.FindChild("Cube").transform.localScale = new Vector3(1.0f, 1.0f, size);
+
+      // Prompt Landscape
       // True - Left->Right
       // False - Top->Down
       bool isLandscape = data["prompt"]["isLandscape"].AsBool;
-      float prompt_h = (isLandscape) ? 1.0f : 4.0f;
-      float prompt_w = (isLandscape) ? 4.0f : 1.0f;
+      float prompt_h = (isLandscape) ? 1.0f * size : 4.0f * size;
+      float prompt_w = (isLandscape) ? 4.0f * size : 1.0f * size;
       float prompt_padding = data["prompt"]["padding"].AsFloat;
 
-      // PromptPos
+      // Prompt Pos
       // 0 - Top
       // 1 - Bottom
       // 2 - Right
       // 3 - Left
       int promptPos = data["prompt"]["position"].AsInt;
-
-      int row = data["grid"]["row"].AsInt;
-      int col = data["grid"]["col"].AsInt;
-      int num_keys = row * col;
-      if (num_keys > keys.Length)
-      {
-        num_keys = keys.Length;
-        row = 4;
-        col = 3;
-      }
-      float half_h = (float)(row - 1) / 2.0f;
-      float half_w = (float)(col - 1) / 2.0f;
-
       float prompt_rel_h = 0.0f;
       float prompt_rel_w = 0.0f;
       switch (promptPos)
@@ -187,41 +159,50 @@ namespace P1
       }
 
       Vector3 center = new Vector3(
-        - prompt_rel_w / 2.0f,
-        - prompt_rel_h / 2.0f,
+        -prompt_rel_w / 2.0f,
+        -prompt_rel_h / 2.0f,
         0
         );
 
-      transform.FindChild("Cube").transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+      Vector3 spacing = new Vector3(data["grid"]["spacing_x"].AsFloat, data["grid"]["spacing_y"].AsFloat, 0.0f);
+      float sensitivity = data["button"]["sensitivity"].AsFloat;
 
-      //backPad.transform.localPosition = new Vector3(0.0f, 0.0f, buttonScale.z / 3.0f);
-      //backPad.transform.localScale = new Vector3((prompt_w + half_w * 2) / 4.0f, (prompt_h + half_h * 2) / 4.0f, buttonScale.z);
-
-      float x_index = - half_w;
-      float y_index = half_h;
+      int row = data["grid"]["row"].AsInt;
+      int col = data["grid"]["col"].AsInt;
+      int num_keys = row * col;
+      if (num_keys > keys.Length)
+      {
+        num_keys = keys.Length;
+        row = 4;
+        col = 3;
+      }
+      float half_i = (float)(row - 1) / 2.0f;
+      float half_j = (float)(col - 1) / 2.0f;
+      float grid_i = -half_j;
+      float grid_j = half_i;
       for (int i = 0; i < num_keys; ++i)
       {
         KeyDef k = keys[i];
-       
+
         // Construct the matrix of keys based on the rows and cols. The last key will be at the last rol and centered
         Vector3 localPos = center;
         float x_coord = 0.0f;
         float y_coord = 0.0f;
-        float z_coord = 0.0f;
-        if (i == keys.Length - 1 && half_w == 1.0f && half_h == 1.5f)
+        float z_coord = - size;
+        if (i == keys.Length - 1 && half_j == 1.0f && half_i == 1.5f)
         {
-          y_coord = y_index * (buttonSpacing.y + buttonScale.y);
+          y_coord = grid_j * (spacing.y + size);
         }
         else
         {
-          x_coord = x_index * (buttonSpacing.x + buttonScale.x);
-          y_coord = y_index * (buttonSpacing.y + buttonScale.y);
+          x_coord = grid_i * (spacing.x + size);
+          y_coord = grid_j * (spacing.y + size);
 
-          x_index++;
-          if (x_index > (half_w + 0.25f))
+          grid_i++;
+          if (grid_i > (half_j + 0.25f))
           {
-            x_index = -half_w;
-            y_index--;
+            grid_i = -half_j;
+            grid_j--;
           }
         }
         localPos += new Vector3(x_coord, y_coord, z_coord);
@@ -229,14 +210,14 @@ namespace P1
         GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
         go.SetActive(true);
         TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
-        g.SetTriggerSensitivity(sensitivity);
-        g.KeypadScale = buttonScale;
+        //g.SetTriggerSensitivity(sensitivity);
+        g.KeypadScale = Vector3.one * size;
         g.label = k.label;
         go.transform.parent = transform;
         go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = transform.TransformPoint(localPos);
         g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate(monkeyDo.WhenPushed);
         go.transform.localPosition = localPos;
-        go.transform.localScale = buttonScale;
+        go.transform.localScale = Vector3.one * size;
         go.transform.rotation = transform.rotation;
       }
 
@@ -244,23 +225,24 @@ namespace P1
       switch (promptPos)
       {
         case 0:
-          promptPosition.y += prompt_padding + (half_h + prompt_h / 2 + 0.5f) * buttonScale.y + half_h * buttonSpacing.y;
+          promptPosition.y += prompt_padding + (half_i + prompt_h / 2 + 0.5f) * size + half_i * size;
           break;
         case 1:
-          promptPosition.y -= prompt_padding + (half_h + prompt_h / 2 + 0.5f) * buttonScale.y + half_h * buttonSpacing.y;
+          promptPosition.y -= prompt_padding + (half_i + prompt_h / 2 + 0.5f) * size + half_i * size;
           break;
         case 2:
-          promptPosition.x += prompt_padding + (half_w + prompt_w / 2 + 0.5f) * buttonScale.x + half_w * buttonSpacing.x;
+          promptPosition.x += prompt_padding + (half_j + prompt_w / 2 + 0.5f) * size + half_j * size;
           break;
         case 3:
-          promptPosition.x -= prompt_padding + (half_w + prompt_w / 2 + 0.5f) * buttonScale.x + half_w * buttonSpacing.x;
+          promptPosition.x -= prompt_padding + (half_j + prompt_w / 2 + 0.5f) * size + half_j * size;
           break;
         default:
-          promptPosition.y += prompt_padding + (half_h + prompt_h / 2 + 0.5f) * buttonScale.y + half_h * buttonSpacing.y;
+          promptPosition.y += prompt_padding + (half_i + prompt_h / 2 + 0.5f) * size + half_i * size;
           break;
       }
+      promptPosition.z = - size;
       pinPrompt.transform.localPosition = promptPosition;
-      pinPrompt.transform.localScale = buttonScale;
+      pinPrompt.transform.localScale = Vector3.one * size;
       pinPrompt.transform.rotation = transform.rotation;
       pinPrompt.GetComponent<PINPrompt>().SetOrientation(isLandscape);
     }
