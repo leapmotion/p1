@@ -9,10 +9,14 @@ namespace P1
     private Vector3 original_position;
     private Vector3 correct_basis;
 
-    private bool is_active_ = false;
+    [HideInInspector]
+    public bool is_active_ = false;
+    [HideInInspector]
+    public bool restricted_ = false;
+
     private bool readyToPress = true;
     private bool allow_colors_ = true;
-    private bool restrain_buttons_ = false;
+
 
     public void FingerEntered(bool is_active)
     {
@@ -26,6 +30,7 @@ namespace P1
     {
       this.transform.localPosition = Vector3.zero;
       readyToPress = true;
+      is_active_ = false;
 
       if (allow_colors_)
         transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
@@ -34,6 +39,9 @@ namespace P1
     #region Unity_Callbacks
     void OnTriggerEnter(Collider other)
     {
+      if (restricted_)
+        return;
+
       if (other.gameObject.layer != LayerMask.NameToLayer("Mouse"))
       {
         if (other.gameObject.name == "Trigger")
@@ -48,6 +56,7 @@ namespace P1
         }
         else if (other.gameObject.name == "Cushion")
         {
+          is_active_ = true;
           if (allow_colors_)
             transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
         }
@@ -56,18 +65,21 @@ namespace P1
 
     void OnTriggerExit(Collider other)
     {
+      if (restricted_)
+        return;
+
       if (other.gameObject.layer != LayerMask.NameToLayer("Mouse"))
       {
         if (other.gameObject.name == "Cushion")
         {
           readyToPress = true;
+          is_active_ = false;
           
           if (allow_colors_)
             transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
         }
         else if (other.gameObject.name == "Trigger")
         {
-          
           if (allow_colors_)
             transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
         }
@@ -82,12 +94,17 @@ namespace P1
       correct_basis = trigger_position - original_position;
       JSONNode data = Utils.FileToJSON("grid_config.json");
       allow_colors_ = data["grid"]["allowColor"].AsBool;
-      restrain_buttons_ = data["grid"]["restrainButtons"].AsBool;
     }
 
     // Update is called once per frame
     void Update()
     {
+      if (restricted_)
+      {
+        Reset();
+        return;
+      }
+
       Vector3 curr_basis = transform.position - original_position;
       Vector3 adjusted_basis = Vector3.Project(curr_basis, correct_basis);
       transform.position = adjusted_basis + original_position;

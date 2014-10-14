@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -40,6 +41,8 @@ namespace P1
     public GameObject buttonTemplate;
     GridMonkey monkeyDo;
     public GameObject pinPrompt;
+    private bool restrain_buttons_ = false;
+    private List<GameObject> key_gameObjects_ = new List<GameObject>();
 
     #region loop
 
@@ -53,8 +56,9 @@ namespace P1
     {
       monkeyDo = new GridMonkey();
       SetGridFromConfig("grid_config.json");
-	  monkeyDo.ConfigureTest("grid");
+	    monkeyDo.ConfigureTest("grid");
       monkeyDo.TrialEvent += TrialUpdate;
+      restrain_buttons_ = Utils.FileToJSON("grid_config.json")["grid"]["restrainButtons"].AsBool;
 
       monkeyDo.Start();
       Debug.Log("Monkey, type: " + monkeyDo.GetTrialKeys());
@@ -105,6 +109,35 @@ namespace P1
     void Update()
     {
     }
+
+    void FixedUpdate()
+    {
+      if (restrain_buttons_)
+      {
+        GameObject active_key = null;
+        foreach (GameObject key in key_gameObjects_)
+        {
+          if (key.GetComponent<TenKeyKey>().button.GetComponent<ButtonTrigger>().is_active_)
+          {
+            active_key = key;
+            break;
+          }
+        }
+
+        foreach (GameObject key in key_gameObjects_)
+        {
+          if (active_key != null && key != active_key)
+          {
+            key.GetComponent<TenKeyKey>().button.GetComponent<ButtonTrigger>().restricted_ = true;
+          }
+          else
+          {
+            key.GetComponent<TenKeyKey>().button.GetComponent<ButtonTrigger>().restricted_ = false;
+          }
+        }
+      }
+    }
+
     #endregion
 
     #region configuration
@@ -213,6 +246,7 @@ namespace P1
         go.transform.localPosition = localPos;
         go.transform.localScale = Vector3.one * size;
         go.transform.rotation = transform.rotation;
+        key_gameObjects_.Add(go);
       }
 
       Vector3 promptPosition = center;

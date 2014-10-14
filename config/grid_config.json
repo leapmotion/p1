@@ -19,6 +19,6 @@
     "spacing_x": 0.01, 
     "spacing_y": 0.01,
     "allowColor": true,
-    "restrainButtons" true
+    "restrainButtons": true
   }
 }
