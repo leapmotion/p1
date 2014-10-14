@@ -46,6 +46,7 @@ namespace P1
       {
         if (other.gameObject.name == "Trigger")
         {
+          is_active_ = true;
           if (readyToPress)
           {
             transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
@@ -56,7 +57,6 @@ namespace P1
         }
         else if (other.gameObject.name == "Cushion")
         {
-          is_active_ = true;
           if (allow_colors_)
             transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
         }
@@ -73,13 +73,13 @@ namespace P1
         if (other.gameObject.name == "Cushion")
         {
           readyToPress = true;
-          is_active_ = false;
           
           if (allow_colors_)
             transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
         }
         else if (other.gameObject.name == "Trigger")
         {
+          is_active_ = false;
           if (allow_colors_)
             transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.gray);
         }

@@ -212,6 +212,8 @@ namespace P1
         row = 4;
         col = 3;
       }
+
+      Vector3 unit_per_radian = spacing / distance * 180.0f / Mathf.PI;
       float numpad_w = (float)(col - 1) * spacing.y + (float)col * size;
       float numpad_h = (float)(row - 1) * spacing.x + (float)row * size;
       float x_coord = -(numpad_w / 2.0f - size / 2.0f);
