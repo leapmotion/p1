@@ -52,9 +52,8 @@ namespace P1
 
     public void CheckPinIndex(int index)
     {
-      while (pins_index < index && index < pins.Count)
+      if (pins_index > 0 && pins_index < index && pins_index < pins.Count)
       {
-        Debug.Log("Fail");
         TogglePIN(true);
       }
     }
