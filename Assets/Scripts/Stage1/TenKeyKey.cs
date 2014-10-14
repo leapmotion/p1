@@ -69,8 +69,15 @@ namespace P1
 
     public void SetTriggerSensitivity(float sensitivity)
     {
-      Debug.Log(this.collider.bounds.size);
-      //trigger.localPosition = this.collider.bounds.size;
+      BoxCollider box_collider = GetComponentInChildren<Joint>().GetComponent<BoxCollider>();
+      float edge = 3 * box_collider.size.z / 2 - box_collider.center.z - 1.0f;
+      Vector3 trigger_position = new Vector3(0.0f, 0.0f, edge + sensitivity);
+      trigger.transform.localPosition = trigger_position;
+
+      Vector3 cushion_position = new Vector3(0.0f, 0.0f, (trigger_position.z + edge) / 2);
+      Vector3 cushion_size = new Vector3(1.0f, 1.0f, Mathf.Max(0.0f, (trigger_position.z - edge) - 1.0f) * 0.8f);
+      cushion.transform.localPosition = cushion_position;
+      cushion.transform.localScale = cushion_size;
     }
 
     public void UpdateColor(Color color)
