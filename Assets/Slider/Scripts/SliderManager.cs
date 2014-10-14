@@ -168,6 +168,7 @@ namespace P1
 				Vector3 tickPos = new Vector3(SliderBarHandleMesh.transform.position.x + tickOffset, transform.localPosition.y, transform.localPosition.z);
 				GameObject tick = Instantiate(TickGRP, tickPos, transform.localRotation) as GameObject;
 				tick.transform.parent = this.transform;
+				tick.SetActive(true);
 				count++;
 			}
 			return null;
