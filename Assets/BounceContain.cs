@@ -25,7 +25,7 @@ namespace P1
 				public float DAMPENING = 0.9f;
 				public float DAMPENING_NEAR_TARRGET = 0.99f;
 				float lastTimeFoundOutsideTaget = 0;
-				public float NEARNESS = 0.3f;
+				public float NEARNESS = 1f;
 				public float TIME_IN_TARGET_TO_STABILIZE = 0.75f;
 				public string configFilePath = "";
 				public GameObject minIndicator;
@@ -114,6 +114,7 @@ namespace P1
 						SPRINGINESS_NEAR_TARGET = n ["springiness_near_target"].AsFloat;
 						DAMPENING = n ["dampening"].AsFloat;
 						DAMPENING_NEAR_TARRGET = n ["dampening_near_target"].AsFloat;
+						NEARNESS = n ["nearness"].AsFloat;
 				}
 
 				float timeInTarget { get { return Time.time - lastTimeFoundOutsideTaget; } }
@@ -156,7 +157,9 @@ namespace P1
 				void Spring ()
 				{
 						SpringNear (springTarget);
-						if (Utils.Elapsed (lastTimeFoundOutsideTaget, TIME_IN_TARGET_TO_STABILIZE)) {
+						if (Utils.Elapsed (lastTimeFoundOutsideTaget, TIME_IN_TARGET_TO_STABILIZE * 2)) { 
+								bounceState.Change (BOUNCE_STATE_01_MIDDLE);
+						} else if (Utils.Elapsed (lastTimeFoundOutsideTaget, TIME_IN_TARGET_TO_STABILIZE)) {
 								switch (bounceState.state) {
 								case BOUNCE_STATE_03_TOP:
 										bounceState.Change (BOUNCE_STATE_05_TOP_SNAP);

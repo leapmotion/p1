@@ -3,4 +3,5 @@
 	"springiness_near_target": 4;
 	"dampening": 0.99;
 	"dampening_near_target": 0.999;
+"nearness": 2.0;
 }
