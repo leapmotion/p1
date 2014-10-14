@@ -9,13 +9,25 @@ namespace P1
     private Vector3 original_position;
     private Vector3 correct_basis;
 
-    private bool isIndex_ = false;
+    private bool is_active_ = false;
     private bool readyToPress = true;
     private bool allow_colors_ = true;
 
-    public void FingerEntered(bool isIndex)
+    public void FingerEntered(bool is_active)
     {
-      isIndex_ = isIndex;
+      if (!is_active)
+      {
+        Reset();
+      }
+    }
+
+    public void Reset()
+    {
+      this.transform.localPosition = Vector3.zero;
+      readyToPress = true;
+
+      if (allow_colors_)
+        transform.parent.parent.GetComponent<TenKeyKey>().ResetColor();
     }
 
     #region Unity_Callbacks
@@ -27,17 +39,9 @@ namespace P1
         {
           if (readyToPress)
           {
-            isIndex_ = true; // Allow all fingers to activate the buttons
-            if (isIndex_)
-            {
-              transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
-              if (allow_colors_)
-                transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
-            }
-            else
-            {
-              transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(false, "Leap");
-            }
+            transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
+            if (allow_colors_)
+              transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
             readyToPress = false;
           }
         }

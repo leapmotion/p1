@@ -11,7 +11,7 @@ namespace P1
     public GameObject trigger;
     public GameObject cushion;
 
-    private Color original_color;
+    private Color original_color = new Color(0.25f, 0.25f, 0.25f);
     private bool mouse_clicked = false;
 
     [SerializeField]
@@ -129,7 +129,6 @@ namespace P1
         new StateList("ButtonState", "unknown", "default", "over", "down");
       }
       state = new State("ButtonState");
-      original_color = button.renderer.material.color;
     }
 
     // Update is called once per frame
