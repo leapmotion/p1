@@ -16,6 +16,7 @@ namespace P1
     private GameObject fadeScreen2 = null;
     public GameObject splashScreen;
     private GameObject splashScreen2 = null;
+    public GameObject lightSource;
     public GameObject focusPoint;
 
     private bool isConnected = false;
@@ -202,6 +203,10 @@ namespace P1
       handController.GetComponent<HandController>().handMovementScale = Vector3.one * data["hand"]["speed"].AsInt;
 
       InitializeScreens(170.0f, 1.0f); // Initialize at 170.0f field of view to compensate for uninitiated field of view
+
+      lightSource.transform.parent = activeCamera.transform;
+      lightSource.transform.rotation = activeCamera.transform.rotation * lightSource.transform.rotation;
+      lightSource.transform.localPosition = new Vector3(x_offset, 0.0f, 0.0f);
 
       LoadScenes();
 	  }
