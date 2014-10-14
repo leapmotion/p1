@@ -8,7 +8,7 @@
   "prompt": {
     "position": 0,
     "isLandscape": true,
-    "padding": 0.002
+    "padding": 0.01
   }
   "grid": {
     "row": 3,
@@ -16,7 +16,7 @@
     "pins": 4,
     "distance": 0.5,
     "angle": -45,
-    "spacing_x": 0.005, 
-    "spacing_y": 0.005
+    "spacing_x": 0.01, 
+    "spacing_y": 0.01
   }
 }

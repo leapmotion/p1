@@ -116,12 +116,13 @@ namespace P1
       float angle = data["grid"]["angle"].AsFloat;
       float distance = data["grid"]["distance"].AsFloat;
       transform.position = Quaternion.Euler(-angle, 0.0f, 0.0f) * Vector3.forward * distance;
+      transform.localScale = Vector3.one;
       transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
 
       float size = data["button"]["size"].AsFloat;
 
       transform.FindChild("Cube").transform.localPosition = Vector3.zero;
-      transform.FindChild("Cube").transform.localScale = new Vector3(1.0f, 1.0f, size);
+      transform.FindChild("Cube").transform.localScale = new Vector3(10.0f, 10.0f, size);
 
       // Prompt Landscape
       // True - Left->Right
@@ -161,7 +162,7 @@ namespace P1
       Vector3 center = new Vector3(
         -prompt_rel_w / 2.0f,
         -prompt_rel_h / 2.0f,
-        0
+        -size
         );
 
       Vector3 spacing = new Vector3(data["grid"]["spacing_x"].AsFloat, data["grid"]["spacing_y"].AsFloat, 0.0f);
@@ -176,36 +177,30 @@ namespace P1
         row = 4;
         col = 3;
       }
-      float half_i = (float)(row - 1) / 2.0f;
-      float half_j = (float)(col - 1) / 2.0f;
-      float grid_i = -half_j;
-      float grid_j = half_i;
+      float numpad_w = (float)(col - 1) * spacing.y + (float)col * size;
+      float numpad_h = (float)(row - 1) * spacing.x + (float)row * size;
+      float x_coord = -(numpad_w / 2.0f - size / 2.0f);
+      float y_coord = (numpad_h / 2.0f - size / 2.0f);
       for (int i = 0; i < num_keys; ++i)
       {
         KeyDef k = keys[i];
 
         // Construct the matrix of keys based on the rows and cols. The last key will be at the last rol and centered
-        Vector3 localPos = center;
-        float x_coord = 0.0f;
-        float y_coord = 0.0f;
-        float z_coord = - size;
-        if (i == keys.Length - 1 && half_j == 1.0f && half_i == 1.5f)
+        Vector3 localPos = center + new Vector3(x_coord, y_coord, 0.0f);
+        if (i == keys.Length - 1 && row == 4 && col == 3) // Zero
         {
-          y_coord = grid_j * (spacing.y + size);
+          x_coord = 0.0f;
         }
         else
         {
-          x_coord = grid_i * (spacing.x + size);
-          y_coord = grid_j * (spacing.y + size);
+          x_coord += spacing.x + size;
 
-          grid_i++;
-          if (grid_i > (half_j + 0.25f))
+          if (x_coord > numpad_w / 2.0f)
           {
-            grid_i = -half_j;
-            grid_j--;
+            x_coord = -(numpad_w / 2.0f - size / 2.0f);
+            y_coord -= spacing.y + size;
           }
         }
-        localPos += new Vector3(x_coord, y_coord, z_coord);
 
         GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
         go.SetActive(true);
@@ -225,22 +220,21 @@ namespace P1
       switch (promptPos)
       {
         case 0:
-          promptPosition.y += prompt_padding + (half_i + prompt_h / 2 + 0.5f) * size + half_i * size;
+          promptPosition.y += prompt_padding + (numpad_h + prompt_h) / 2.0f;
           break;
         case 1:
-          promptPosition.y -= prompt_padding + (half_i + prompt_h / 2 + 0.5f) * size + half_i * size;
+          promptPosition.y -= prompt_padding + (numpad_h + prompt_h) / 2.0f;
           break;
         case 2:
-          promptPosition.x += prompt_padding + (half_j + prompt_w / 2 + 0.5f) * size + half_j * size;
+          promptPosition.x += prompt_padding + (numpad_w + prompt_w) / 2.0f;
           break;
         case 3:
-          promptPosition.x -= prompt_padding + (half_j + prompt_w / 2 + 0.5f) * size + half_j * size;
+          promptPosition.x -= prompt_padding + (numpad_w + prompt_w) / 2.0f;
           break;
         default:
-          promptPosition.y += prompt_padding + (half_i + prompt_h / 2 + 0.5f) * size + half_i * size;
+          promptPosition.y += prompt_padding + (numpad_h + prompt_h) / 2.0f;
           break;
       }
-      promptPosition.z = - size;
       pinPrompt.transform.localPosition = promptPosition;
       pinPrompt.transform.localScale = Vector3.one * size;
       pinPrompt.transform.rotation = transform.rotation;
