@@ -27,6 +27,7 @@
   "grid": {
     "row": 3,
     "col": 3,
-    "pins": 4
+    "pins": 4,
+    "angle": -45
   }
 }

@@ -161,11 +161,13 @@ namespace P1
       Hmd hmd = OVR.Hmd.GetHmd();
       ovrTrackingState ss = hmd.GetTrackingState();
       isConnected = (ss.StatusFlags & (uint)ovrStatusBits.ovrStatus_HmdConnected) != 0;
+      float x_offset = 0.0f;
       if (isConnected)
       {
         riftCamera.SetActive(true);
         normalCamera.SetActive(false);
         activeCamera = riftCamera.GetComponent<OVRCameraController>().CameraMain;
+        x_offset = riftCamera.GetComponent<OVRCameraController>().IPD;
       }
       else
       {
@@ -177,7 +179,8 @@ namespace P1
       handController.transform.rotation = activeCamera.transform.rotation * handController.transform.rotation;
 
       JSONNode data = Utils.FileToJSON("all_config.json");
-      handController.transform.localScale = Vector3.one * 20 * data["hand"]["scale"].AsInt;
+      handController.transform.localScale = Vector3.one * 1.55f * data["hand"]["scale"].AsInt;
+      handController.transform.localPosition = new Vector3(x_offset, 0.0f, 0.08f);
       handController.GetComponent<HandController>().handMovementScale = Vector3.one * data["hand"]["speed"].AsInt;
 
       InitializeScreens(170.0f, 1.0f); // Initialize at 170.0f field of view to compensate for uninitiated field of view
