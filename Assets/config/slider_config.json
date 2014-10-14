@@ -1,12 +1,15 @@
 {
-	"min": 1,
-	"max": 10,
-	"interval": 1,
-	"use_ticks" : true,
-	"widgetXscale" : 2,
-	"widgetYscale" : 2,
-	"widgetZscale" : 2,
-	"sliderHandleWidth" : 1,
-	"sliderHandleHeight" : 1,
-	"sliderHandleDepth" : 1,
+  "test": {
+    "number": 3
+  },
+  "min": 0,
+  "max": 10,
+  "interval": 1,
+  "use_ticks" : true,
+  "widgetXscale" : 3.5,
+  "widgetYscale" : 3.5,
+  "widgetZscale" : 3.5,
+  "sliderHandleWidth" : .75,
+  "sliderHandleHeight" : .75,
+  "sliderHandleDepth" : .75
 }

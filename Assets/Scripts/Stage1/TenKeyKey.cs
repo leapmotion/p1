@@ -53,16 +53,26 @@ namespace P1
         label_ = value;
         foreach (GameObject g in labels)
         {
+          Transform[] child_transforms = g.GetComponentsInChildren<Transform>();
+          foreach (Transform child_transform in child_transforms)
+          {
+            child_transform.gameObject.SetActive(false);
+          }
           g.SetActive(false);
         }
 
         try
         {
           labels[System.Convert.ToInt16(value)].SetActive(true);
+          Transform[] child_transforms = labels[System.Convert.ToInt16(value)].GetComponentsInChildren<Transform>(true);
+          foreach (Transform child_transform in child_transforms)
+          {
+            child_transform.gameObject.SetActive(true);
+          }
         }
         catch (UnityException e)
         {
-          Debug.Log("Cannot set letter for value " + value);
+          Debug.Log(e + ": Cannot set letter for value " + value);
         }
       }
     }

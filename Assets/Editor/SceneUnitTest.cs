@@ -7,11 +7,11 @@ namespace P1
 	public class SceneUnitTest
 	{
 
-		SceneManager newScene(){
+		CameraManager newScene(){
 			
 			GameObject g = new GameObject ();
-			g.AddComponent ("SceneManager");
-			return g.GetComponent<SceneManager> ();
+			g.AddComponent ("CameraManager");
+			return g.GetComponent<CameraManager> ();
 }
 
 		#region config
@@ -19,8 +19,8 @@ namespace P1
 		[Test]
 		public void SceneConfigFirstItemTest ()
 		{
-			SceneManager s = newScene();
-			s.DoStart ();
+			CameraManager s = newScene();
+			s.LoadScenes();
 
 			Assert.AreEqual ("Stage1", s.currentScene, "First scene is Stage1");
 			bool firstInScenes = false;
@@ -34,8 +34,8 @@ namespace P1
 		[Test]
 		public void SceneConfigScenesTest ()
 		{
-			SceneManager s = newScene();
-			s.DoStart ();
+			CameraManager s = newScene();
+      s.LoadScenes();
 			Assert.AreEqual (3, s.scenes.Count, "has three scenes");
 		}
 
@@ -47,8 +47,8 @@ namespace P1
 		
 		public void CurrentIndexTest ()
 		{
-			SceneManager s = newScene();
-			s.DoStart ();
+			CameraManager s = newScene();
+      s.LoadScenes();
 			Assert.AreEqual(0, s.currentIndex, "current index starts at 0");
 		}
 		#endregion
@@ -60,10 +60,10 @@ namespace P1
 		public void NextTest ()
 		{
 			GameObject g = new GameObject ();
-			g.AddComponent ("SceneManager");
-			SceneManager s = g.GetComponent<SceneManager> ();
-			s.DoStart ();
-			s.Next ();
+			g.AddComponent ("CameraManager");
+			CameraManager s = g.GetComponent<CameraManager> ();
+      s.LoadScenes();
+			s.NextScene();
 			Assert.AreEqual(1, s.currentIndex, "current index is 1 after next");
 		}
 		
@@ -71,9 +71,9 @@ namespace P1
 		
 		public void NextContentTest ()
 		{
-			SceneManager s = newScene();
-			s.DoStart ();
-			s.Next ();
+			CameraManager s = newScene();
+      s.LoadScenes();
+			s.NextScene();
 			Assert.AreEqual(s.currentScene, s.scenes[1], "current scenes is the next scene after next");
 		}
 		
@@ -82,19 +82,19 @@ namespace P1
 		
 		public void NextOverflowTest ()
 		{
-			SceneManager s = newScene();
-			s.DoStart ();
-			s.DoStart ();
-			s.Next ();
-			s.Next ();
-			s.Next ();
-			s.Next ();
-			s.Next ();
-			s.Next ();
-			s.Next ();
-			s.Prev ();
-			s.Next ();
-			s.Next ();
+			CameraManager s = newScene();
+      s.LoadScenes();
+      s.LoadScenes();
+			s.NextScene();
+			s.NextScene();
+			s.NextScene();
+			s.NextScene();
+			s.NextScene();
+			s.NextScene();
+			s.NextScene();
+			s.PrevScene();
+			s.NextScene();
+			s.NextScene();
 			Assert.AreEqual (s.currentScene, s.scenes [s.scenes.Count - 1], "current scene is the last one after overflow");
 		}
 		
@@ -106,9 +106,9 @@ namespace P1
 		
 		public void PrevTest ()
 		{
-			SceneManager s = newScene();
-			s.DoStart ();
-			s.Prev ();
+			CameraManager s = newScene();
+      s.LoadScenes();
+			s.PrevScene();
 			Assert.AreEqual(0, s.currentIndex, "current index is 0 after prev");
 		}
 		
@@ -116,20 +116,20 @@ namespace P1
 		
 		public void PrevContentTest ()
 		{
-			SceneManager s = newScene();
-			s.DoStart ();
-			s.Prev ();
+			CameraManager s = newScene();
+      s.LoadScenes();
+			s.PrevScene();
 			Assert.AreEqual(s.currentScene, s.scenes[0], "current scenes is the first scene after prev");
 		}
 		
 		
 		public void NextPrevTest ()
 		{
-			SceneManager s = newScene();
-			s.DoStart ();
-			s.Next ();
-			s.Next ();
-			s.Prev ();
+			CameraManager s = newScene();
+      s.LoadScenes();
+			s.NextScene();
+			s.NextScene();
+			s.PrevScene();
 			Assert.AreEqual(1, s.currentIndex, "current index is 1 after next next prev");
 		}
 		
@@ -137,11 +137,11 @@ namespace P1
 		
 		public void NextPrevContentTest ()
 		{
-			SceneManager s = newScene();
-			s.DoStart ();
-			s.Next ();
-			s.Next ();
-			s.Prev ();
+			CameraManager s = newScene();
+      s.LoadScenes();
+			s.NextScene();
+			s.NextScene();
+			s.PrevScene();
 			Assert.AreEqual(s.currentScene, s.scenes[1], "current scenes is the second scene after next next prev");
 		}
 

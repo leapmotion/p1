@@ -15,6 +15,8 @@ namespace P1
 				public StateList list;
 				public bool allowed;
 
+				public string state { get { return toState.name; } }
+
 				public bool unchanged { get { return fromState.name == toState.name; } }
 
 				public string state { get { return toState.name; } }
