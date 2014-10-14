@@ -85,12 +85,12 @@ namespace P1
 					}
 		}
 		
-		void OnMouseUp ()
-				{
-					isThisHit = false;
-					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandle;
-					SnapToInterval ();
-				}
+//		void OnMouseUp ()
+//				{
+//					isThisHit = false;
+//					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandle;
+//					StartCoroutine(SnapToInterval());
+//				}
 				
 				void OnTriggerEnter(){
 //					StopCoroutine("hiLightPause");
@@ -102,22 +102,31 @@ namespace P1
 					StartCoroutine(hiLightPause());
 				}
 				
-				private IEnumerator hiLightPause () {
+				IEnumerator hiLightPause () {
 					yield return new WaitForSeconds (.2f);
 					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandle;
-					SnapToInterval ();
+					StartCoroutine(SnapToInterval());
+					
 			
 		}
+		
+		
 				
-				void SnapToInterval () {
+		public IEnumerator SnapToInterval () {
 					snappedXint = (Mathf.Round (sliderInt / sliderManager.Interval)) * sliderManager.Interval;
 					Debug.Log ("snappedXint = " + snappedXint);
 					snappedXpos = (1f / sliderManager.MaxLimit) * snappedXint;
 					Debug.Log ("snappedXpos = " + snappedXpos);
 					
-					this.transform.localPosition = new Vector3 (snappedXpos, this.transform.localPosition.y, this.transform.localPosition.z);
+					Vector3 dest  = new Vector3 (snappedXpos, this.transform.localPosition.y, this.transform.localPosition.z);
+					this.transform.localPosition =  Vector3.Lerp(transform.localPosition, dest, .25f);
+					
 					sliderManager.TextSliderValue.text = snappedXint.ToString ();
-		
+					yield return null; 
+					if(transform.localPosition.x == snappedXpos){
+						sliderClickSound.Play();
+					}
+			
 				}
 		}
 }
