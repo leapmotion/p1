@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 using Leap;
 
 namespace P1
@@ -94,9 +95,27 @@ namespace P1
 
 						Vector3 currentPos = grippingFinger.GetTipPosition ();
 						Vector3 movement = currentPos - fingerPos;
-						movement.x = 0;
-						movement.z = 0;	
-						statusButton.MoveList (movement);
+
+						//Classify Motion
+						if (Math.Abs (movement.y) > Math.Abs (movement.x) &&
+								Math.Abs (movement.y) > Math.Abs (movement.z)) {
+								//Scroll
+								movement.x = 0;
+								movement.z = 0;	
+								statusButton.MoveList (movement);
+						}
+						if (Math.Abs (movement.x) > Math.Abs (movement.y) &&
+								Math.Abs (movement.x) > Math.Abs (movement.z)) {
+								//Select
+								movement.y = 0;
+								movement.z = 0;	
+								rigidbody.MovePosition (movement);
+						}
+						if (Math.Abs (movement.x) > Math.Abs (movement.y) &&
+								Math.Abs (movement.x) > Math.Abs (movement.z)) {
+								//Ignore
+								UnityEngine.Debug.Log ("Why so Zerious?");
+						}
 						fingerPos = currentPos;
 				}
 		
