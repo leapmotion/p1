@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +21,7 @@ namespace P1
       return (startTime + duration < Time.time);
     }
 
-    public static bool Elapsed(float startTime, float duration, Object item)
+    public static bool Elapsed(float startTime, float duration, UnityEngine.Object item)
     {
       if (item == null)
         return false;
@@ -75,7 +76,7 @@ namespace P1
     {
       if (directory == ".")
       {
-        directory = Application.dataPath + "/config/";
+        directory = Environment.CurrentDirectory + "/config/";
       }
       return JSON.Parse(File.ReadAllText(directory + filename));
     }

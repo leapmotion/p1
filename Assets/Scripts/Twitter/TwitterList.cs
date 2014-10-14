@@ -91,15 +91,11 @@ namespace P1
 
 						#if UNITY_EDITOR
 			            go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
-			
-			inEditor = true;
-						#endif
-
-						if (!inEditor) {
+            #else
 								//go = new GameObject ();
 								//go.AddComponent ("TwitterStatusButton");
                 go = (GameObject)Instantiate(Resources.Load("TwitterListStatus"));
-						}
+            #endif
 						go.transform.parent = items.transform;
 						go.transform.rotation = transform.rotation;
 						go.transform.localScale = Vector3.one;

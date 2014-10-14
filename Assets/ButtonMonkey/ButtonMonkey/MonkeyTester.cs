@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using SimpleJSON;
+using P1;
 
 namespace ButtonMonkey
 {
@@ -74,12 +75,13 @@ namespace ButtonMonkey
 				public void ConfigureTest (string testName)
 				{
 						//(1) Create unique record directory
-						JSONNode userConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/user_config.json"));
+						//JSONNode userConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/config/user_config.json"));
+            JSONNode userConfig = Utils.FileToJSON("user_config.json");
 						string recordPath = Environment.CurrentDirectory + "/TestResults/" + userConfig ["userName"].Value + "/";
 						Directory.CreateDirectory (recordPath);
 
 						//(2) Copy configurations into directory
-						string configPath = Environment.CurrentDirectory + "/Assets/config/";
+						string configPath = Environment.CurrentDirectory + "/config/";
 						string[] files = Directory.GetFiles (configPath);
 						foreach (string f in files) {
 								string configName = Path.GetFileName (f);
@@ -88,7 +90,8 @@ namespace ButtonMonkey
 						}
 			
 						//(3) Read test configuration
-						testConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/" + testName + "_config.json"));
+						//testConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/" + testName + "_config.json"));
+            testConfig = Utils.FileToJSON(testName + "_config.json");
 						testNum = testConfig ["test"] ["number"].AsInt;
 
 						//(4) Create test file
