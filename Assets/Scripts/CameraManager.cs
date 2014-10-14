@@ -15,7 +15,6 @@ namespace P1
     public GameObject fadeScreen;
     private GameObject fadeScreen2 = null;
     public GameObject splashScreen;
-    private GameObject splashScreen2 = null;
     public GameObject lightSource;
     public GameObject focusPoint;
 
@@ -96,8 +95,7 @@ namespace P1
       {
         InitializeScreen(fadeScreen, 0.0001f, fieldOfView, aspect);
         InitializeScreen(fadeScreen2, 0.0001f, fieldOfView, aspect, new Vector3(0.064f, 0.0f, 0.0f));
-        InitializeScreen(splashScreen, 0.002f, fieldOfView, 1.0f);
-        InitializeScreen(splashScreen2, 0.002f, fieldOfView, 1.0f, new Vector3(0.064f, 0.0f, 0.0f));
+        InitializeScreen(splashScreen, 0.0002f, fieldOfView, 1.0f);
       }
       else
       {
@@ -121,8 +119,6 @@ namespace P1
     public void ToggleSplashScreen(bool active)
     {
       splashScreen.SetActive(active);
-      if (isConnected)
-        splashScreen2.SetActive(active);
     }
 
     private void UpdateFadeScreen() 
@@ -185,7 +181,6 @@ namespace P1
         normalCamera.SetActive(false);
         activeCamera = riftCamera.GetComponent<OVRCameraController>().CameraMain;
         x_offset = riftCamera.GetComponent<OVRCameraController>().IPD / 2.0f;
-        splashScreen2 = Instantiate(splashScreen) as GameObject;
         fadeScreen2 = Instantiate(fadeScreen) as GameObject;
       }
       else
