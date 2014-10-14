@@ -89,7 +89,7 @@ namespace P1
 
     private void InitializeScreens(float fieldOfView, float aspect) 
     {
-      InitializeScreen(fadeScreen, 0.001f, fieldOfView, aspect);
+      InitializeScreen(fadeScreen, 0.001f, 179f, aspect);
       InitializeScreen(splashScreen, 0.002f, fieldOfView, 1.0f);
     }
 
