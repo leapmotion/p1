@@ -12,6 +12,7 @@ namespace P1
     private bool is_active_ = false;
     private bool readyToPress = true;
     private bool allow_colors_ = true;
+    private bool restrain_buttons_ = false;
 
     public void FingerEntered(bool is_active)
     {
@@ -79,7 +80,9 @@ namespace P1
       Vector3 trigger_position = transform.parent.FindChild("Trigger").transform.position;
       original_position = transform.position;
       correct_basis = trigger_position - original_position;
-      allow_colors_ = Utils.FileToJSON("grid_config.json")["grid"]["allowColor"].AsBool;
+      JSONNode data = Utils.FileToJSON("grid_config.json");
+      allow_colors_ = data["grid"]["allowColor"].AsBool;
+      restrain_buttons_ = data["grid"]["restrainButtons"].AsBool;
     }
 
     // Update is called once per frame
