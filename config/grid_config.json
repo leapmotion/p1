@@ -14,10 +14,10 @@
     "row": 3,
     "col": 3,
     "pins": 4,
-    "distance": 0.5,
+    "distance": 0.6,
     "angle": -45,
-    "spacing_x": 0.01, 
-    "spacing_y": 0.01,
+    "spacing_x": 0.1, 
+    "spacing_y": 0.1,
     "allowColor": true,
     "restrainButtons": true
   }
