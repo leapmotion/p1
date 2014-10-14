@@ -201,7 +201,7 @@ namespace P1
 
       lightSource.transform.parent = activeCamera.transform;
       lightSource.transform.rotation = activeCamera.transform.rotation * lightSource.transform.rotation;
-      lightSource.transform.localPosition = new Vector3(x_offset, 0.0f, 0.0f);
+      lightSource.transform.localPosition = new Vector3(x_offset, 0.0f, -0.5f);
 
       LoadScenes();
 	  }
