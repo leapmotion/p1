@@ -6,23 +6,9 @@ namespace P1
 {
 		public class GridMonkey : MonkeyTester
 		{
-
-				int last_ = -1;
-
-				int Next (int range)
-				{
-						System.Random gen = new System.Random ();
-						int next = -1;
-
-						do {
-								next = gen.Next ();
-						} while (next == last_);
-						last_ = next;	
-						return next;
-				}
-
 				protected override List<int> GenerateKeys ()
 				{
+						System.Random gen = new System.Random ();
 
 						int row = testConfig ["grid"] ["row"].AsInt;
 						int col = testConfig ["grid"] ["col"].AsInt;
@@ -40,7 +26,7 @@ namespace P1
 						while (keys.Count < pins) {
 								List<int> picks = new List<int> ();
 								for (int r = 0; r < row; ++r) {
-										int num = 1 + (r * col) + (Next (col));
+										int num = 1 + (r * col) + (gen.Next () % col);
 										if (num < 10) {
 												picks.Add (num);
 										} else {
@@ -50,7 +36,7 @@ namespace P1
 				
 								// Choose a random ordering of rows
 								while (picks.Count > 0 && keys.Count < pins) {
-										int next = Next (picks.Count);
+										int next = gen.Next () % picks.Count;
 										keys.Add (picks [next]);
 										picks.RemoveAt (next);
 								}

@@ -3,7 +3,7 @@
     "number": 11
   }
   "button": {
-    "size": 0.05
+    "size": 0.1
   }
   "prompt": {
     "position": 0,
@@ -14,7 +14,7 @@
     "row": 3,
     "col": 3,
     "pins": 4,
-    "distance": 0.6,
+    "distance": 0.7,
     "angle": -45,
     "spacing_x": 0.1, 
     "spacing_y": 0.1,
