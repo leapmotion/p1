@@ -39,6 +39,11 @@ namespace P1
 								SetRandomTarget ();
 						}
 						rigidbody.velocity *= FRICTION;
+
+            if (targetSet)
+            {
+              ShowArrowKeys();
+            }
 				}
 
 #endregion
@@ -125,14 +130,19 @@ namespace P1
 								if (s.index != status.index)
 										s.targetState.Change ("base");
 						}
-						TwitterStatusButton a = Radical.instance.activeTwitter;
-						if (a != null && status != null) {
-								if (upArrowInd != null)
-										upArrowInd.SetActive (a.index < status.index);
-								if (downArrowInd != null)
-										downArrowInd.SetActive (a.index > status.index);
-						}
 				}
+
+        public void ShowArrowKeys()
+        {
+          TwitterStatusButton a = Radical.instance.activeTwitter;
+          if (a != null && targetedButton != null)
+          {
+            if (upArrowInd != null)
+              upArrowInd.SetActive(a.index > targetedButton.index);
+            if (downArrowInd != null)
+              downArrowInd.SetActive(a.index < targetedButton.index);
+          }
+        }
 
 #endregion
 
