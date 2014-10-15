@@ -255,10 +255,14 @@ namespace P1
 				{
 						TwitterStatusButton a = Radical.instance.activeTwitter;
 						if (a != null && targetedButton != null) {
-								if (upArrowInd != null)
+								if (upArrowInd != null) {
 										upArrowInd.SetActive (a.index > targetedButton.index);
-								if (downArrowInd != null)
+										upArrowInd.renderer.material.color = Color.green;
+				}
+								if (downArrowInd != null) {
 										downArrowInd.SetActive (a.index < targetedButton.index);
+										downArrowInd.renderer.material.color = Color.green;
+				}
 						}
 				}
 
