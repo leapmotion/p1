@@ -80,9 +80,7 @@ namespace P1
 						if (!File.Exists (directory + filename)) {
 								throw new FileNotFoundException ("Cannot load " + directory + filename);
 						}
-						string text = File.ReadAllText (directory + filename);
-
-						Debug.Log ("Reading " + filename  + " file " + text.Substring (0, Mathf.Min (text.Length, 100))); 
+            Debug.Log(directory + filename);
 						return JSON.Parse (File.ReadAllText (directory + filename));
 				}
 
