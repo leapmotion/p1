@@ -88,6 +88,8 @@ namespace P1
 						case Utils.Dimension.Y: // only one for now
 								Vector3 p = transform.position;
 								BoxCollider c = GetComponent<BoxCollider> ();
+								if (c == null)
+										return;
 								if (c.bounds.min.y < min) { // at bottom
 										//		Debug.Log ("At Bottom");
 										p.y = min - (c.bounds.min.y - p.y);
