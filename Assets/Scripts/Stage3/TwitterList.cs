@@ -52,12 +52,6 @@ namespace P1
 								sc.toState.name == TWITTER_LIST_UNTOUCHED) {
 								UnityEngine.Debug.Log ("You jilted Bieber!");
 								rigidbody.velocity = Vector3.zero;
-								if (Radical.instance) {
-										if (Radical.instance.activeTwitter) {
-												int pick = Radical.instance.activeTwitter.index;
-												UnityEngine.Debug.Log ("Monkey picked: " + pick);
-										}
-								}
 						}
 				}
 		
@@ -74,13 +68,9 @@ namespace P1
 								Utils.Elapsed (lastTouched, stopDelay)) {
 								touchedState.Change (TWITTER_LIST_UNTOUCHED);
 								if (selector.activeTwitter) {
-										UnityEngine.Debug.Log ("GOOD MONKEY!");
-										//PROBLEM: Argument is char not int
-										//monkeyDo.WhenPushed (true, selector.activeTwitter.index);
-								} else {
-										UnityEngine.Debug.Log ("BAD MONKEY!");
+										UnityEngine.Debug.Log ("Monkey picked: " + selector.activeTwitter.index);
+										monkeyDo.WhenPushed (true, selector.activeTwitter.index);
 								}
-
 						}
 				}
 
@@ -115,6 +105,7 @@ namespace P1
 
 				public void TrialUpdate (MonkeyTester trial)
 				{
+					UnityEngine.Debug.Log ("TwitterList.TrialUpdate: trial.WasCorrect = " + trial.WasCorrect ());
 				}
 
 #endregion

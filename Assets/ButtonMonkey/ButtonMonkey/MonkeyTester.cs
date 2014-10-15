@@ -130,6 +130,7 @@ namespace ButtonMonkey
 
 				public void WhenPushed (bool complete, int symbol)
 				{
+						UnityEngine.Debug.Log ("MonkeyTester.WHenPushed symbol = " + symbol);
 						if (StageComplete () ||
 								TrialComplete ()) {
 								//Already complete -> no event
@@ -162,7 +163,9 @@ namespace ButtonMonkey
 						}
 
 						// Update test results immediately
+						UnityEngine.Debug.Log ("recordFile = " + recordFile);
 						if (recordFile.Length > 0) {
+								UnityEngine.Debug.Log ("Writing!!!");
 								File.WriteAllText (recordFile, this.ToString ());
 						}
 				}
