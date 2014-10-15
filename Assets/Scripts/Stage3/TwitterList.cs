@@ -21,6 +21,9 @@ namespace P1
 				static float MOVE_SCALE = 50;
 				static float FRICTION = 0.9f;
 				private float lastTouched = 0.0f;
+				TwitterStatusButton targetedButton;
+				public GameObject upInd;
+				public GameObject downInd;
 
 		#region TouchState
 				const string TWITTER_LIST_STATE_NAME = "Touched state name";
@@ -102,6 +105,7 @@ namespace P1
 						rigidbody.velocity *= FRICTION;
 
 						UpdateTouched ();
+						UpdateInd ();
 				}
 
 				public void TrialUpdate (MonkeyTester trial)
@@ -109,6 +113,27 @@ namespace P1
 				}
 
 #endregion
+
+
+				public void UpdateInd ()
+				{
+						TwitterStatusButton a = Radical.instance.activeTwitter;
+
+						if (upInd != null)
+								upInd.SetActive (false);
+						if (downInd != null)
+								downInd.SetActive (false);
+
+						if ((targetedButton == null) || (a == null))
+								return;
+						if (upInd != null) {	
+								upInd.SetActive (targetedButton.index < a.index);
+						}
+
+						if (downInd != null) {
+								downInd.SetActive (targetedButton.index > a.index);
+						}
+				}
 
 				public void LoadConfigs ()
 				{
@@ -192,6 +217,7 @@ namespace P1
 								if (s.index != status.index)
 										s.targetState.Change ("base");
 						}
+						targetedButton = status;
 				}
 
 				public void ResetAllColors ()
