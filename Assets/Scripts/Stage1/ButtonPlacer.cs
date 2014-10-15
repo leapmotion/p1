@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 using SimpleJSON;
 
@@ -150,14 +151,7 @@ namespace P1
 
       float angle = data["grid"]["angle"].AsFloat;
       float distance = data["grid"]["distance"].AsFloat;
-      transform.position = Quaternion.Euler(-angle, 0.0f, 0.0f) * Vector3.forward * distance;
-      transform.localScale = Vector3.one;
-      transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
-
       float size = data["button"]["size"].AsFloat;
-
-      transform.FindChild("Cube").transform.localPosition = Vector3.zero;
-      transform.FindChild("Cube").transform.localScale = new Vector3(10.0f, 10.0f, size);
 
       // Prompt Landscape
       // True - Left->Right
@@ -213,7 +207,7 @@ namespace P1
         col = 3;
       }
 
-      Vector3 unit_per_radian = spacing / distance * 180.0f / Mathf.PI;
+      float degree_per_unit = 1.0f / distance * 180.0f / Mathf.PI;
       float numpad_w = (float)(col - 1) * spacing.y + (float)col * size;
       float numpad_h = (float)(row - 1) * spacing.x + (float)row * size;
       float x_coord = -(numpad_w / 2.0f - size / 2.0f);
@@ -222,8 +216,11 @@ namespace P1
       {
         KeyDef k = keys[i];
 
-        // Construct the matrix of keys based on the rows and cols. The last key will be at the last rol and centered
-        Vector3 localPos = center + new Vector3(x_coord, y_coord, 0.0f);
+        //// Construct the matrix of keys based on the rows and cols. The last key will be at the last rol and centered
+        float x_degree = (x_coord + center.x) * degree_per_unit;
+        float y_degree = (y_coord + center.y) * degree_per_unit;
+        Vector3 position = Quaternion.Euler(-y_degree, x_degree, 0.0f) * Vector3.forward * distance;
+
         if (i == keys.Length - 1 && row == 4 && col == 3) // Zero
         {
           x_coord = 0.0f;
@@ -239,17 +236,15 @@ namespace P1
           }
         }
 
-        GameObject go = ((GameObject)Instantiate(buttonTemplate, transform.TransformPoint(localPos), Quaternion.identity));
+        GameObject go = ((GameObject)Instantiate(buttonTemplate, position, Quaternion.identity));
         go.SetActive(true);
         TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
         g.KeypadScale = Vector3.one * size;
         g.label = k.label;
         go.transform.parent = transform;
-        go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = transform.TransformPoint(localPos);
         g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate(monkeyDo.WhenPushed);
-        go.transform.localPosition = localPos;
         go.transform.localScale = Vector3.one * size;
-        go.transform.rotation = transform.rotation;
+        go.transform.rotation = Quaternion.LookRotation(go.transform.position - Camera.main.transform.position);
         key_gameObjects_.Add(go);
       }
 
@@ -272,10 +267,23 @@ namespace P1
           promptPosition.y += prompt_padding + (numpad_h + prompt_h) / 2.0f;
           break;
       }
-      pinPrompt.transform.localPosition = promptPosition;
+      
+      pinPrompt.transform.position = Quaternion.Euler(-(promptPosition.y * degree_per_unit), promptPosition.x * degree_per_unit, 0.0f) * Vector3.forward * distance;
       pinPrompt.transform.localScale = Vector3.one * size;
-      pinPrompt.transform.rotation = transform.rotation;
+      pinPrompt.transform.rotation = Quaternion.LookRotation(pinPrompt.transform.position - Camera.main.transform.position);
       pinPrompt.GetComponent<PINPrompt>().SetOrientation(isLandscape);
+
+      transform.rotation = Quaternion.Euler(-angle, 0.0f, 0.0f);
+      foreach (GameObject key in key_gameObjects_)
+      {
+        key.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = key.transform.position;
+        key.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().spring = 1000;
+      }
+
+      transform.Find("Sphere").transform.localScale = Vector3.one * distance * (2 + size);
+      Mesh mesh = transform.Find("Sphere").GetComponent<MeshFilter>().mesh;
+      mesh.triangles = mesh.triangles.Reverse().ToArray();
+      mesh.RecalculateNormals();
     }
 
     #endregion
