@@ -42,7 +42,7 @@ namespace P1
 
 				public void LoadConfigs ()
 				{
-			    LoadConfigs ("twitter_list.json");
+						LoadConfigs ("twitter_list.json");
 				}
 
 				public void LoadConfigs (string s)
@@ -62,28 +62,25 @@ namespace P1
 
 				public void SetRandomTarget ()
 				{
-						statusButtons [Random.Range (0, statusButtons.Count - 1)].targetState.Change ("target");
+						if (statusButtons.Count > 0)
+								statusButtons [Random.Range (0, statusButtons.Count - 1)].targetState.Change ("target");
 						targetSet = true;
 				}
 
 				public void ReadTweets (string source)
 				{
-          tr = new TwitterReader("justin_tweets.json");
-          if (tr == null)
-          {
-            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            go.transform.parent = items.transform;
-            go.transform.rotation = transform.rotation;
-            go.transform.localScale = Vector3.one * 10;
-            go.transform.localPosition = Vector3.zero;
-          }
-          else
-          {
-            foreach (Tweet s in tr.statuses)
-            {
-              AddStatus(s);
-            }
-          } 
+						tr = new TwitterReader ("justin_tweets.json");
+						if (tr == null) {
+								GameObject go = GameObject.CreatePrimitive (PrimitiveType.Cube);
+								go.transform.parent = items.transform;
+								go.transform.rotation = transform.rotation;
+								go.transform.localScale = Vector3.one * 10;
+								go.transform.localPosition = Vector3.zero;
+						} else {
+								foreach (Tweet s in tr.statuses) {
+										AddStatus (s);
+								}
+						} 
 				}
 
 				void InitListTriggerState ()
@@ -107,13 +104,13 @@ namespace P1
             status.index = statusButtons.Count;
             statusButtons.Add(status);
 #else
-          //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-          //go.transform.parent = items.transform;
-          //go.transform.rotation = transform.rotation;
-          //go.transform.localScale = Vector3.one * 10;
-          //go.transform.localPosition = Vector3.zero;
+						//GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+						//go.transform.parent = items.transform;
+						//go.transform.rotation = transform.rotation;
+						//go.transform.localScale = Vector3.one * 10;
+						//go.transform.localPosition = Vector3.zero;
 #endif
-        }
+				}
 
 				public TwitterStatusButton PrevStatus (TwitterStatusButton s)
 				{

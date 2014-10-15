@@ -18,10 +18,11 @@ namespace P1
 				public TwitterReader (string configFilePath)
 				{
 						JSONNode n = Utils.FileToJSON (configFilePath);
-						Debug.Log ("Reading justin file " + File.ReadAllText (configFilePath).Substring (0, 100));
 						if (n [STATUSES] == null) {
 								Debug.Log ("No statuses in " + n.ToString ());
-						} else for (int i = 0; i < n[STATUSES].Count; ++i) {
+						} else
+								for (int i = 0; i < n[STATUSES].Count; ++i) {
+										Debug.Log ("Reading status " + i);
 										AddStatus (n [STATUSES] [i]);
 								}
 				}
