@@ -24,8 +24,8 @@ namespace P1
 				// Use this for initialization
 				void Start ()
 				{
-						//LoadConfigs ();
-						//InitState ();
+						LoadConfigs ();
+						InitState ();
 						ReadTweets (tweetSource);
 				}
 		
@@ -62,8 +62,16 @@ namespace P1
 
 				public void SetRandomTarget ()
 				{
-						statusButtons [Random.Range (0, statusButtons.Count - 1)].targetState.Change ("target");
-						targetSet = true;
+          if (statusButtons.Count > 0)
+          {
+            statusButtons[Random.Range(0, statusButtons.Count - 1)].targetState.Change("target");
+            targetSet = true;
+          }
+          else
+          {
+            targetSet = true;
+          }
+						
 				}
 
 				public void ReadTweets (string source)
