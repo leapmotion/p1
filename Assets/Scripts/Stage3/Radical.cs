@@ -9,7 +9,7 @@ namespace P1
     public GameObject TwitterList;
 
     [HideInInspector]
-    public GameObject activeTwitter = null;
+    public TwitterStatusButton activeTwitter = null;
 
     private TwitterStatusButton getTwitterStatusButton(Collider other)
     {
@@ -38,7 +38,7 @@ namespace P1
       TwitterStatusButton button = getTwitterStatusButton(other);
       if (button)
       {
-        activeTwitter = button.gameObject;
+        activeTwitter = button;
         button.SetColor(Color.cyan);
       }
     }

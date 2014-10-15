@@ -31,7 +31,7 @@ namespace P1
 
 				public Tweet (string t, string d)
 				{
-						Debug.Log ("Adding tweet " + t);
+//						Debug.Log ("Adding tweet " + t);
 						text = t;
 						date = d;
 						m = dateParser.Match (d);

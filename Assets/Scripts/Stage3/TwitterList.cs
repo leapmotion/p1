@@ -18,8 +18,9 @@ namespace P1
 				static float MOVE_SCALE_COUNTER = 100f;
 				static float MOVE_SCALE = 50;
 				static float FRICTION = 0.9f;
-
 				public static TwitterStatusButton targetedButton;
+				public GameObject upArrowInd;
+				public GameObject downArrowInd;
 
 #region loop
 		
@@ -44,7 +45,7 @@ namespace P1
 
 				public void LoadConfigs ()
 				{
-			    LoadConfigs ("twitter_list.json");
+						LoadConfigs ("twitter_list.json");
 				}
 
 				public void LoadConfigs (string s)
@@ -64,27 +65,23 @@ namespace P1
 
 				public void SetRandomTarget ()
 				{
-          if (statusButtons.Count > 0)
-          {
-            statusButtons[Random.Range(0, statusButtons.Count - 1)].targetState.Change("target");
-            targetSet = true;
-          }
-          else
-          {
-            targetSet = true;
-          }
+						if (statusButtons.Count > 0) {
+								statusButtons [Random.Range (0, statusButtons.Count - 1)].targetState.Change ("target");
+								targetSet = true;
+						} else {
+								targetSet = true;
+						}
 						
 				}
 
 				public void ReadTweets (string source)
 				{
-          tr = new TwitterReader("justin_tweets.json");
-          if (tr != null) {
-            foreach (Tweet s in tr.statuses)
-            {
-              AddStatus(s);
-            }
-          } 
+						tr = new TwitterReader ("justin_tweets.json");
+						if (tr != null) {
+								foreach (Tweet s in tr.statuses) {
+										AddStatus (s);
+								}
+						} 
 				}
 
 				void InitListTriggerState ()
@@ -97,16 +94,16 @@ namespace P1
 						if (statusButtons.Count >= MAX_TWEETS)
 								return;
 
-            GameObject go = (GameObject)Instantiate(Resources.Load("TwitterListStatus"));
-            go.transform.parent = items.transform;
-            go.transform.rotation = transform.rotation;
-            go.transform.localScale = Vector3.one;
-            TwitterStatusButton status = go.GetComponent<TwitterStatusButton>();
-            status.list = this;
-            status.status = s;
-            status.index = statusButtons.Count;
-            statusButtons.Add(status);
-        }
+						GameObject go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
+						go.transform.parent = items.transform;
+						go.transform.rotation = transform.rotation;
+						go.transform.localScale = Vector3.one;
+						TwitterStatusButton status = go.GetComponent<TwitterStatusButton> ();
+						status.list = this;
+						status.status = s;
+						status.index = statusButtons.Count;
+						statusButtons.Add (status);
+				}
 
 				public TwitterStatusButton PrevStatus (TwitterStatusButton s)
 				{
@@ -122,11 +119,18 @@ namespace P1
  */
 		
 				public void TargetSet (TwitterStatusButton status)
-		{
-			targetedButton = this;
+				{
+						targetedButton = status;
 						foreach (TwitterStatusButton s in statusButtons) {
 								if (s.index != status.index)
 										s.targetState.Change ("base");
+						}
+						TwitterStatusButton a = Radical.instance.activeTwitter;
+						if (a != null && status != null) {
+								if (upArrowInd != null)
+										upArrowInd.SetActive (a.index < status.index);
+								if (downArrowInd != null)
+										downArrowInd.SetActive (a.index > status.index);
 						}
 				}
 
