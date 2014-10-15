@@ -49,8 +49,7 @@ namespace P1
 						get { return index_; }
 						set {
 								index_ = value;
-								//FIXME: Initialize indexTextMesh
-								//indexTextMesh.text = value.ToString ();
+								indexTextMesh.text = value.ToString ();
 								RefreshPosition ();
 						}
 				}
