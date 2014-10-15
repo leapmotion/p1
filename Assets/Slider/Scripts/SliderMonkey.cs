@@ -6,7 +6,10 @@ namespace P1
 {
 		public class SliderMonkey : MonkeyTester
 		{
-        int last_number = int.MaxValue;
+				//NOTE: Slider position always begins at 0, so 0
+				//should not be the first number picked.
+				int last_number = 0;
+
 				protected override List<int> GenerateKeys ()
 				{
 						System.Random gen = new System.Random ();
@@ -14,17 +17,17 @@ namespace P1
 						int min = testConfig ["min"].AsInt;
 						int max = testConfig ["max"].AsInt;
 
-						// Choose a single random number in the specified range
+						//Choose a single random number in the specified range,
+						//with last_number removed
 						int next = (gen.Next () % (max - min)) + min;
-            for (int tries = 0; tries < 10000; ++tries)
-            {
-              if (next == last_number)
-              {
-                next = (gen.Next() % (max - min)) + min;
-              }
-            }
-            last_number = next;
-
+						if (next >= last_number) {
+								next += 1;
+								if (next > max) {
+										next = min;
+								}
+						}
+						last_number = next;
+			
 						List<int> keys = new List<int> ();
 						keys.Add (next);
 						return keys;
