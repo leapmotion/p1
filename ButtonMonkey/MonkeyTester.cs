@@ -86,7 +86,10 @@ namespace ButtonMonkey
 						foreach (string f in files) {
 								string configName = Path.GetFileName (f);
 								string recordName = Path.Combine (recordPath, configName);
-								System.IO.File.Copy (f, recordName, true);
+                if (configName.Substring(configName.Length - 5, 5) != ".meta") // Ignore if the file is .meta
+                {
+                  System.IO.File.Copy(f, recordName, true);
+                }
 						}
 			
 						//(3) Read test configuration
