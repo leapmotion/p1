@@ -77,16 +77,7 @@ namespace P1
 				public void ReadTweets (string source)
 				{
           tr = new TwitterReader("justin_tweets.json");
-          if (tr == null)
-          {
-            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            go.transform.parent = items.transform;
-            go.transform.rotation = transform.rotation;
-            go.transform.localScale = Vector3.one * 10;
-            go.transform.localPosition = Vector3.zero;
-          }
-          else
-          {
+          if (tr != null) {
             foreach (Tweet s in tr.statuses)
             {
               AddStatus(s);
@@ -104,7 +95,6 @@ namespace P1
 						if (statusButtons.Count >= MAX_TWEETS)
 								return;
 
-#if UNITY_EDITOR
             GameObject go = (GameObject)Instantiate(Resources.Load("TwitterListStatus"));
             go.transform.parent = items.transform;
             go.transform.rotation = transform.rotation;
@@ -114,13 +104,6 @@ namespace P1
             status.status = s;
             status.index = statusButtons.Count;
             statusButtons.Add(status);
-#else
-          //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-          //go.transform.parent = items.transform;
-          //go.transform.rotation = transform.rotation;
-          //go.transform.localScale = Vector3.one * 10;
-          //go.transform.localPosition = Vector3.zero;
-#endif
         }
 
 				public TwitterStatusButton PrevStatus (TwitterStatusButton s)
