@@ -45,7 +45,7 @@ namespace P1
 
 				public void LoadConfigs ()
 				{
-			LoadConfigs ("twitter_list.json");
+						LoadConfigs ("twitter_list.json");
 				}
 
 				public void LoadConfigs (string s)
@@ -91,11 +91,11 @@ namespace P1
 
 						#if UNITY_EDITOR
 			            go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
-            #else
-								//go = new GameObject ();
-								//go.AddComponent ("TwitterStatusButton");
-                go = (GameObject)Instantiate(Resources.Load("TwitterListStatus"));
-            #endif
+						#else
+						//go = new GameObject ();
+						//go.AddComponent ("TwitterStatusButton");
+						go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
+						#endif
 						go.transform.parent = items.transform;
 						go.transform.rotation = transform.rotation;
 						go.transform.localScale = Vector3.one;
@@ -126,6 +126,13 @@ namespace P1
 						foreach (TwitterStatusButton s in statusButtons) {
 								if (s.index != status.index)
 										s.targetState.Change ("base");
+						}
+				}
+
+				public void ResetAllColors ()
+				{
+						foreach (TwitterStatusButton sb in statusButtons) {
+								sb.ResetColor ();
 						}
 				}
 
