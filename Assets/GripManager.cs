@@ -108,8 +108,8 @@ namespace P1
 								Math.Abs (movement.x) > Math.Abs (movement.z)) {
 								//Select
 								movement.y = 0;
-								movement.z = 0;	
-								rigidbody.MovePosition (movement);
+								movement.z = 0;
+                statusButton.MoveList(movement);
 						}
 						if (Math.Abs (movement.x) > Math.Abs (movement.y) &&
 								Math.Abs (movement.x) > Math.Abs (movement.z)) {
