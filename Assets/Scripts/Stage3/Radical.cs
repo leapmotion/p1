@@ -8,12 +8,14 @@ namespace P1
 				public static Radical instance;
 				public GameObject TwitterList;
 				[HideInInspector]
-				public TwitterStatusButton activeTwitter = null;
+				public TwitterStatusButton
+						activeTwitter = null;
 				public float lastTouch = 0.0f;
 
 				private TwitterStatusButton getTwitterStatusButton (Collider other)
 				{
-						if (other.transform.parent && other.transform.parent.GetComponent<TwitterStatusButton> ()) {
+						if (other.transform.parent && 
+								other.transform.parent.GetComponent<TwitterStatusButton> ()) {
 								return other.transform.parent.GetComponent<TwitterStatusButton> ();
 						}
 						return null;
@@ -40,12 +42,17 @@ namespace P1
 						TwitterStatusButton button = getTwitterStatusButton (other);
 						if (button) {
 								activeTwitter = button;
+								UnityEngine.Debug.Log ("activeTwitter.index = " + activeTwitter.index);
 								//NOTE: See TwitterList.SetRandomTarget() target state string
 								if (button.targetState.state == "target") {
+										UnityEngine.Debug.Log ("Selected ACTIVE button");
 										button.SetColor (Color.magenta);
 								} else {
+										UnityEngine.Debug.Log ("Selected passive button");
 										button.SetColor (Color.cyan);
 								}
+						} else {
+								UnityEngine.Debug.Log ("No button. Found " + other.name);
 						}
 				}
 
