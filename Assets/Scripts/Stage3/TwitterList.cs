@@ -49,6 +49,21 @@ namespace P1
 								UnityEngine.Debug.Log ("You jilted Bieber!");
 						}
 				}
+		
+				public void Touched ()
+				{
+						lastTouched = Time.time;
+						if (touchedState.state == TWITTER_LIST_UNTOUCHED)
+								touchedState.Change (TWITTER_LIST_TOUCHED);
+				}
+		
+				void UpdateTouched ()
+				{
+						if (touchedState.state == TWITTER_LIST_TOUCHED &&
+								Utils.Elapsed (lastTouched, 1.0f)) {
+								touchedState.Change (TWITTER_LIST_UNTOUCHED);
+						}
+				}
 
 			#endregion
 
@@ -62,7 +77,7 @@ namespace P1
 						if (tweetSource != "")
 								ReadTweets (tweetSource);
 
-
+						InitTouchState ();
 				}
 		
 				// Update is called once per frame
@@ -72,6 +87,8 @@ namespace P1
 								SetRandomTarget ();
 						}
 						rigidbody.velocity *= FRICTION;
+
+						UpdateTouched ();
 				}
 
 #endregion
@@ -167,11 +184,6 @@ namespace P1
 						foreach (TwitterStatusButton sb in statusButtons) {
 								sb.ResetColor ();
 						}
-				}
-
-				public void Touched ()
-				{
-						lastTouched = Time.time;
 				}
 
 #endregion
