@@ -45,7 +45,7 @@ namespace P1
 
 				public void LoadConfigs ()
 				{
-						LoadConfigs ("twitter_list.json");
+			LoadConfigs ("twitter_list.json");
 				}
 
 				public void LoadConfigs (string s)

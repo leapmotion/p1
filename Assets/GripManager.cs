@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 using Leap;
 
 namespace P1
@@ -94,9 +95,27 @@ namespace P1
 
 						Vector3 currentPos = grippingFinger.GetTipPosition ();
 						Vector3 movement = currentPos - fingerPos;
-						movement.x = 0;
-						movement.z = 0;	
-						statusButton.MoveList (movement);
+
+						//Classify Motion
+						if (Math.Abs (movement.y) > Math.Abs (movement.x) &&
+								Math.Abs (movement.y) > Math.Abs (movement.z)) {
+								//Scroll
+								movement.x = 0;
+								movement.z = 0;	
+								statusButton.MoveList (movement);
+						}
+						if (Math.Abs (movement.x) > Math.Abs (movement.y) &&
+								Math.Abs (movement.x) > Math.Abs (movement.z)) {
+								//Select
+								movement.y = 0;
+								movement.z = 0;
+								statusButton.MoveList (movement);
+						}
+						if (Math.Abs (movement.x) > Math.Abs (movement.y) &&
+								Math.Abs (movement.x) > Math.Abs (movement.z)) {
+								//Ignore
+								UnityEngine.Debug.Log ("Why so Zerious?");
+						}
 						fingerPos = currentPos;
 				}
 		
@@ -127,7 +146,6 @@ namespace P1
 						if (enteringFinger != null) {
 								grippingFinger = enteringFinger;
 								gripState.Change (GRIPSTATE_2GRIPPED);
-								//Debug.Log ("... gripping for finger : " + enteringFinger.GetLeapFinger ().Id);
 						}
 				}
 		
@@ -152,10 +170,7 @@ namespace P1
 								return;
 						int lfid = leavingFinger.GetLeapFinger ().Id;
 						if (lfid == grippingFinger.GetLeapFinger ().Id) {
-								Debug.Log (string.Format ("gripper {0} Leaving finger id {1}", id, lfid));
 								gripState.Change (GRIPSTATE_0BASE);
-						} else {
-								Debug.Log (string.Format ("gripper {0} Ignoring leaving finger {1}", id, lfid));
 						}
 				}
 
@@ -175,8 +190,6 @@ namespace P1
 								Debug.Log ("ignoring change " + change.ToString ());
 								return;
 						}
-
-						//Debug.Log ("GripStateChange for item #" + statusButton.index + ": " + change.toState.name);
 
 						switch (change.toState.name) {
 						case GRIPSTATE_2GRIPPED:
