@@ -24,6 +24,7 @@ namespace P1
 				const string TWITTER_LIST_STATE_NAME = "Touched state name";
 				const string TWITTER_LIST_UNTOUCHED = "Untouched twitter";
 				const string TWITTER_LIST_TOUCHED = "Touched twitter";
+				public float stopDelay = 0.25f;
 				State touchedState;
 
 				void InitTouchState ()
@@ -47,6 +48,9 @@ namespace P1
 						if (sc.fromState.name == TWITTER_LIST_TOUCHED &&
 								sc.toState.name == TWITTER_LIST_UNTOUCHED) {
 								UnityEngine.Debug.Log ("You jilted Bieber!");
+								rigidbody.velocity = Vector3.zero;
+				int pick = Radical.instance.activeTwitter.index;
+				UnityEngine.Debug.Log ("Monkey picked: " + pick);
 						}
 				}
 		
@@ -60,7 +64,7 @@ namespace P1
 				void UpdateTouched ()
 				{
 						if (touchedState.state == TWITTER_LIST_TOUCHED &&
-								Utils.Elapsed (lastTouched, 1.0f)) {
+								Utils.Elapsed (lastTouched, stopDelay)) {
 								touchedState.Change (TWITTER_LIST_UNTOUCHED);
 						}
 				}

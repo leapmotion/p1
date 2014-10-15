@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using ButtonMonkey;
 
 namespace P1
 {
@@ -9,8 +8,9 @@ namespace P1
 				public static Radical instance;
 				public GameObject TwitterList;
 				[HideInInspector]
-				public GameObject activeTwitter = null;
-		public float lastTouch = 0.0f;
+				public TwitterStatusButton
+						activeTwitter = null;
+				public float lastTouch = 0.0f;
 
 				private TwitterStatusButton getTwitterStatusButton (Collider other)
 				{
@@ -40,8 +40,13 @@ namespace P1
 
 						TwitterStatusButton button = getTwitterStatusButton (other);
 						if (button) {
-								activeTwitter = button.gameObject;
-								button.SetColor (Color.cyan);
+								activeTwitter = button;
+								//NOTE: See TwitterList.SetRandomTarget() target state string
+								if (button.targetState.state == "target") {
+										button.SetColor (Color.magenta);
+								} else {
+										button.SetColor (Color.cyan);
+								}
 						}
 				}
 
@@ -57,8 +62,9 @@ namespace P1
       
 				}
 
-		public void ResetTouchTimer() {
-			lastTouch = Time.time;
+				public void ResetTouchTimer ()
+				{
+						lastTouch = Time.time;
 				}
 		
 		}
