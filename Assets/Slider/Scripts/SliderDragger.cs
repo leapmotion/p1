@@ -45,7 +45,7 @@ namespace P1
 				{
 						prevSliderInt = sliderInt;
 						pos = rigidbody.position;
-			pos.x = Mathf.Clamp(pos.x, 0.0f + sliderManager.transform.position.x, (1.0f * sliderManager.transform.localScale.x) + sliderManager.transform.position.x);
+						pos.x = Mathf.Clamp(pos.x, 0.0f + sliderManager.transform.position.x, (1.0f * sliderManager.transform.localScale.x) + sliderManager.transform.position.x);
 						rigidbody.position = pos;
 
 						if (rigidbody.position.x < (1.0f  * sliderManager.transform.localScale.x) + sliderManager.transform.position.x) {
