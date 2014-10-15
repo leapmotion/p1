@@ -26,9 +26,10 @@ namespace P1
 				const string TWITTER_LIST_STATE_NAME = "Touched state name";
 				const string TWITTER_LIST_UNTOUCHED = "Untouched twitter";
 				const string TWITTER_LIST_TOUCHED = "Touched twitter";
-				public float stopDelay = 0.25f;
 				State touchedState;
-
+				public float stopDelay = 0.25f;
+				public Radical selector;
+		
 				void InitTouchState ()
 				{
 						if (!StateList.HasList (TWITTER_LIST_STATE_NAME))
@@ -72,6 +73,14 @@ namespace P1
 						if (touchedState.state == TWITTER_LIST_TOUCHED &&
 								Utils.Elapsed (lastTouched, stopDelay)) {
 								touchedState.Change (TWITTER_LIST_UNTOUCHED);
+								if (selector.activeTwitter) {
+										UnityEngine.Debug.Log ("GOOD MONKEY!");
+										//PROBLEM: Argument is char not int
+										//monkeyDo.WhenPushed (true, selector.activeTwitter.index);
+								} else {
+										UnityEngine.Debug.Log ("BAD MONKEY!");
+								}
+
 						}
 				}
 

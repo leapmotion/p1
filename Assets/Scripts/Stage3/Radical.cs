@@ -8,8 +8,7 @@ namespace P1
 				public static Radical instance;
 				public GameObject TwitterList;
 				[HideInInspector]
-				public TwitterStatusButton
-						activeTwitter = null;
+				public TwitterStatusButton activeTwitter = null;
 				public float lastTouch = 0.0f;
 
 				private TwitterStatusButton getTwitterStatusButton (Collider other)
