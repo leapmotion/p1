@@ -5,7 +5,11 @@ namespace P1
 {
   public class Radical : MonoBehaviour
   {
+    public static Radical instance;
     public GameObject TwitterList;
+
+    [HideInInspector]
+    public GameObject activeTwitter = null;
 
     private TwitterStatusButton getTwitterStatusButton(Collider other)
     {
@@ -19,6 +23,7 @@ namespace P1
     // Use this for initialization
     void Start()
     {
+      instance = this;
       this.transform.position = new Vector3(0.0f, 0.0f, TwitterList.transform.position.z);
     }
 
@@ -33,6 +38,7 @@ namespace P1
       TwitterStatusButton button = getTwitterStatusButton(other);
       if (button)
       {
+        activeTwitter = button.gameObject;
         button.SetColor(Color.cyan);
       }
     }
