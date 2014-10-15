@@ -86,19 +86,9 @@ namespace P1
       TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey>());
       g.label = label;
       go.transform.parent = transform;
-      go.gameObject.transform.FindChild("button").FindChild("default").GetComponent<SpringJoint>().connectedAnchor = position;
-      go.transform.position = position;
       go.transform.rotation = transform.rotation;
-      Collider[] colliders = go.GetComponentsInChildren<Collider>();
-      foreach (Collider collider in colliders)
-      {
-        collider.enabled = false;
-      }
-      SpringJoint[] joints = go.GetComponentsInChildren<SpringJoint>();
-      foreach (SpringJoint joint in joints)
-      {
-        joint.spring = 0;
-      }
+      g.Init();
+      g.SetActive(false);
       ButtonTrigger button_trigger = go.GetComponentInChildren<ButtonTrigger>();
       button_trigger.transform.localPosition = Vector3.zero;
       go.transform.localScale = Vector3.one;

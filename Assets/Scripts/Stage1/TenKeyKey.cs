@@ -15,6 +15,8 @@ namespace P1
     private Color original_color = new Color(0.25f, 0.25f, 0.25f);
     private bool mouse_clicked = false;
 
+    public float springConstant = 1000.0f;
+
     [SerializeField]
     private float m_KeypadUniformScale;
     public float KeypadUniformScale
@@ -74,6 +76,41 @@ namespace P1
         catch (UnityException e)
         {
           Debug.Log(e + ": Cannot set letter for value " + value);
+        }
+      }
+    }
+
+    public void Init()
+    {
+      button.GetComponent<SpringJoint>().connectedAnchor = transform.position;
+    }
+
+    public void SetActive(bool value)
+    {
+      if (value)
+      {
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+          collider.enabled = true;
+        }
+        SpringJoint[] joints = GetComponentsInChildren<SpringJoint>();
+        foreach (SpringJoint joint in joints)
+        {
+          joint.spring = springConstant;
+        }
+      }
+      else
+      {
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+          collider.enabled = false;
+        }
+        SpringJoint[] joints = GetComponentsInChildren<SpringJoint>();
+        foreach (SpringJoint joint in joints)
+        {
+          joint.spring = 0;
         }
       }
     }

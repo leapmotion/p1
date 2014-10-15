@@ -220,6 +220,8 @@ namespace P1
 								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
 								g.KeypadScale = Vector3.one * size;
 								g.label = k.label;
+                g.Init();
+                g.SetActive(true);
 								go.transform.parent = transform;
 								g.TenKeyEventBroadcaster += monkeyDo.WhenPushed;
 								go.transform.localScale = Vector3.one * size;
