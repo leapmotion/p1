@@ -86,10 +86,9 @@ namespace ButtonMonkey
 						foreach (string f in files) {
 								string configName = Path.GetFileName (f);
 								string recordName = Path.Combine (recordPath, configName);
-                if (configName.Substring(configName.Length - 5, 5) != ".meta") // Ignore if the file is .meta
-                {
-                  System.IO.File.Copy(f, recordName, true);
-                }
+								if (configName.Substring (configName.Length - 5, 5) != ".meta") { // Ignore if the file is .meta
+										System.IO.File.Copy (f, recordName, true);
+								}
 						}
 			
 						//(3) Read test configuration
@@ -108,7 +107,7 @@ namespace ButtonMonkey
 						trial.counter = new MonkeyCounter ();
 						if (testConfig != null) {
 								trial.keys = GenerateKeys ();
-								trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
+								trial.counter.ChangeTarget (trial.keys [step]);
 						} else {
 								trial.keys = new List<int> ();
 						}
@@ -129,8 +128,9 @@ namespace ButtonMonkey
 
 				public event TrialUpdate TrialEvent;
 
-				public void WhenPushed (bool complete, char label)
+				public void WhenPushed (bool complete, int symbol)
 				{
+						UnityEngine.Debug.Log ("MonkeyTester.WHenPushed symbol = " + symbol);
 						if (StageComplete () ||
 								TrialComplete ()) {
 								//Already complete -> no event
@@ -138,10 +138,10 @@ namespace ButtonMonkey
 						}
 
 						current = timer.ElapsedMilliseconds / 1000.0f;
-						trial.counter.WhenPushed (complete, label, current);
+						trial.counter.WhenPushed (complete, symbol, current);
 
 						if (complete) {
-								if (label == trial.keys [step].ToString () [0]) {
+								if (symbol == trial.keys [step]) {
 										correct = true;
 										step += 1;
 										if (TrialComplete ()) {
@@ -150,7 +150,7 @@ namespace ButtonMonkey
 												test += 1;
 												// Do not immediately start next test
 										} else {
-												trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
+												trial.counter.ChangeTarget (trial.keys [step]);
 										}
 								} else {
 										correct = false;
@@ -163,7 +163,9 @@ namespace ButtonMonkey
 						}
 
 						// Update test results immediately
+						UnityEngine.Debug.Log ("recordFile = " + recordFile);
 						if (recordFile.Length > 0) {
+								UnityEngine.Debug.Log ("Writing!!!");
 								File.WriteAllText (recordFile, this.ToString ());
 						}
 				}
@@ -177,7 +179,7 @@ namespace ButtonMonkey
 				{
 						string trialKeys = "";
 						for (int k = 0; k < trial.keys.Count; k += 1) {
-								trialKeys += trial.keys [k].ToString () [0];
+								trialKeys += trial.keys [k].ToString ();
 						}
 						return trialKeys;
 				}

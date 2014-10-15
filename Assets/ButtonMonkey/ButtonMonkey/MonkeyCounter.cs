@@ -6,17 +6,17 @@ namespace ButtonMonkey
 		public struct ButtonPushed
 		{
 				public bool complete;
-				public char symbol;
+				public int symbol;
 				public float time;
 
-				public ButtonPushed (bool c, char s, float t)
+				public ButtonPushed (bool c, int s, float t)
 				{
 						complete = c;
 						symbol = s;
 						time = t;
 				}
 
-				public string RecordFormat (char goal)
+				public string RecordFormat (int goal)
 				{
 						//return goal + ", " + push.symbol + ", " + push.complete.ToString () + ", " + push.time.ToString () + "\n";
 			
@@ -27,54 +27,23 @@ namespace ButtonMonkey
 								IsHit = 1;
 						}
 						int rectified = -1; //DEFAULT: Not on key pad
-						switch (symbol) {
-						case '0':
-								rectified = 0;
-								break;
-						case '1':
-								rectified = 1;
-								break;
-						case '2':
-								rectified = 2;
-								break;
-						case '3':
-								rectified = 3;
-								break;
-						case '4':
-								rectified = 4;
-								break;
-						case '5':
-								rectified = 5;
-								break;
-						case '6':
-								rectified = 6;
-								break;
-						case '7':
-								rectified = 7;
-								break;
-						case '8':
-								rectified = 8;
-								break;
-						case '9':
-								rectified = 9;
-								break;
-						default:
-								break; //DEFAULT
+						if (0 <= symbol && symbol <= 9) {
+								rectified = symbol;
 						}
 						if (rectified >= 0 && !complete) {
 								rectified += 10;
 						}
-						report += goal + ", " + rectified.ToString () + ", " + IsHit.ToString () + ", " + time.ToString () + "\n";
+						report += goal.ToString () + ", " + rectified.ToString () + ", " + IsHit.ToString () + ", " + time.ToString () + "\n";
 						return report;
 				}
 		}
 
 		public struct AttemptsMade
 		{
-				public char target;
+				public int target;
 				public List<ButtonPushed> attempts;
 
-				public AttemptsMade (char t, List<ButtonPushed> a)
+				public AttemptsMade (int t, List<ButtonPushed> a)
 				{
 						target = t;
 						attempts = a;
@@ -84,7 +53,7 @@ namespace ButtonMonkey
 		public class MonkeyCounter
 		{
 				bool ready;
-				char target;
+				int target;
 				List<ButtonPushed> attempts;
 				List<AttemptsMade> complete;
 
@@ -97,7 +66,7 @@ namespace ButtonMonkey
 						complete = new List<AttemptsMade> ();
 				}
 		
-				public void WhenPushed (bool complete, char symbol, float time)
+				public void WhenPushed (bool complete, int symbol, float time)
 				{
 						if (ready == false) {
 								return;
@@ -119,7 +88,7 @@ namespace ButtonMonkey
 						ready = false;
 				}
 
-				public void ChangeTarget (char next)
+				public void ChangeTarget (int next)
 				{
 						if (ready == true) {
 								CommitTrial ();
@@ -170,7 +139,7 @@ namespace ButtonMonkey
 						get { 
 								int successes = 0;
 								foreach (AttemptsMade c in complete) {
-										char goal = c.target;
+										int goal = c.target;
 										foreach (ButtonPushed a in c.attempts) {
 												if (a.symbol == goal) {
 														successes += 1;
@@ -186,7 +155,7 @@ namespace ButtonMonkey
 				{
 						string report = "";
 						foreach (AttemptsMade c in complete) {
-								char goal = c.target;
+								int goal = c.target;
 								foreach (ButtonPushed a in c.attempts) {
 										report += a.RecordFormat (goal);
 								}

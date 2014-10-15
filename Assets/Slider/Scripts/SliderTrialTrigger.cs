@@ -104,7 +104,8 @@ namespace P1
 		IEnumerator StepThroughTrial (){
 			char x = sliderDragger.sliderInt.ToString()[0];
 			Debug.Log ("char x = " + x);
-			monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
+			UnityEngine.Debug.Log ("Slider Selected: " + sliderDragger.sliderInt);
+			monkeyDo.WhenPushed (true, sliderDragger.sliderInt);
 			yield return new WaitForSeconds(1.0f);
 //			sliderDragger.sliderInt = 0;
 //			sliderManager.SliderHandleGRP.transform.localPosition = new Vector3 (0.0f, sliderManager.SliderHandleGRP.transform.localPosition.y, sliderManager.SliderHandleGRP.transform.localPosition.z);
