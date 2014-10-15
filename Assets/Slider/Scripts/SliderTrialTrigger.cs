@@ -42,8 +42,8 @@ namespace P1
 			monkeyDo.TrialEvent += TrialUpdate;
 			
 			monkeyDo.Start ();
-			Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-			pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
+			Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+			pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeysString ());
 		}
 		
 		// Called once for each key pushed
@@ -63,14 +63,14 @@ namespace P1
 					pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 					
 					monkeyDo.Start ();
-					Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-					pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
+					Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+					pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeysString ());
 				} else {
 					if (monkeyDo.WasCorrect ()) {
-						Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+						Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 					} else {
-						Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+						Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
 					}
 				}

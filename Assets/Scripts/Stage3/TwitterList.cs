@@ -2,11 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using SimpleJSON;
+using ButtonMonkey;
 
 namespace P1
 {
 		public class TwitterList : MonoBehaviour
 		{
+				TwitterMonkey monkeyDo;
 				TwitterReader tr;
 				public GameObject items;
 				public List<TwitterStatusButton> statusButtons = new List<TwitterStatusButton> ();
@@ -49,8 +51,8 @@ namespace P1
 								sc.toState.name == TWITTER_LIST_UNTOUCHED) {
 								UnityEngine.Debug.Log ("You jilted Bieber!");
 								rigidbody.velocity = Vector3.zero;
-				int pick = Radical.instance.activeTwitter.index;
-				UnityEngine.Debug.Log ("Monkey picked: " + pick);
+								int pick = Radical.instance.activeTwitter.index;
+								UnityEngine.Debug.Log ("Monkey picked: " + pick);
 						}
 				}
 		
@@ -80,8 +82,11 @@ namespace P1
 						InitState ();
 						if (tweetSource != "")
 								ReadTweets (tweetSource);
-
 						InitTouchState ();
+						monkeyDo = new TwitterMonkey ();
+						monkeyDo.ConfigureTest ("twitter");
+						monkeyDo.TrialEvent += TrialUpdate;
+						monkeyDo.Start ();
 				}
 		
 				// Update is called once per frame
@@ -95,11 +100,15 @@ namespace P1
 						UpdateTouched ();
 				}
 
+				public void TrialUpdate (MonkeyTester trial)
+				{
+				}
+
 #endregion
 
 				public void LoadConfigs ()
 				{
-						LoadConfigs ("twitter_list.json");
+						LoadConfigs ("twitter_config.json");
 				}
 
 				public void LoadConfigs (string s)
@@ -119,7 +128,10 @@ namespace P1
 
 				public void SetRandomTarget ()
 				{
-						statusButtons [Random.Range (0, statusButtons.Count - 1)].targetState.Change ("target");
+						monkeyDo.statusButtonsCount = statusButtons.Count - 1;
+						monkeyDo.Start ();
+						int target = monkeyDo.GetTrialKeys () [0];
+						statusButtons [target].targetState.Change ("target");
 						targetSet = true;
 				}
 

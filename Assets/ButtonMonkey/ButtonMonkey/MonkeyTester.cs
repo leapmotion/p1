@@ -76,7 +76,7 @@ namespace ButtonMonkey
 				{
 						//(1) Create unique record directory
 						//JSONNode userConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/config/user_config.json"));
-            JSONNode userConfig = Utils.FileToJSON("user_config.json");
+						JSONNode userConfig = Utils.FileToJSON ("user_config.json");
 						string recordPath = Environment.CurrentDirectory + "/TestResults/" + userConfig ["userName"].Value + "/";
 						Directory.CreateDirectory (recordPath);
 
@@ -91,7 +91,7 @@ namespace ButtonMonkey
 			
 						//(3) Read test configuration
 						//testConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/" + testName + "_config.json"));
-            testConfig = Utils.FileToJSON(testName + "_config.json");
+						testConfig = Utils.FileToJSON (testName + "_config.json");
 						testNum = testConfig ["test"] ["number"].AsInt;
 
 						//(4) Create test file
@@ -164,8 +164,13 @@ namespace ButtonMonkey
 								File.WriteAllText (recordFile, this.ToString ());
 						}
 				}
+		
+				public List<int> GetTrialKeys ()
+				{
+						return trial.keys;
+				}
 
-				public string GetTrialKeys ()
+				public string GetTrialKeysString ()
 				{
 						string trialKeys = "";
 						for (int k = 0; k < trial.keys.Count; k += 1) {
