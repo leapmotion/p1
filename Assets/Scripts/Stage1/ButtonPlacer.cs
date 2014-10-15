@@ -57,15 +57,17 @@ namespace P1
 
 				public void DoStart ()
 				{
-						SetGridFromConfig ("grid_config.json");
-						restrain_buttons_ = Utils.FileToJSON ("grid_config.json") ["grid"] ["restrainButtons"].AsBool;
 						monkeyDo = new GridMonkey ();
 						monkeyDo.ConfigureTest ("grid");
 						monkeyDo.TrialEvent += TrialUpdate;
 						monkeyDo.Start ();
 						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
-
 						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeysString ());
+
+						//IMPORTANT: SetGridFromConfig must happen AFTER new GridMonkey,
+						//since it registers monkeyDo.WhenPushed as an event delegate.
+						SetGridFromConfig ("grid_config.json");
+						restrain_buttons_ = Utils.FileToJSON ("grid_config.json") ["grid"] ["restrainButtons"].AsBool;
 				}
 
 				// Called once for each key pushed
@@ -219,7 +221,7 @@ namespace P1
 								g.KeypadScale = Vector3.one * size;
 								g.label = k.label;
 								go.transform.parent = transform;
-								g.TenKeyEventBroadcaster += new TenKeyKey.TenKeyEventDelegate (monkeyDo.WhenPushed);
+								g.TenKeyEventBroadcaster += monkeyDo.WhenPushed;
 								go.transform.localScale = Vector3.one * size;
 								go.transform.rotation = Quaternion.LookRotation (go.transform.position - Camera.main.transform.position);
 								key_gameObjects_.Add (go);
