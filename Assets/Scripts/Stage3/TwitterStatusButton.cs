@@ -101,6 +101,20 @@ namespace P1
 
 #region targetState
 
+				public void Activate ()
+				{
+
+						foreach (TwitterStatusButton b in list.statusButtons) {
+								b.ResetColor ();
+//@TODO: put in list?
+						}
+						if (targetState.state == "target") {
+								SetColor (Color.magenta);
+						} else {
+								SetColor (Color.cyan);
+						}
+				}
+
 				public void SetColor (Color color)
 				{
 						list.ResetAllColors ();
