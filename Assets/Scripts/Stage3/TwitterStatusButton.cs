@@ -29,6 +29,7 @@ namespace P1
 		public int sizeOffset = 10;
 		private Color original_bg_color;
 		private Color original_bg_active_color;
+		public TextMeshPro indexTextMesh;
 
 		public Tweet status
 		{
@@ -56,6 +57,7 @@ namespace P1
 			set
 			{
 				index_ = value;
+				indexTextMesh.text = value.ToString();
 				RefreshPosition();
 			}
 		}
