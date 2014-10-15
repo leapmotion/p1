@@ -116,7 +116,7 @@ namespace P1
 						if (Math.Abs (movement.x) > Math.Abs (movement.y) &&
 								Math.Abs (movement.x) > Math.Abs (movement.z)) {
 								//Ignore
-								UnityEngine.Debug.Log ("Why so Zerious?");
+								//UnityEngine.Debug.Log ("Why so Zerious?");
 						}
 						*/
 						fingerPos = currentPos;

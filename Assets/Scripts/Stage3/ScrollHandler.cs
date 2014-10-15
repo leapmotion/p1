@@ -14,6 +14,7 @@ namespace P1
     private HandModel activeHand_ = null;
     private Vector3 start_palm_position_ = Vector3.zero;
     private Vector3 start_content_position = Vector3.zero;
+    private float start_content_z = 0.0f;
 
     public void SetScroll(bool allowScroll)
     {
@@ -75,11 +76,18 @@ namespace P1
     // Use this for initialization
     void Start()
     {
+      if (content) 
+      {
+        start_content_z = content.transform.localPosition.z;
+      }
     }
 
     // Update is called once per frame
     void Update()
     {
+      Vector3 position = content.transform.localPosition;
+      position.z = start_content_z;
+      content.transform.localPosition = position;
       if (activeHand_ != null)
       {
         HandList hands = leap_controller_.Frame().Hands;
@@ -100,12 +108,12 @@ namespace P1
 
         if (allowScroll_ && activeHandParts > 0 && content)
         {
-          Vector3 position_change = activeHand_.GetPalmPosition() - start_palm_position_;
-          content.transform.position = start_content_position + position_change;
-          Vector3 local_position = content.transform.localPosition;
-          local_position.x = 0.0f;
-          local_position.z = 0.0f;
-          content.transform.localPosition = local_position;
+          //Vector3 position_change = activeHand_.GetPalmPosition() - start_palm_position_;
+          //content.transform.position = start_content_position + position_change;
+          //Vector3 local_position = content.transform.localPosition;
+          //local_position.x = 0.0f;
+          //local_position.z = start_content_z;
+          //content.transform.localPosition = local_position;
         }
       }
     }

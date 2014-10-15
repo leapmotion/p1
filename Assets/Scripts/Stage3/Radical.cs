@@ -10,7 +10,6 @@ namespace P1
 				[HideInInspector]
 				public TwitterStatusButton
 						activeTwitter = null;
-				public float lastTouch = 0.0f;
 
 				private TwitterStatusButton getTwitterStatusButton (Collider other)
 				{
@@ -55,7 +54,7 @@ namespace P1
 								UnityEngine.Debug.Log ("No button. Found " + other.name);
 						}
 				}
-
+				
 				void OnTriggerExit (Collider other)
 				{
 						if (Time.time < 1.0f)
@@ -65,13 +64,6 @@ namespace P1
 						if (button) {
 								button.ResetColor ();
 						}
-      
 				}
-
-				public void ResetTouchTimer ()
-				{
-						lastTouch = Time.time;
-				}
-		
 		}
 }
