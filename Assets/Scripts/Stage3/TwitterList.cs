@@ -20,6 +20,38 @@ namespace P1
 				static float FRICTION = 0.9f;
 				private float lastTouched = 0.0f;
 
+		#region TouchState
+				const string TWITTER_LIST_STATE_NAME = "Touched state name";
+				const string TWITTER_LIST_UNTOUCHED = "Untouched twitter";
+				const string TWITTER_LIST_TOUCHED = "Touched twitter";
+				State touchedState;
+
+				void InitTouchState ()
+				{
+						if (!StateList.HasList (TWITTER_LIST_STATE_NAME))
+								StateList.Create (TWITTER_LIST_STATE_NAME,
+				                  TWITTER_LIST_UNTOUCHED,
+				                  TWITTER_LIST_TOUCHED);
+						touchedState = new State (TWITTER_LIST_STATE_NAME,
+			                         TWITTER_LIST_UNTOUCHED);
+						touchedState.StateChangedEvent += OnStateChanged;
+				}
+
+				void OnStateChanged (StateChange sc)
+				{
+						if (sc.fromState.name == TWITTER_LIST_UNTOUCHED &&
+								sc.toState.name == TWITTER_LIST_TOUCHED) {
+								UnityEngine.Debug.Log ("You touched Bieber!");
+						}
+			
+						if (sc.fromState.name == TWITTER_LIST_TOUCHED &&
+								sc.toState.name == TWITTER_LIST_UNTOUCHED) {
+								UnityEngine.Debug.Log ("You jilted Bieber!");
+						}
+				}
+
+			#endregion
+
 #region loop
 		
 				// Use this for initialization

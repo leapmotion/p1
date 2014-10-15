@@ -112,11 +112,13 @@ namespace P1
 								movement.z = 0;
 								statusButton.MoveList (movement);
 						}
+						/*
 						if (Math.Abs (movement.x) > Math.Abs (movement.y) &&
 								Math.Abs (movement.x) > Math.Abs (movement.z)) {
 								//Ignore
 								UnityEngine.Debug.Log ("Why so Zerious?");
 						}
+						*/
 						fingerPos = currentPos;
 				}
 		
