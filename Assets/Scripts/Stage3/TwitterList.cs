@@ -24,6 +24,8 @@ namespace P1
 				TwitterStatusButton targetedButton;
 				public GameObject upInd;
 				public GameObject downInd;
+				public GameObject upArrowInd;
+				public GameObject downArrowInd;
 
 		#region TouchState
 				const string TWITTER_LIST_STATE_NAME = "Touched state name";
@@ -31,7 +33,6 @@ namespace P1
 				const string TWITTER_LIST_TOUCHED = "Touched twitter";
 				State touchedState;
 				public float stopDelay = 0.25f;
-				public Radical selector;
 		
 				void InitTouchState ()
 				{
@@ -70,9 +71,9 @@ namespace P1
 						if (touchedState.state == TWITTER_LIST_TOUCHED &&
 								Utils.Elapsed (lastTouched, stopDelay)) {
 								touchedState.Change (TWITTER_LIST_UNTOUCHED);
-								if (selector.activeTwitter) {
-										UnityEngine.Debug.Log ("Monkey picked: " + selector.activeTwitter.index);
-										monkeyDo.WhenPushed (true, selector.activeTwitter.index);
+								if (Radical.instance.activeTwitter) {
+										UnityEngine.Debug.Log ("Monkey picked: " + Radical.instance.activeTwitter.index);
+										monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
 								}
 						}
 				}
@@ -102,14 +103,17 @@ namespace P1
 								SetRandomTarget ();
 						}
 						rigidbody.velocity *= FRICTION;
-
+			
+						if (targetSet) {
+								ShowArrowKeys ();
+						}
 						UpdateTouched ();
 						UpdateInd ();
 				}
 
 				public void TrialUpdate (MonkeyTester trial)
 				{
-					UnityEngine.Debug.Log ("TwitterList.TrialUpdate: trial.WasCorrect = " + trial.WasCorrect ());
+						UnityEngine.Debug.Log ("TwitterList.TrialUpdate: trial.WasCorrect = " + trial.WasCorrect ());
 				}
 
 #endregion
@@ -187,6 +191,7 @@ namespace P1
 				{
 						if (statusButtons.Count >= MAX_TWEETS)
 								return;
+
 						GameObject go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
 						go.transform.parent = items.transform;
 						go.transform.rotation = transform.rotation;
@@ -213,6 +218,7 @@ namespace P1
 		
 				public void TargetSet (TwitterStatusButton status)
 				{
+						targetedButton = status;
 						foreach (TwitterStatusButton s in statusButtons) {
 								if (s.index != status.index)
 										s.targetState.Change ("base");
@@ -224,6 +230,17 @@ namespace P1
 				{
 						foreach (TwitterStatusButton sb in statusButtons) {
 								sb.ResetColor ();
+						}
+				}
+
+				public void ShowArrowKeys ()
+				{
+						TwitterStatusButton a = Radical.instance.activeTwitter;
+						if (a != null && targetedButton != null) {
+								if (upArrowInd != null)
+										upArrowInd.SetActive (a.index > targetedButton.index);
+								if (downArrowInd != null)
+										downArrowInd.SetActive (a.index < targetedButton.index);
 						}
 				}
 

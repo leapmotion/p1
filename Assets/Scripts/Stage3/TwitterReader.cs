@@ -22,7 +22,7 @@ namespace P1
 								Debug.Log ("No statuses in " + n.ToString ());
 						} else
 								for (int i = 0; i < n[STATUSES].Count; ++i) {
-										Debug.Log ("Reading status " + i);
+//										Debug.Log ("Reading status " + i);
 										AddStatus (n [STATUSES] [i]);
 								}
 				}
