@@ -25,8 +25,8 @@ namespace P1
 				public State targetState;
 				const string STATE_NAME_TLS = "twitter status button trigger state";
 				public GripManager gripManager;
-        
-        private Color original_bg_color;
+
+        private Color original_bg_color = new Color(160.0f / 255.0f, 178.0f / 255.0f, 193.0f / 255.0f);
         private Color original_bg_active_color;
 
 				public Tweet status {
@@ -82,7 +82,7 @@ namespace P1
 						if (HEIGHT <= 0)
 								HEIGHT = background.renderer.bounds.size.y;
 
-            original_bg_color = background.renderer.material.color;
+            //original_bg_color = background.renderer.material.color;
             original_bg_active_color = backgroundActive.renderer.material.color;
 				}
 		
