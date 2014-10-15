@@ -51,8 +51,12 @@ namespace P1
 								sc.toState.name == TWITTER_LIST_UNTOUCHED) {
 								UnityEngine.Debug.Log ("You jilted Bieber!");
 								rigidbody.velocity = Vector3.zero;
-								int pick = Radical.instance.activeTwitter.index;
-								UnityEngine.Debug.Log ("Monkey picked: " + pick);
+								if (Radical.instance) {
+										if (Radical.instance.activeTwitter) {
+												int pick = Radical.instance.activeTwitter.index;
+												UnityEngine.Debug.Log ("Monkey picked: " + pick);
+										}
+								}
 						}
 				}
 		
@@ -131,16 +135,22 @@ namespace P1
 						monkeyDo.statusButtonsCount = statusButtons.Count - 1;
 						monkeyDo.Start ();
 						int target = monkeyDo.GetTrialKeys () [0];
-						statusButtons [target].targetState.Change ("target");
-						targetSet = true;
+						if (statusButtons.Count > 0) {
+								statusButtons [target].targetState.Change ("target");
+								targetSet = true;
+						} else {
+								targetSet = true;
+						}
 				}
 
 				public void ReadTweets (string source)
 				{
-						tr = new TwitterReader (source);
-						foreach (Tweet s in tr.statuses) {
-								AddStatus (s);
-						}
+						tr = new TwitterReader ("justin_tweets.json");
+						if (tr != null) {
+								foreach (Tweet s in tr.statuses) {
+										AddStatus (s);
+								}
+						} 
 				}
 
 				void InitListTriggerState ()
@@ -152,25 +162,14 @@ namespace P1
 				{
 						if (statusButtons.Count >= MAX_TWEETS)
 								return;
-
-						GameObject go;
-
-						#if UNITY_EDITOR
-			            go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
-						#else
-						//go = new GameObject ();
-						//go.AddComponent ("TwitterStatusButton");
-						go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
-						#endif
+						GameObject go = (GameObject)Instantiate (Resources.Load ("TwitterListStatus"));
 						go.transform.parent = items.transform;
 						go.transform.rotation = transform.rotation;
 						go.transform.localScale = Vector3.one;
-			
 						TwitterStatusButton status = go.GetComponent<TwitterStatusButton> ();
 						status.list = this;
 						status.status = s;
 						status.index = statusButtons.Count;
-
 						statusButtons.Add (status);
 				}
 

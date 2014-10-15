@@ -72,8 +72,33 @@ namespace P1
 			}
 		}
 		
-		//public float Xpos;
-		//public float Ypos;
+		private float
+			m_Xpos;
+		public float Xpos {
+			get { return m_Xpos; }
+			set {
+				this.transform.position = new Vector3 (value, this.transform.position.y, this.transform.position.z );
+				m_Xpos = value;
+			}
+		}
+		private float
+			m_Ypos;
+		public float Ypos {
+			get { return m_Ypos; }
+			set {
+				this.transform.position = new Vector3 (this.transform.position.x, value, this.transform.position.z );
+				m_Ypos = value;
+			}
+		}
+		private float
+			m_Zpos;
+		public float Zpos {
+			get { return m_Zpos; }
+			set {
+				this.transform.position = new Vector3 (this.transform.position.x, this.transform.position.y, value );
+				m_Zpos = value;
+			}
+		}
 		[SerializeField]
 		private float
 			m_SliderHandleWidth;
@@ -148,6 +173,12 @@ namespace P1
 			if (TicksOnOff == true) {
 				BuildTicks ();
 			}
+			
+			Xpos = n ["Xpos"].AsFloat;
+			Ypos = n ["Ypos"].AsFloat;
+			Zpos = n ["Zpos"].AsFloat;
+			
+			
 			
 			WidgetWidth = n ["widgetXscale"].AsFloat;
 			WidgetHeight = n ["widgetYscale"].AsFloat;

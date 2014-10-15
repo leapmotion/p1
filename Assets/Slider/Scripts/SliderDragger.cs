@@ -24,6 +24,7 @@ namespace P1
 				public AudioSource sliderClickSound;
 				
 				private SliderManager sliderManager;
+				private Vector3 pos;
 		
 				void Start() {
 
@@ -34,63 +35,34 @@ namespace P1
 					if (sliderManager == null) {
 						Debug.LogWarning ("You are missing a Slider Manager in the scene.");
 					}
+					rigidbody.position = sliderManager.transform.position;
 
 				}
 		
 			
-				void OnMouseDown ()
-				{
-					isThisHit = true;
-					moveAmountX = moveIncrement;
-					origPos = Input.mousePosition;
-					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandleActive;
-				}
 	
 				void Update ()
 				{
 						prevSliderInt = sliderInt;
-//						if (Input.GetMouseButton (0) && isThisHit == true) {
-//								deltaX = origPos.x - Input.mousePosition.x;
-//								moveAmountX = moveIncrement * ((Mathf.Abs (deltaX) * sliderManager.SliderSpeed));
-//	
-//								if (Input.mousePosition.x > origPos.x && transform.localPosition.x < moveLimit) {
-//										Debug.Log ("moveAmountX = " + moveAmountX);
-//										this.transform.Translate (moveAmountX, 0f, 0f);
-//								}
-//								if (Input.mousePosition.x < origPos.x && transform.localPosition.x > 0) {
-//										this.transform.Translate (-moveAmountX, 0f, 0f);
-//								}
-//								float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
-//								sliderInt = (int)(sliderValue);
-//								sliderManager.TextSliderValue.text = sliderInt.ToString ();
-//						}
-//						origPos = Input.mousePosition;
-
-						Vector3 pos = rigidbody.position;
-						pos.x = Mathf.Clamp(pos.x, 0.0f, 1.0f * sliderManager.transform.localScale.x);
+						pos = rigidbody.position;
+						pos.x = Mathf.Clamp(pos.x, 0.0f + sliderManager.transform.position.x, (1.0f * sliderManager.transform.localScale.x) + sliderManager.transform.position.x);
 						rigidbody.position = pos;
 
-						if (rigidbody.position.x < 1.0f  * sliderManager.transform.localScale.x) {
+						if (rigidbody.position.x < (1.0f  * sliderManager.transform.localScale.x) + sliderManager.transform.position.x) {
 							HandleVisGRP.transform.position = rigidbody.position;
 						}
 
-		}
-		void FixedUpdate(){
-			float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
-					sliderInt = (int)(sliderValue +.5f);
-					sliderManager.TextSliderValue.text = sliderInt.ToString ();
-					if(prevSliderInt != sliderInt){
-//						Debug.Log("Click Sound");
-						sliderClickSound.Play();
-					}
-		}
-		
-//		void OnMouseUp ()
-//				{
-//					isThisHit = false;
-//					sliderManager.SliderBarHandleMesh.renderer.material = sliderManager.SliderHandle;
-//					StartCoroutine(SnapToInterval());
-//				}
+				}
+				void FixedUpdate(){
+					float sliderValue = sliderManager.MaxLimit * this.transform.localPosition.x;
+							sliderInt = (int)(sliderValue +.5f);
+							sliderManager.TextSliderValue.text = sliderInt.ToString ();
+							if(prevSliderInt != sliderInt){
+		//						Debug.Log("Click Sound");
+								sliderClickSound.Play();
+							}
+				}
+
 				
 				void OnTriggerEnter(){
 //					StopCoroutine("hiLightPause");

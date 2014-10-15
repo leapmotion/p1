@@ -31,6 +31,7 @@ namespace P1
 
 				public Tweet (string t, string d)
 				{
+						Debug.Log ("Adding tweet " + t);
 						text = t;
 						date = d;
 						m = dateParser.Match (d);
@@ -42,7 +43,7 @@ namespace P1
 										int day = Convert.ToInt32 (m.Groups [3].Value);
 										if (day > 0 && day <= 31) {
 												int year = Convert.ToInt32 (m.Groups [4].Value);
-											//	Debug.Log ("Date " + d + " parsed as day " + day + ", month " + mint + " (" + month + ")");
+												//	Debug.Log ("Date " + d + " parsed as day " + day + ", month " + mint + " (" + month + ")");
 												try {
 														time = new DateTime (year, mint, day);
 												} catch (Exception aor) {
@@ -67,7 +68,7 @@ namespace P1
 						return -1;
 				}
 
-		public Tweet (JSONNode n): 	this (n ["text"].Value, n ["created_at"].Value)
+				public Tweet (JSONNode n): 	this (n ["text"].Value, n ["created_at"].Value)
 				{
 					
 				}
