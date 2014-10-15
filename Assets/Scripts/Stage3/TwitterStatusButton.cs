@@ -10,7 +10,7 @@ namespace P1
 				TwitterList list_;
 				Tweet status_;
 				int index_;
-				static float HEIGHT = 2;
+				static float HEIGHT = 3;
 				const float MIN_WIDTH = 25;
 				const float MARGIN_HEIGHT = 0.5f;
 				const float MARGIN_WIDTH = 1.5f;
