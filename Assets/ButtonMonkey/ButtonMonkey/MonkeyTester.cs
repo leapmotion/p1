@@ -76,7 +76,7 @@ namespace ButtonMonkey
 				{
 						//(1) Create unique record directory
 						//JSONNode userConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/config/user_config.json"));
-            JSONNode userConfig = Utils.FileToJSON("user_config.json");
+						JSONNode userConfig = Utils.FileToJSON ("user_config.json");
 						string recordPath = Environment.CurrentDirectory + "/TestResults/" + userConfig ["userName"].Value + "/";
 						Directory.CreateDirectory (recordPath);
 
@@ -86,15 +86,14 @@ namespace ButtonMonkey
 						foreach (string f in files) {
 								string configName = Path.GetFileName (f);
 								string recordName = Path.Combine (recordPath, configName);
-                if (configName.Substring(configName.Length - 5, 5) != ".meta") // Ignore if the file is .meta
-                {
-                  System.IO.File.Copy(f, recordName, true);
-                }
+								if (configName.Substring (configName.Length - 5, 5) != ".meta") { // Ignore if the file is .meta
+										System.IO.File.Copy (f, recordName, true);
+								}
 						}
 			
 						//(3) Read test configuration
 						//testConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/" + testName + "_config.json"));
-            testConfig = Utils.FileToJSON(testName + "_config.json");
+						testConfig = Utils.FileToJSON (testName + "_config.json");
 						testNum = testConfig ["test"] ["number"].AsInt;
 
 						//(4) Create test file
@@ -108,7 +107,7 @@ namespace ButtonMonkey
 						trial.counter = new MonkeyCounter ();
 						if (testConfig != null) {
 								trial.keys = GenerateKeys ();
-								trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
+								trial.counter.ChangeTarget (trial.keys [step]);
 						} else {
 								trial.keys = new List<int> ();
 						}
@@ -129,19 +128,29 @@ namespace ButtonMonkey
 
 				public event TrialUpdate TrialEvent;
 
-				public void WhenPushed (bool complete, char label)
+				public void WhenPushed (bool complete, int symbol)
 				{
+						UnityEngine.Debug.Log ("MonkeyTester.WhenPushed symbol = " + symbol);
+						if (StageComplete ())
+								UnityEngine.Debug.Log ("StageComplete");
+						if (TrialComplete ())
+								UnityEngine.Debug.Log ("TrialCompelte");
+
 						if (StageComplete () ||
 								TrialComplete ()) {
 								//Already complete -> no event
 								return;
 						}
 
+						UnityEngine.Debug.Log ("trial.keys [" + step + "] = " + trial.keys [step]);
+
 						current = timer.ElapsedMilliseconds / 1000.0f;
-						trial.counter.WhenPushed (complete, label, current);
+						trial.counter.WhenPushed (complete, symbol, current);
 
 						if (complete) {
-								if (label == trial.keys [step].ToString () [0]) {
+								UnityEngine.Debug.Log ("BEFORE");
+								if (symbol == trial.keys [step]) {
+										UnityEngine.Debug.Log ("AFTER");
 										correct = true;
 										step += 1;
 										if (TrialComplete ()) {
@@ -150,7 +159,7 @@ namespace ButtonMonkey
 												test += 1;
 												// Do not immediately start next test
 										} else {
-												trial.counter.ChangeTarget (trial.keys [step].ToString () [0]);
+												trial.counter.ChangeTarget (trial.keys [step]);
 										}
 								} else {
 										correct = false;
@@ -163,16 +172,23 @@ namespace ButtonMonkey
 						}
 
 						// Update test results immediately
+						UnityEngine.Debug.Log ("recordFile = " + recordFile);
 						if (recordFile.Length > 0) {
+								UnityEngine.Debug.Log ("Writing!!!");
 								File.WriteAllText (recordFile, this.ToString ());
 						}
 				}
+		
+				public List<int> GetTrialKeys ()
+				{
+						return trial.keys;
+				}
 
-				public string GetTrialKeys ()
+				public string GetTrialKeysString ()
 				{
 						string trialKeys = "";
 						for (int k = 0; k < trial.keys.Count; k += 1) {
-								trialKeys += trial.keys [k].ToString () [0];
+								trialKeys += trial.keys [k].ToString ();
 						}
 						return trialKeys;
 				}

@@ -80,7 +80,7 @@ namespace P1
 						if (!File.Exists (directory + filename)) {
 								throw new FileNotFoundException ("Cannot load " + directory + filename);
 						}
-            Debug.Log(directory + filename);
+			            //Debug.Log(directory + filename);
 						return JSON.Parse (File.ReadAllText (directory + filename));
 				}
 

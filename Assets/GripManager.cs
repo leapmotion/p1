@@ -30,6 +30,7 @@ namespace P1
 
 				//related components
 				TwitterStatusButton statusButton;
+				public TwitterList twitterList;
 
 #region loop
 
@@ -109,13 +110,15 @@ namespace P1
 								//Select
 								movement.y = 0;
 								movement.z = 0;
-                statusButton.MoveList(movement);
+								statusButton.MoveList (movement);
 						}
+						/*
 						if (Math.Abs (movement.x) > Math.Abs (movement.y) &&
 								Math.Abs (movement.x) > Math.Abs (movement.z)) {
 								//Ignore
 								//UnityEngine.Debug.Log ("Why so Zerious?");
 						}
+						*/
 						fingerPos = currentPos;
 				}
 		
@@ -159,6 +162,7 @@ namespace P1
 						if (enteringFinger.GetLeapFinger ().Id == grippingFinger.GetLeapFinger ().Id) {
 								lastFingerTime = Time.time;
 						}
+						twitterList.Touched ();
 				}
 		
 				void OnTriggerExit (Collider c)
@@ -190,8 +194,6 @@ namespace P1
 								Debug.Log ("ignoring change " + change.ToString ());
 								return;
 						}
-
-					//	Debug.Log ("GripStateChange for item #" + statusButton.index + ": " + change.toState.name);
 
 						switch (change.toState.name) {
 						case GRIPSTATE_2GRIPPED:

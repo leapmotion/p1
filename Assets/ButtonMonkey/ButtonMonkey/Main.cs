@@ -17,7 +17,7 @@ namespace ButtonMonkey
 			while (test <= 4) {
 				// Initial instructions
 				monkeyDo.Start ();
-				Console.WriteLine ("\nMonkey, type: " + monkeyDo.GetTrialKeys ());
+				Console.WriteLine ("\nMonkey, type: " + monkeyDo.GetTrialKeysString ());
 
 				while (true) {
 					ConsoleKeyInfo info = Console.ReadKey ();
