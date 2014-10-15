@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
+using System.Text.RegularExpressions;
 
 namespace P1
 {
 		public class TwitterStatusButton : MonoBehaviour
 		{
-		
 				TwitterList list_;
 				Tweet status_;
 				int index_;
@@ -25,10 +25,10 @@ namespace P1
 				public State targetState;
 				const string STATE_NAME_TLS = "twitter status button trigger state";
 				public GripManager gripManager;
-
-        private Color original_bg_color = new Color(160.0f / 255.0f, 178.0f / 255.0f, 193.0f / 255.0f);
-        private Color original_bg_active_color;
-
+				private Color original_bg_color = new Color (160.0f / 255.0f, 178.0f / 255.0f, 193.0f / 255.0f);
+				private Color original_bg_active_color;
+				public TextMeshPro indexTextMesh;
+		
 				public Tweet status {
 						get { return status_; }
 						set {
@@ -49,6 +49,7 @@ namespace P1
 						get { return index_; }
 						set {
 								index_ = value;
+								indexTextMesh.text = value.ToString ();
 								RefreshPosition ();
 						}
 				}
@@ -60,7 +61,6 @@ namespace P1
 				{
 						RefreshPosition ();
 				}
-		
 				// Use this for initialization
 				void Start ()
 				{
@@ -78,12 +78,13 @@ namespace P1
 				public void InitBackground ()
 				{
 						gripManager = GetComponentInChildren<GripManager> ();
+						gripManager.twitterList = list;
 						baseColor = background.renderer.material.color;
 						if (HEIGHT <= 0)
 								HEIGHT = background.renderer.bounds.size.y;
 
-            //original_bg_color = background.renderer.material.color;
-            original_bg_active_color = backgroundActive.renderer.material.color;
+						//original_bg_color = background.renderer.material.color;
+						original_bg_active_color = backgroundActive.renderer.material.color;
 				}
 		
 				public void InitState ()
@@ -99,17 +100,19 @@ namespace P1
 
 #region targetState
 
-        public void SetColor(Color color)
-        {
-          background.renderer.material.color = color;
-          backgroundActive.renderer.material.color = color;
-        }
+				public void SetColor (Color color)
+				{
+						list.ResetAllColors ();
 
-        public void ResetColor()
-        {
-          background.renderer.material.color = original_bg_color;
-          backgroundActive.renderer.material.color = original_bg_active_color;
-        }
+						background.renderer.material.color = color;
+						backgroundActive.renderer.material.color = color;
+				}
+
+				public void ResetColor ()
+				{
+						background.renderer.material.color = original_bg_color;
+						backgroundActive.renderer.material.color = original_bg_active_color;
+				}
 
 				void OnTLSStateChange (StateChange change)
 				{
@@ -149,10 +152,10 @@ namespace P1
 
 #endregion
 
-		public void MoveList (Vector3 movement)
-		{
-			list.MoveList(movement);
-		}
+				public void MoveList (Vector3 movement)
+				{
+						list.MoveList (movement);
+				}
 
 		}
 }

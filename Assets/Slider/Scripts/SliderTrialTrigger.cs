@@ -47,8 +47,8 @@ namespace P1
 			monkeyDo.TrialEvent += TrialUpdate;
 			
 			monkeyDo.Start ();
-			Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-			pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
+			Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+			pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeysString ());
 		}
 		
 		// Called once for each key pushed
@@ -68,14 +68,14 @@ namespace P1
 					pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 					
 					monkeyDo.Start ();
-					Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeys ());
-					pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeys ());
+					Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+					pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeysString ());
 				} else {
 					if (monkeyDo.WasCorrect ()) {
-						Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+						Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 					} else {
-						Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+						Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
 					}
 				}
@@ -109,7 +109,8 @@ namespace P1
 		IEnumerator StepThroughTrial (){
 			char x = sliderDragger.sliderInt.ToString()[0];
 			Debug.Log ("char x = " + x);
-			monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
+			UnityEngine.Debug.Log ("Slider Selected: " + sliderDragger.sliderInt);
+			monkeyDo.WhenPushed (true, sliderDragger.sliderInt);
 			yield return new WaitForSeconds(1.0f);
 //			sliderDragger.sliderInt = 0;
 //			sliderManager.SliderHandleGRP.transform.localPosition = new Vector3 (0.0f, sliderManager.SliderHandleGRP.transform.localPosition.y, sliderManager.SliderHandleGRP.transform.localPosition.z);

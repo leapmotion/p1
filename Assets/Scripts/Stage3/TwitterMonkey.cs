@@ -4,18 +4,21 @@ using ButtonMonkey;
 
 namespace P1
 {
-		public class SliderMonkey : MonkeyTester
+		public class TwitterMonkey : MonkeyTester
 		{
-				//NOTE: Slider position always begins at 0, so 0
-				//should not be the first number picked.
-				int last_number = 0;
+				public int statusButtonsCount = 0;
+				int last_number = int.MaxValue;
 
 				protected override List<int> GenerateKeys ()
 				{
 						System.Random gen = new System.Random ();
 
-						int min = testConfig ["min"].AsInt;
-						int max = testConfig ["max"].AsInt;
+						const int min = 0;
+						int max = testConfig ["max_tweets"].AsInt - 1;
+						if (statusButtonsCount > 0 &&
+								max > statusButtonsCount) {
+								max = statusButtonsCount;
+						}
 
 						//Choose a single random number in the specified range,
 						//with last_number removed
@@ -27,7 +30,7 @@ namespace P1
 								}
 						}
 						last_number = next;
-			
+
 						List<int> keys = new List<int> ();
 						keys.Add (next);
 						return keys;
