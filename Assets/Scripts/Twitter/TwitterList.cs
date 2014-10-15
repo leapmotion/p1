@@ -19,6 +19,8 @@ namespace P1
 				static float MOVE_SCALE = 50;
 				static float FRICTION = 0.9f;
 
+				public static TwitterStatusButton targetedButton;
+
 #region loop
 		
 				// Use this for initialization
@@ -122,7 +124,8 @@ namespace P1
  */
 		
 				public void TargetSet (TwitterStatusButton status)
-				{
+		{
+			targetedButton = this;
 						foreach (TwitterStatusButton s in statusButtons) {
 								if (s.index != status.index)
 										s.targetState.Change ("base");
