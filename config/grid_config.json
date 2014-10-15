@@ -11,7 +11,7 @@
     "padding": 0.01
   }
   "grid": {
-    "row": 3,
+    "row": 4,
     "col": 3,
     "pins": 4,
     "distance": 0.7,

@@ -130,18 +130,26 @@ namespace ButtonMonkey
 
 				public void WhenPushed (bool complete, int symbol)
 				{
-						UnityEngine.Debug.Log ("MonkeyTester.WHenPushed symbol = " + symbol);
+						UnityEngine.Debug.Log ("MonkeyTester.WhenPushed symbol = " + symbol);
+						if (StageComplete ())
+								UnityEngine.Debug.Log ("StageComplete");
+						if (TrialComplete ())
+								UnityEngine.Debug.Log ("TrialCompelte");
 						if (StageComplete () ||
 								TrialComplete ()) {
 								//Already complete -> no event
 								return;
 						}
 
+			UnityEngine.Debug.Log ("trial.keys [" + step + "] = " + trial.keys [step]);
+
 						current = timer.ElapsedMilliseconds / 1000.0f;
 						trial.counter.WhenPushed (complete, symbol, current);
 
 						if (complete) {
-								if (symbol == trial.keys [step]) {
+				UnityEngine.Debug.Log ("BEFORE");
+				if (symbol == trial.keys [step]) {
+					UnityEngine.Debug.Log ("AFTER");
 										correct = true;
 										step += 1;
 										if (TrialComplete ()) {

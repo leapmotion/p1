@@ -31,7 +31,6 @@ namespace P1
 				const string TWITTER_LIST_TOUCHED = "Touched twitter";
 				State touchedState;
 				public float stopDelay = 0.25f;
-				public Radical selector;
 		
 				void InitTouchState ()
 				{
@@ -70,9 +69,9 @@ namespace P1
 						if (touchedState.state == TWITTER_LIST_TOUCHED &&
 								Utils.Elapsed (lastTouched, stopDelay)) {
 								touchedState.Change (TWITTER_LIST_UNTOUCHED);
-								if (selector.activeTwitter) {
-										UnityEngine.Debug.Log ("Monkey picked: " + selector.activeTwitter.index);
-										monkeyDo.WhenPushed (true, selector.activeTwitter.index);
+								if (Radical.instance.activeTwitter) {
+										UnityEngine.Debug.Log ("Monkey picked: " + Radical.instance.activeTwitter.index);
+										monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
 								}
 						}
 				}
@@ -109,7 +108,7 @@ namespace P1
 
 				public void TrialUpdate (MonkeyTester trial)
 				{
-					UnityEngine.Debug.Log ("TwitterList.TrialUpdate: trial.WasCorrect = " + trial.WasCorrect ());
+						UnityEngine.Debug.Log ("TwitterList.TrialUpdate: trial.WasCorrect = " + trial.WasCorrect ());
 				}
 
 #endregion
