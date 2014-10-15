@@ -30,6 +30,7 @@ namespace P1
 
 				//related components
 				TwitterStatusButton statusButton;
+				public TwitterList twitterList;
 
 #region loop
 
@@ -159,6 +160,7 @@ namespace P1
 						if (enteringFinger.GetLeapFinger ().Id == grippingFinger.GetLeapFinger ().Id) {
 								lastFingerTime = Time.time;
 						}
+						twitterList.Touched ();
 				}
 		
 				void OnTriggerExit (Collider c)

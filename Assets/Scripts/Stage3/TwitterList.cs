@@ -18,6 +18,7 @@ namespace P1
 				static float MOVE_SCALE_COUNTER = 100f;
 				static float MOVE_SCALE = 50;
 				static float FRICTION = 0.9f;
+				private float lastTouched = 0.0f;
 
 #region loop
 		
@@ -134,6 +135,11 @@ namespace P1
 						foreach (TwitterStatusButton sb in statusButtons) {
 								sb.ResetColor ();
 						}
+				}
+
+				public void Touched ()
+				{
+						lastTouched = Time.time;
 				}
 
 #endregion

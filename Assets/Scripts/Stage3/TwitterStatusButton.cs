@@ -103,6 +103,7 @@ namespace P1
 		public void InitBackground()
 		{
 			gripManager = GetComponentInChildren<GripManager>();
+			gripManager.twitterList = list;
 			baseColor = background.renderer.material.color;
 			if (HEIGHT <= 0)
 				HEIGHT = background.renderer.bounds.size.y;
@@ -126,6 +127,8 @@ namespace P1
 
 		public void SetColor(Color color)
 		{
+			list.ResetAllColors ();
+
 			background.renderer.material.color = color;
 			backgroundActive.renderer.material.color = color;
 		}

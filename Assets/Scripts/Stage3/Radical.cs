@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using ButtonMonkey;
 
 namespace P1
 {
@@ -8,8 +9,8 @@ namespace P1
 				public static Radical instance;
 				public GameObject TwitterList;
 				[HideInInspector]
-				public GameObject
-						activeTwitter = null;
+				public GameObject activeTwitter = null;
+		public float lastTouch = 0.0f;
 
 				private TwitterStatusButton getTwitterStatusButton (Collider other)
 				{
@@ -55,5 +56,10 @@ namespace P1
 						}
       
 				}
+
+		public void ResetTouchTimer() {
+			lastTouch = Time.time;
+				}
+		
 		}
 }
