@@ -14,10 +14,9 @@ namespace P1
 		
 				public TwitterReader (string configFilePath)
 				{
-						JSONNode n = Utils.FileToJSON (configFilePath, Application.dataPath + "/data/");
+						JSONNode n = Utils.FileToJSON (configFilePath);
 						for (int i = 0; i < n["statuses"].Count; ++i) {
 								AddStatus (n ["statuses"] [i]);
-				
 						}
 				}
 
