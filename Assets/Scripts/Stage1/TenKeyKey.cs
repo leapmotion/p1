@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 namespace P1
@@ -163,7 +164,7 @@ namespace P1
 
     #region broadcast
 
-    public delegate void TenKeyEventDelegate(bool complete, char symbol);
+    public delegate void TenKeyEventDelegate(bool complete, int symbol);
 
     public event TenKeyEventDelegate TenKeyEventBroadcaster;
 
@@ -171,7 +172,7 @@ namespace P1
     {
       if (TenKeyEventBroadcaster != null)
       {
-        TenKeyEventBroadcaster(complete, label[0]);
+        TenKeyEventBroadcaster(complete, Convert.ToInt32(label,10));
       }
     }
 
