@@ -8,6 +8,8 @@ namespace P1
 		{
 				protected override List<int> GenerateKeys ()
 				{
+						isDorinGrid = true;
+
 						System.Random gen = new System.Random ();
 
 						int row = testConfig ["grid"] ["row"].AsInt;

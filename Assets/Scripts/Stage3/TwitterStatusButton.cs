@@ -161,7 +161,7 @@ namespace P1
 				{
 						h = height;
 						w = width;
-						transform.localPosition = new Vector3 (0, index * -(HEIGHT + MARGIN_HEIGHT), 0);
+						transform.localPosition = new Vector3 (0, index * -(HEIGHT + MARGIN_HEIGHT * 2.0f), 0);
 				}
 
 #endregion

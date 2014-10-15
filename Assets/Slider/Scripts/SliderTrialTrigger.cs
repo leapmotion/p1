@@ -23,6 +23,11 @@ namespace P1
 			monkeyDo = new SliderMonkey();
 			monkeyDo.TrialEvent += TrialUpdate;
 		}
+
+    public void Trigger()
+    {
+      StartCoroutine(StepThroughTrial());
+    }
 		
 		public void Start() {
 			DoStart();
@@ -117,7 +122,6 @@ namespace P1
 			if (prevHandCount > 0 && theHands.GetFrame().Hands.Count == 0) {
 				// Trigger the function to check if slider is at right spot
 				Debug.Log ("Triggering StepThroughTrial");
-				StartCoroutine( StepThroughTrial());
 			}
 			
 			//@Frame - 1 (Last frame)

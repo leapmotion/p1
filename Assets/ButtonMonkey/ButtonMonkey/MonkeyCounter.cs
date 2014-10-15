@@ -18,8 +18,23 @@ namespace ButtonMonkey
 
 				public string RecordFormat (int goal)
 				{
-						//return goal + ", " + push.symbol + ", " + push.complete.ToString () + ", " + push.time.ToString () + "\n";
-			
+						return goal.ToString () + ", " + symbol.ToString () + ", " + complete.ToString () + ", " + time.ToString () + "\n";
+				}
+				
+				public string RecordFormatDorin (int goal)
+				{	
+						//Dorin accessibility assistance
+						string report = "";
+						int IsHit = 0;
+						if (goal == symbol) {
+								IsHit = 1;
+						}
+						report += goal.ToString () + ", " + symbol.ToString () + ", " + IsHit.ToString () + ", " + time.ToString () + "\n";
+						return report;
+				}
+		
+				public string RecordFormatDorinGrid (int goal)
+				{	
 						//Dorin accessibility assistance
 						string report = "";
 						int IsHit = 0;
@@ -162,6 +177,30 @@ namespace ButtonMonkey
 						}
 						foreach (ButtonPushed a in attempts) {
 								report += a.RecordFormat (target);
+						}
+						return report;
+				}
+
+				//Print results in Dorin accessibility mode
+				public string ToDorin (bool isGrid)
+				{
+						string report = "";
+						foreach (AttemptsMade c in complete) {
+								int goal = c.target;
+								foreach (ButtonPushed a in c.attempts) {
+										if (isGrid) {
+												report += a.RecordFormatDorinGrid (goal);
+										} else {
+												report += a.RecordFormatDorin (goal);
+										}
+								}
+						}
+						foreach (ButtonPushed a in attempts) {
+								if (isGrid) {
+										report += a.RecordFormatDorinGrid (target);
+								} else {
+										report += a.RecordFormatDorin (target);
+								}
 						}
 						return report;
 				}

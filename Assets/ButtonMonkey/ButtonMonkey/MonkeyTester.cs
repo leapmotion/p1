@@ -25,6 +25,20 @@ namespace ButtonMonkey
 						}
 						return report;
 				}
+
+				//Print results in Dorin accessibility mode
+				public string ToDorin (bool isGrid)
+				{
+						string report = "";
+						if (keys.Count > 0) {
+								report += "Trial Keys: ";
+								foreach (int k in keys) {
+										report += k.ToString () + ".";
+								}
+								report += "\n" + counter.ToDorin (isGrid) + "\n";
+						}
+						return report;
+				}
 		}
 
 		public class MonkeyTester
@@ -40,6 +54,9 @@ namespace ButtonMonkey
 				string recordFile;
 				int test;
 				int testNum;
+				// Dorin accessibility mode
+				static bool empowerDorin = true;
+				protected bool isDorinGrid = false;
 
 				// Initialize to completed state
 				public MonkeyTester ()
@@ -173,7 +190,11 @@ namespace ButtonMonkey
 					//	UnityEngine.Debug.Log ("recordFile = " + recordFile);
 						if (recordFile.Length > 0) {
 								UnityEngine.Debug.Log ("Writing!!!");
-								File.WriteAllText (recordFile, this.ToString ());
+								if (empowerDorin) {
+										File.WriteAllText (recordFile, this.ToDorin (isDorinGrid));
+								} else {
+										File.WriteAllText (recordFile, this.ToString ());
+								}
 						}
 				}
 		
@@ -225,6 +246,19 @@ namespace ButtonMonkey
 						}
 						if (!TrialComplete ()) {
 								report += trial.ToString ();
+						}
+						return report;
+				}
+
+				//Print results in Dorin accessibility mode
+				public string ToDorin (bool isGrid)
+				{
+						string report = "";
+						foreach (Trial h in history) {
+								report += h.ToDorin (isGrid);
+						}
+						if (!TrialComplete ()) {
+								report += trial.ToDorin (isGrid);
 						}
 						return report;
 				}

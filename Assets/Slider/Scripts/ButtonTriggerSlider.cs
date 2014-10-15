@@ -4,7 +4,7 @@ using SimpleJSON;
 
 namespace P1
 {
-  public class ButtonTrigger : MonoBehaviour
+  public class ButtonTriggerSlider : MonoBehaviour
   {
     private Vector3 original_position;
     private Vector3 correct_basis;
@@ -49,8 +49,8 @@ namespace P1
           is_active_ = true;
           if (readyToPress)
           {
-            transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
-            //transform.parent.parent.GetComponent<TrialTrigger>().SliderTrialBoundary.GetComponent<SliderTrialTrigger>().Trigger();
+            //transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
+            transform.parent.parent.GetComponent<TrialTrigger>().SliderTrialBoundary.GetComponent<SliderTrialTrigger>().Trigger();
             if (allow_colors_)
               transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
             readyToPress = false;

@@ -113,12 +113,30 @@ namespace P1
 
 				public void TrialUpdate (MonkeyTester trial)
 				{
-						UnityEngine.Debug.Log ("TwitterList.TrialUpdate: trial.WasCorrect = " + trial.WasCorrect ());
+						if (monkeyDo.StageComplete ()) {
+								// Show final correct result
+								Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+								if (CameraManager.instance) {
+										CameraManager.instance.NextScene ();
+								}
+						} else {
+								if (monkeyDo.TrialComplete ()) {
+										// Show final correct result
+										SetRandomTarget ();
+										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+								} else {
+										if (monkeyDo.WasCorrect ()) { 
+												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
+										} else {
+												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
+										}
+								}
+						}
 				}
-
-#endregion
-
-
+		
+		#endregion
+		
+		
 				public void UpdateInd ()
 				{
 						TwitterStatusButton a = Radical.instance.activeTwitter;
@@ -237,10 +255,14 @@ namespace P1
 				{
 						TwitterStatusButton a = Radical.instance.activeTwitter;
 						if (a != null && targetedButton != null) {
-								if (upArrowInd != null)
+								if (upArrowInd != null) {
 										upArrowInd.SetActive (a.index > targetedButton.index);
-								if (downArrowInd != null)
+										upArrowInd.renderer.material.color = Color.green;
+				}
+								if (downArrowInd != null) {
 										downArrowInd.SetActive (a.index < targetedButton.index);
+										downArrowInd.renderer.material.color = Color.green;
+				}
 						}
 				}
 
