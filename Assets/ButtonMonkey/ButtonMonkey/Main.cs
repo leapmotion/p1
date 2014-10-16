@@ -22,23 +22,24 @@ namespace ButtonMonkey
 	{
 		public static void Main (string[] args)
 		{
+			MonkeyTalker monkeySee = MonkeyTalker.instance;
 			#if UNITY_EDITOR || UNITY_STANDALONE
-				Console.WriteLine ("No monkeys? No research!");
+				monkeySee.Log ("No monkeys? No research!");
 				return;
 			#else
 			ConsoleMonkey monkeyDo = new ConsoleMonkey ();
 			monkeyDo.ConfigureTest ("console");
 			monkeyDo.Start ();
-			Console.WriteLine ("\nMonkey, type: " + monkeyDo.GetTrialKeysString ());
+			monkeySee.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
 
 			while (true) {
 				if (monkeyDo.StageComplete ()) {
-					Console.WriteLine ("\nWell done monkey! Close you eyes and we'll give you a treat...");
+					monkeySee.Log  ("Well done monkey! Close you eyes and we'll give you a treat...");
 					break; //End testing
 				}
 				if (monkeyDo.TrialComplete ()) {
 					monkeyDo.Start (); //Start next trial
-					Console.WriteLine ("\nMonkey, type: " + monkeyDo.GetTrialKeysString ());
+					monkeySee.Log  ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
 				}
 
 				ConsoleKeyInfo info = Console.ReadKey ();
@@ -81,13 +82,13 @@ namespace ButtonMonkey
 
 				if (!monkeyDo.TrialComplete ()) {
 					if (monkeyDo.WasCorrect ()) {
-						Console.WriteLine ("\nGood monkey! Next, type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+						monkeySee.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
 					} else {
-						Console.WriteLine ("\nBad monkey! You were told to type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
+						monkeySee.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeys () [monkeyDo.GetTrialStep ()]);
 					}
 				}
 			}
-			Console.WriteLine ("Autopsy report for monkey:\n\n" + monkeyDo.ToString ());
+			monkeySee.Log ("Autopsy report for monkey in: " + monkeyDo.recordPath);
 			#endif
 		}
 	}

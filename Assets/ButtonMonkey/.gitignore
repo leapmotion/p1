@@ -4,6 +4,7 @@
 #Unity
 *.meta
 
-#ButtonMonkey Test Results
+#ButtonMonkey
+**ButtonMonkey.exe*
 **/TestResults/**
 

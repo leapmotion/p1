@@ -40,6 +40,7 @@
     <Compile Include="MonkeyCounter.cs" />
     <Compile Include="MonkeyTester.cs" />
     <Compile Include="SimpleJSON.cs" />
+    <Compile Include="MonkeySee.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
