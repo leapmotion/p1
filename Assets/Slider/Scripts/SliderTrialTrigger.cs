@@ -13,6 +13,7 @@ namespace P1
 	
 	public class SliderTrialTrigger : MonoBehaviour {
 	
+		MonkeyTalker monkeySee;
 		SliderMonkey monkeyDo;
 		public GameObject pinPrompt;
 		private SliderManager sliderManager;
@@ -20,6 +21,8 @@ namespace P1
 		private int prevHandCount = 0;
 		
 		SliderTrialTrigger() {
+			monkeySee = MonkeyTalker.instance;
+			monkeySee.Log ("\nTesting SliderMonkey... for Science!");
 			monkeyDo = new SliderMonkey();
 			monkeyDo.TrialEvent += TrialUpdate;
 		}
@@ -47,7 +50,7 @@ namespace P1
 			monkeyDo.TrialEvent += TrialUpdate;
 			
 			monkeyDo.Start ();
-			Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+			monkeySee.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
 			pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeysString ());
 		}
 		
@@ -57,7 +60,7 @@ namespace P1
 			if (monkeyDo.StageComplete ()) {
 				// Show final correct result
 				pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-				Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+				monkeySee.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
 				
 				if (CameraManager.instance) {
 					CameraManager.instance.NextScene();
@@ -68,14 +71,14 @@ namespace P1
 					pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 					
 					monkeyDo.Start ();
-					Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+					monkeySee.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
 					pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeysString ());
 				} else {
 					if (monkeyDo.WasCorrect ()) {
-						Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
+						monkeySee.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 					} else {
-						Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
+						monkeySee.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 						pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
 					}
 				}
@@ -85,7 +88,7 @@ namespace P1
 //		int colliderCount = 0;
 //		bool isHandNearSlider = false;
 //		void OnTriggerEnter (){
-////			Debug.Log ("OnTriggerEnter isHandNearSlider = " + isHandNearSlider);
+////			monkeySee.Log ("OnTriggerEnter isHandNearSlider = " + isHandNearSlider);
 //			
 //			isHandNearSlider = true;
 //			colliderCount++;
@@ -99,7 +102,7 @@ namespace P1
 //		void OnTriggerExit () {
 //			colliderCount--;
 //			if(colliderCount == 0 && isHandNearSlider == true){
-//				Debug.Log ("OnTriggerExit isHandNearSlider = " + isHandNearSlider);
+//				monkeySee.Log ("OnTriggerExit isHandNearSlider = " + isHandNearSlider);
 //				isHandNearSlider = false;
 //				StepThroughTrial();
 //
@@ -108,8 +111,8 @@ namespace P1
 		
 		IEnumerator StepThroughTrial (){
 			char x = sliderDragger.sliderInt.ToString()[0];
-			Debug.Log ("char x = " + x);
-			UnityEngine.Debug.Log ("Slider Selected: " + sliderDragger.sliderInt);
+			monkeySee.Log ("char x = " + x);
+			monkeySee.Log ("Slider Selected: " + sliderDragger.sliderInt);
 			monkeyDo.WhenPushed (true, sliderDragger.sliderInt);
 			yield return new WaitForSeconds(1.0f);
 //			sliderDragger.sliderInt = 0;
@@ -121,16 +124,16 @@ namespace P1
 			//@Frame (Current frame)
 			if (prevHandCount > 0 && theHands.GetFrame().Hands.Count == 0) {
 				// Trigger the function to check if slider is at right spot
-				Debug.Log ("Triggering StepThroughTrial");
+				monkeySee.Log ("Triggering StepThroughTrial");
 			}
 			
 			//@Frame - 1 (Last frame)
 			prevHandCount = theHands.GetFrame().Hands.Count;
-//			Debug.Log ("prevHandCount = " + prevHandCount);
+//			monkeySee.Log ("prevHandCount = " + prevHandCount);
 //			if(Input.GetKeyUp(KeyCode.T)){
-//				Debug.Log ("sliderInt = " + sliderDragger.sliderInt);
+//				monkeySee.Log ("sliderInt = " + sliderDragger.sliderInt);
 //				char x = sliderDragger.sliderInt.ToString()[0];
-//				Debug.Log ("char x = " + x);
+//				monkeySee.Log ("char x = " + x);
 //				monkeyDo.WhenPushed (true, sliderDragger.sliderInt.ToString()[0]);
 //			}
 

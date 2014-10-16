@@ -40,6 +40,7 @@ namespace P1
 					new KeyDef ("0", 0, -2)
 				};
 				public GameObject buttonTemplate;
+				MonkeyTalker monkeySee;
 				GridMonkey monkeyDo;
 				public GameObject pinPrompt;
 				private bool restrain_buttons_ = false;
@@ -57,11 +58,13 @@ namespace P1
 
 				public void DoStart ()
 				{
+						monkeySee = MonkeyTalker.instance;
+						monkeySee.Log ("\nTesting GridMonkey... for Science!");
 						monkeyDo = new GridMonkey ();
 						monkeyDo.ConfigureTest ("grid");
 						monkeyDo.TrialEvent += TrialUpdate;
 						monkeyDo.Start ();
-						Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+						monkeySee.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
 						pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeysString ());
 
 						//IMPORTANT: SetGridFromConfig must happen AFTER new GridMonkey,
@@ -76,7 +79,7 @@ namespace P1
 						if (monkeyDo.StageComplete ()) {
 								// Show final correct result
 								pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
-								Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+								monkeySee.Log ("Autopsy report for GridMonkey in: " + monkeyDo.recordPath);
 								if (CameraManager.instance) {
 										CameraManager.instance.NextScene ();
 								}
@@ -86,14 +89,14 @@ namespace P1
 										pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 
 										monkeyDo.Start ();
-										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+										monkeySee.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
 										pinPrompt.GetComponent<PINPrompt> ().UpdatePIN (monkeyDo.GetTrialKeysString ());
 								} else {
 										if (monkeyDo.WasCorrect ()) { 
-												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
+												monkeySee.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 												pinPrompt.GetComponent<PINPrompt> ().TogglePIN (true);
 										} else {
-												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
+												monkeySee.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 												pinPrompt.GetComponent<PINPrompt> ().TogglePIN (false);
 												pinPrompt.GetComponent<PINPrompt> ().CheckPinIndex (monkeyDo.GetTrialStep ());
 										}
@@ -220,8 +223,8 @@ namespace P1
 								TenKeyKey g = (TenKeyKey)(go.gameObject.GetComponent<TenKeyKey> ());
 								g.KeypadScale = Vector3.one * size;
 								g.label = k.label;
-                g.Init();
-                g.SetActive(true);
+								g.Init ();
+								g.SetActive (true);
 								go.transform.parent = transform;
 								g.TenKeyEventBroadcaster += monkeyDo.WhenPushed;
 								go.transform.localScale = Vector3.one * size;
