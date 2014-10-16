@@ -1,0 +1,9 @@
+#Apple
+*.DS_Store
+
+#Unity
+*.meta
+
+#ButtonMonkey Test Results
+**/TestResults/**
+
