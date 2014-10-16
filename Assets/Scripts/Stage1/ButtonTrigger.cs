@@ -92,6 +92,7 @@ namespace P1
       Vector3 trigger_position = transform.parent.FindChild("Trigger").transform.position;
       original_position = transform.position;
       correct_basis = trigger_position - original_position;
+      GetComponent<SpringJoint>().connectedAnchor = transform.position;
       JSONNode data = Utils.FileToJSON("grid_config.json");
       allow_colors_ = data["grid"]["allowColor"].AsBool;
     }
