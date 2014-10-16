@@ -49,7 +49,7 @@ namespace P1
           is_active_ = true;
           if (readyToPress)
           {
-            transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
+            transform.parent.parent.GetComponent<TenKeyKey>().TriggerAction();
             if (allow_colors_)
               transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
             readyToPress = false;
@@ -92,6 +92,7 @@ namespace P1
       Vector3 trigger_position = transform.parent.FindChild("Trigger").transform.position;
       original_position = transform.position;
       correct_basis = trigger_position - original_position;
+      GetComponent<SpringJoint>().connectedAnchor = transform.position;
       JSONNode data = Utils.FileToJSON("grid_config.json");
       allow_colors_ = data["grid"]["allowColor"].AsBool;
     }

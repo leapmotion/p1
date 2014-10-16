@@ -73,10 +73,18 @@ namespace P1
 								touchedState.Change (TWITTER_LIST_UNTOUCHED);
 								if (Radical.instance.activeTwitter) {
 //										UnityEngine.Debug.Log ("Monkey picked: " + Radical.instance.activeTwitter.index);
-										monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
+										//monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
 								}
 						}
 				}
+
+        public void Trigger()
+        {
+          if (Radical.instance.activeTwitter)
+          {
+            monkeyDo.WhenPushed(true, Radical.instance.activeTwitter.index);
+          }
+        }
 
 			#endregion
 

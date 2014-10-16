@@ -115,6 +115,11 @@ namespace P1
       }
     }
 
+    public virtual void TriggerAction()
+    {
+      OnTenKeyEvent(true, "Leap");
+    }
+
     public void SetTriggerSensitivity(float sensitivity)
     {
       BoxCollider box_collider = GetComponentInChildren<Joint>().GetComponent<BoxCollider>();
