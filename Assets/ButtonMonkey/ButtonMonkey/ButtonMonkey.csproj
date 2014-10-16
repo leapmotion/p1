@@ -37,8 +37,9 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ButtonCounter.cs" />
-    <Compile Include="ButtonTrial.cs" />
+    <Compile Include="MonkeyCounter.cs" />
+    <Compile Include="MonkeyTester.cs" />
+    <Compile Include="SimpleJSON.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
