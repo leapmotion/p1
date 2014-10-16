@@ -50,7 +50,6 @@ namespace P1
           if (readyToPress)
           {
             transform.parent.parent.GetComponent<TenKeyKey>().OnTenKeyEvent(true, "Leap");
-            //transform.parent.parent.GetComponent<TrialTrigger>().SliderTrialBoundary.GetComponent<SliderTrialTrigger>().Trigger();
             if (allow_colors_)
               transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
             readyToPress = false;
