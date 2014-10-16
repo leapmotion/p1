@@ -227,6 +227,13 @@ namespace P1
 						status.status = s;
 						status.index = statusButtons.Count;
 						statusButtons.Add (status);
+            if (status.index == 0)
+            {
+              float x_offset = -transform.GetComponentInChildren<GripManager>().transform.position.x;
+              Vector3 parent_position = transform.position;
+              parent_position.x += x_offset;
+              transform.position = parent_position;
+            }
 				}
 
 				public TwitterStatusButton PrevStatus (TwitterStatusButton s)
