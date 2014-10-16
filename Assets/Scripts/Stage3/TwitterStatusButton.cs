@@ -10,7 +10,7 @@ namespace P1
 				TwitterList list_;
 				Tweet status_;
 				int index_;
-				static float HEIGHT = 2;
+				static float HEIGHT = 3;
 				const float MIN_WIDTH = 25;
 				const float MARGIN_HEIGHT = 0.5f;
 				const float MARGIN_WIDTH = 1.5f;
@@ -100,6 +100,20 @@ namespace P1
 
 #region targetState
 
+				public void Activate ()
+				{
+
+						foreach (TwitterStatusButton b in list.statusButtons) {
+								b.ResetColor ();
+//@TODO: put in list?
+						}
+						if (targetState.state == "target") {
+								SetColor (Color.magenta);
+						} else {
+								SetColor (Color.cyan);
+						}
+				}
+
 				public void SetColor (Color color)
 				{
 						list.ResetAllColors ();
@@ -147,7 +161,7 @@ namespace P1
 				{
 						h = height;
 						w = width;
-						transform.localPosition = new Vector3 (0, index * -(HEIGHT + MARGIN_HEIGHT), 0);
+						transform.localPosition = new Vector3 (0, index * -(HEIGHT + MARGIN_HEIGHT * 2.0f), 0);
 				}
 
 #endregion

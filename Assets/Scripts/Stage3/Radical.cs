@@ -9,7 +9,18 @@ namespace P1
 				public GameObject TwitterList;
 				[HideInInspector]
 				public TwitterStatusButton
-						activeTwitter = null;
+						activeTwitter_ = null;
+
+		public TwitterStatusButton activeTwitter {
+			get {
+				return activeTwitter_;
+			}
+			set {
+
+				value.Activate();
+				activeTwitter_ = value;
+			}
+		}
 
 				private TwitterStatusButton getTwitterStatusButton (Collider other)
 				{
@@ -41,21 +52,12 @@ namespace P1
 						TwitterStatusButton button = getTwitterStatusButton (other);
 						if (button) {
 								activeTwitter = button;
-								UnityEngine.Debug.Log ("activeTwitter.index = " + activeTwitter.index);
-								//NOTE: See TwitterList.SetRandomTarget() target state string
-								if (button.targetState.state == "target") {
-										UnityEngine.Debug.Log ("Selected ACTIVE button");
-										button.SetColor (Color.magenta);
-								} else {
-										UnityEngine.Debug.Log ("Selected passive button");
-										button.SetColor (Color.cyan);
-								}
 						} else {
-								UnityEngine.Debug.Log ("No button. Found " + other.name);
+							//	UnityEngine.Debug.Log ("No button. Found " + other.name);
 						}
 				}
 				
-				void OnTriggerExit (Collider other)
+			/*	void OnTriggerExit (Collider other)
 				{
 						if (Time.time < 1.0f)
 								return;
@@ -64,6 +66,6 @@ namespace P1
 						if (button) {
 								button.ResetColor ();
 						}
-				}
+				} */
 		}
 }

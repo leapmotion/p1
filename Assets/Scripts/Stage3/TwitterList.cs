@@ -49,12 +49,12 @@ namespace P1
 				{
 						if (sc.fromState.name == TWITTER_LIST_UNTOUCHED &&
 								sc.toState.name == TWITTER_LIST_TOUCHED) {
-								UnityEngine.Debug.Log ("You touched Bieber!");
+							//	UnityEngine.Debug.Log ("You touched Bieber!");
 						}
 			
 						if (sc.fromState.name == TWITTER_LIST_TOUCHED &&
 								sc.toState.name == TWITTER_LIST_UNTOUCHED) {
-								UnityEngine.Debug.Log ("You jilted Bieber!");
+							//	UnityEngine.Debug.Log ("You jilted Bieber!");
 								rigidbody.velocity = Vector3.zero;
 						}
 				}
@@ -72,7 +72,7 @@ namespace P1
 								Utils.Elapsed (lastTouched, stopDelay)) {
 								touchedState.Change (TWITTER_LIST_UNTOUCHED);
 								if (Radical.instance.activeTwitter) {
-										UnityEngine.Debug.Log ("Monkey picked: " + Radical.instance.activeTwitter.index);
+//										UnityEngine.Debug.Log ("Monkey picked: " + Radical.instance.activeTwitter.index);
 										monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
 								}
 						}
@@ -255,10 +255,14 @@ namespace P1
 				{
 						TwitterStatusButton a = Radical.instance.activeTwitter;
 						if (a != null && targetedButton != null) {
-								if (upArrowInd != null)
+								if (upArrowInd != null) {
 										upArrowInd.SetActive (a.index > targetedButton.index);
-								if (downArrowInd != null)
+										upArrowInd.renderer.material.color = Color.green;
+				}
+								if (downArrowInd != null) {
 										downArrowInd.SetActive (a.index < targetedButton.index);
+										downArrowInd.renderer.material.color = Color.green;
+				}
 						}
 				}
 

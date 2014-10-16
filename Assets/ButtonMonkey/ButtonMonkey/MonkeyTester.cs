@@ -147,11 +147,11 @@ namespace ButtonMonkey
 
 				public void WhenPushed (bool complete, int symbol)
 				{
-						UnityEngine.Debug.Log ("MonkeyTester.WhenPushed symbol = " + symbol);
-						if (StageComplete ())
+				//		UnityEngine.Debug.Log ("MonkeyTester.WhenPushed symbol = " + symbol);
+					/*	if (StageComplete ())
 								UnityEngine.Debug.Log ("StageComplete");
 						if (TrialComplete ())
-								UnityEngine.Debug.Log ("TrialCompelte");
+								UnityEngine.Debug.Log ("TrialCompelte"); */
 
 						if (StageComplete () ||
 								TrialComplete ()) {
@@ -159,15 +159,13 @@ namespace ButtonMonkey
 								return;
 						}
 
-						UnityEngine.Debug.Log ("trial.keys [" + step + "] = " + trial.keys [step]);
+//						UnityEngine.Debug.Log ("trial.keys [" + step + "] = " + trial.keys [step]);
 
 						current = timer.ElapsedMilliseconds / 1000.0f;
 						trial.counter.WhenPushed (complete, symbol, current);
 
 						if (complete) {
-								UnityEngine.Debug.Log ("BEFORE");
 								if (symbol == trial.keys [step]) {
-										UnityEngine.Debug.Log ("AFTER");
 										correct = true;
 										step += 1;
 										if (TrialComplete ()) {
@@ -189,7 +187,7 @@ namespace ButtonMonkey
 						}
 
 						// Update test results immediately
-						UnityEngine.Debug.Log ("recordFile = " + recordFile);
+					//	UnityEngine.Debug.Log ("recordFile = " + recordFile);
 						if (recordFile.Length > 0) {
 								UnityEngine.Debug.Log ("Writing!!!");
 								if (empowerDorin) {
