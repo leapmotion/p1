@@ -80,7 +80,7 @@ namespace ButtonMonkey
 		{
 			return new List<int> ();
 		}
-			
+
 		protected JSONNode testConfig;
 
 		/// <summary>
@@ -119,6 +119,15 @@ namespace ButtonMonkey
 			if (File.Exists (testConfigPath)) {
 				testConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/config/" + testName + "_config.json"));
 				testNum = testConfig ["test"] ["number"].AsInt;
+			}
+		}
+
+		/// <summary>
+		/// Path to csv file where test results are recorded
+		/// </summary>
+		public string recordPath {
+			get {
+				return recordFile;
 			}
 		}
 				
