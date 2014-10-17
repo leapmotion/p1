@@ -11,16 +11,16 @@ namespace P1
 				public TwitterStatusButton
 						activeTwitter_ = null;
 
-		public TwitterStatusButton activeTwitter {
-			get {
-				return activeTwitter_;
-			}
-			set {
+				public TwitterStatusButton activeTwitter {
+						get {
+								return activeTwitter_;
+						}
+						set {
 
-				value.Activate();
-				activeTwitter_ = value;
-			}
-		}
+								value.Activate ();
+								activeTwitter_ = value;
+						}
+				}
 
 				private TwitterStatusButton getTwitterStatusButton (Collider other)
 				{
@@ -29,6 +29,13 @@ namespace P1
 								return other.transform.parent.GetComponent<TwitterStatusButton> ();
 						}
 						return null;
+				}
+
+				public static float DistanceFrom (float y)
+				{
+						if (instance == null)
+								return 0;
+						return Mathf.Abs (instance.transform.position.y - y);
 				}
 
 				// Use this for initialization
@@ -43,7 +50,7 @@ namespace P1
 				{
 
 				}
-
+/*
 				void OnTriggerEnter (Collider other)
 				{
 						if (Time.time < 1.0f)
@@ -55,9 +62,9 @@ namespace P1
 						} else {
 							//	UnityEngine.Debug.Log ("No button. Found " + other.name);
 						}
-				}
+				} */
 				
-			/*	void OnTriggerExit (Collider other)
+				/*	void OnTriggerExit (Collider other)
 				{
 						if (Time.time < 1.0f)
 								return;

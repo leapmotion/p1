@@ -78,6 +78,8 @@ namespace P1
 										//monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
 								}
 						}
+
+						ActivateClosestRadicalButton ();
 				}
 
 				public void Trigger ()
@@ -88,6 +90,27 @@ namespace P1
 				}
 
 			#endregion
+
+				void ActivateClosestRadicalButton ()
+				{
+
+						float distance = 10000;
+						TwitterStatusButton closest = null;
+						if (Radical.instance == null)
+								return;
+						float radialY = Radical.instance.transform.position.y;
+
+						foreach (TwitterStatusButton b in statusButtons) {
+								if (closest == null)
+										closest = b;
+								else if (Radical.DistanceFrom (b.text.transform.position.y) < distance) {
+										closest = b;
+										distance = Radical.DistanceFrom (closest.text.transform.position.y);
+								}
+						}
+
+						Radical.instance.activeTwitter = closest;
+				}
 
 #region loop
 		
