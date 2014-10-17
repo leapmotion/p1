@@ -165,6 +165,12 @@ namespace P1
 
     State state;
 
+    void Awake()
+    {
+      original_color = button.renderer.material.color;
+      Debug.Log(original_color);
+    }
+
     // Use this for initialization
     public virtual void Start()
     {
@@ -173,7 +179,6 @@ namespace P1
         new StateList("ButtonState", "unknown", "default", "over", "down");
       }
       state = new State("ButtonState");
-      original_color = button.renderer.material.color;
     }
 
     // Update is called once per frame
