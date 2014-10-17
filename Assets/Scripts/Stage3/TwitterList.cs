@@ -8,6 +8,7 @@ namespace P1
 {
 		public class TwitterList : MonoBehaviour
 		{
+				MonkeyTalker monkeySee;
 				TwitterMonkey monkeyDo;
 				TwitterReader tr;
 				public GameObject items;
@@ -49,12 +50,12 @@ namespace P1
 				{
 						if (sc.fromState.name == TWITTER_LIST_UNTOUCHED &&
 								sc.toState.name == TWITTER_LIST_TOUCHED) {
-							//	UnityEngine.Debug.Log ("You touched Bieber!");
+								//	monkeySee.Log ("You touched Bieber!");
 						}
 			
 						if (sc.fromState.name == TWITTER_LIST_TOUCHED &&
 								sc.toState.name == TWITTER_LIST_UNTOUCHED) {
-							//	UnityEngine.Debug.Log ("You jilted Bieber!");
+								//	monkeySee.Log ("You jilted Bieber!");
 								rigidbody.velocity = Vector3.zero;
 						}
 				}
@@ -72,19 +73,18 @@ namespace P1
 								Utils.Elapsed (lastTouched, stopDelay)) {
 								touchedState.Change (TWITTER_LIST_UNTOUCHED);
 								if (Radical.instance.activeTwitter) {
-//										UnityEngine.Debug.Log ("Monkey picked: " + Radical.instance.activeTwitter.index);
+//										monkeySee.Log ("Monkey picked: " + Radical.instance.activeTwitter.index);
 										//monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
 								}
 						}
 				}
 
-        public void Trigger()
-        {
-          if (Radical.instance.activeTwitter)
-          {
-            monkeyDo.WhenPushed(true, Radical.instance.activeTwitter.index);
-          }
-        }
+				public void Trigger ()
+				{
+						if (Radical.instance.activeTwitter) {
+								monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
+						}
+				}
 
 			#endregion
 
@@ -98,6 +98,8 @@ namespace P1
 						if (tweetSource != "")
 								ReadTweets (tweetSource);
 						InitTouchState ();
+						monkeySee = MonkeyTalker.instance;
+						monkeySee.Log ("\nTesting TwitterMonkey... for Science!");
 						monkeyDo = new TwitterMonkey ();
 						monkeyDo.ConfigureTest ("twitter");
 						monkeyDo.TrialEvent += TrialUpdate;
@@ -123,7 +125,7 @@ namespace P1
 				{
 						if (monkeyDo.StageComplete ()) {
 								// Show final correct result
-								Debug.Log ("Autopsy report for monkey:\n" + monkeyDo.ToString ());
+								monkeySee.Log ("Autopsy report for TwitterMonkey in: " + monkeyDo.recordPath);
 								if (CameraManager.instance) {
 										CameraManager.instance.NextScene ();
 								}
@@ -131,12 +133,12 @@ namespace P1
 								if (monkeyDo.TrialComplete ()) {
 										// Show final correct result
 										SetRandomTarget ();
-										Debug.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
+										monkeySee.Log ("Monkey, type: " + monkeyDo.GetTrialKeysString ());
 								} else {
 										if (monkeyDo.WasCorrect ()) { 
-												Debug.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
+												monkeySee.Log ("Good monkey! Next, type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 										} else {
-												Debug.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
+												monkeySee.Log ("Bad monkey! You were told to type: " + monkeyDo.GetTrialKeysString () [monkeyDo.GetTrialStep ()]);
 										}
 								}
 						}
@@ -227,13 +229,12 @@ namespace P1
 						status.status = s;
 						status.index = statusButtons.Count;
 						statusButtons.Add (status);
-            if (status.index == 0)
-            {
-              float x_offset = -transform.GetComponentInChildren<GripManager>().transform.position.x;
-              Vector3 parent_position = transform.position;
-              parent_position.x += x_offset;
-              transform.position = parent_position;
-            }
+						if (status.index == 0) {
+								float x_offset = -transform.GetComponentInChildren<GripManager> ().transform.position.x;
+								Vector3 parent_position = transform.position;
+								parent_position.x += x_offset;
+								transform.position = parent_position;
+						}
 				}
 
 				public TwitterStatusButton PrevStatus (TwitterStatusButton s)
@@ -273,11 +274,11 @@ namespace P1
 								if (upArrowInd != null) {
 										upArrowInd.SetActive (a.index > targetedButton.index);
 										upArrowInd.renderer.material.color = Color.green;
-				}
+								}
 								if (downArrowInd != null) {
 										downArrowInd.SetActive (a.index < targetedButton.index);
 										downArrowInd.renderer.material.color = Color.green;
-				}
+								}
 						}
 				}
 

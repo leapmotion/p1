@@ -5,6 +5,16 @@ using System.Collections.Generic;
 public class HandInitializer : MonoBehaviour {
   private List<int> hand_IDs_ = new List<int>();
 
+  private HandManager getHand(Collider other)
+  {
+    HandManager hand_manager = null;
+    if (other.transform.parent && other.transform.parent.parent && other.transform.parent.parent.GetComponent<HandManager>()) 
+    {
+      hand_manager = other.transform.parent.parent.GetComponent<HandManager>();
+    }
+    return hand_manager;
+  }
+
 	// Use this for initialization
 	void Start () {
 	
@@ -18,8 +28,10 @@ public class HandInitializer : MonoBehaviour {
   void OnTriggerStay(Collider other)
   {
     // Detect if the collider inside is part of the list of hands that are initialized properly
-    for (int i = 0; i < hand_IDs_.Count; ++i)
+    HandManager hand_manager = getHand(other);
+    if (hand_manager != null)
     {
+      hand_manager.SetActive(true);
     }
   }
 }

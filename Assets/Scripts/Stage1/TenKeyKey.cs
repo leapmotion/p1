@@ -165,7 +165,7 @@ namespace P1
     State state;
 
     // Use this for initialization
-    void Start()
+    public virtual void Start()
     {
       if (!StateList.HasList("ButtonState"))
       {
