@@ -12,7 +12,8 @@ namespace P1
     public GameObject trigger;
     public GameObject cushion;
 
-    private Color original_color = new Color(0.25f, 0.25f, 0.25f);
+    //private Color original_color = new Color(0.25f, 0.25f, 0.25f);
+    private Color original_color;
     private bool mouse_clicked = false;
 
     public float springConstant = 1000.0f;
@@ -172,6 +173,7 @@ namespace P1
         new StateList("ButtonState", "unknown", "default", "over", "down");
       }
       state = new State("ButtonState");
+      original_color = button.renderer.material.color;
     }
 
     // Update is called once per frame
