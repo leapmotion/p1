@@ -49,6 +49,7 @@ namespace P1
           is_active_ = true;
           if (readyToPress)
           {
+            transform.audio.Play();
             transform.parent.parent.GetComponent<TenKeyKey>().TriggerAction();
             if (allow_colors_)
               transform.parent.parent.GetComponent<TenKeyKey>().UpdateColor(Color.cyan);
