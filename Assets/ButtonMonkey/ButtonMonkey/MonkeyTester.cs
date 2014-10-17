@@ -104,7 +104,7 @@ namespace ButtonMonkey
 					string configName = Path.GetFileName (f);
 					string recordName = Path.Combine (recordPath, configName);
 					// Ignore if the file is .meta
-					if (configName.Substring (configName.Length - 5) != ".meta")
+					if (configName.Substring (configName.Length - 5) == ".meta")
 						continue;
 					System.IO.File.Copy (f, recordName, true);
 				}
