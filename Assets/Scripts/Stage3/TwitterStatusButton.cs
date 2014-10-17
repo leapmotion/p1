@@ -21,7 +21,6 @@ namespace P1
 				public float h;
 				public float w;
 				Color baseColor;
-				public Color targetColor = Color.black;
 				public State targetState;
 				const string STATE_NAME_TLS = "twitter status button trigger state";
 				public GripManager gripManager;
