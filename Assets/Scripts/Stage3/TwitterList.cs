@@ -26,7 +26,9 @@ namespace P1
 				public GameObject downInd;
 				public GameObject upArrowInd;
 				public GameObject downArrowInd;
-
+				public ArrowDisplay upDisplay;
+				public ArrowDisplay downDisplay;
+		
 		#region TouchState
 				const string TWITTER_LIST_STATE_NAME = "Touched state name";
 				const string TWITTER_LIST_UNTOUCHED = "Untouched twitter";
@@ -49,12 +51,12 @@ namespace P1
 				{
 						if (sc.fromState.name == TWITTER_LIST_UNTOUCHED &&
 								sc.toState.name == TWITTER_LIST_TOUCHED) {
-							//	UnityEngine.Debug.Log ("You touched Bieber!");
+								//	UnityEngine.Debug.Log ("You touched Bieber!");
 						}
 			
 						if (sc.fromState.name == TWITTER_LIST_TOUCHED &&
 								sc.toState.name == TWITTER_LIST_UNTOUCHED) {
-							//	UnityEngine.Debug.Log ("You jilted Bieber!");
+								//	UnityEngine.Debug.Log ("You jilted Bieber!");
 								rigidbody.velocity = Vector3.zero;
 						}
 				}
@@ -78,13 +80,12 @@ namespace P1
 						}
 				}
 
-        public void Trigger()
-        {
-          if (Radical.instance.activeTwitter)
-          {
-            monkeyDo.WhenPushed(true, Radical.instance.activeTwitter.index);
-          }
-        }
+				public void Trigger ()
+				{
+						if (Radical.instance.activeTwitter) {
+								monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
+						}
+				}
 
 			#endregion
 
@@ -227,13 +228,6 @@ namespace P1
 						status.status = s;
 						status.index = statusButtons.Count;
 						statusButtons.Add (status);
-            if (status.index == 0)
-            {
-              float x_offset = -transform.GetComponentInChildren<GripManager>().transform.position.x;
-              Vector3 parent_position = transform.position;
-              parent_position.x += x_offset;
-              transform.position = parent_position;
-            }
 				}
 
 				public TwitterStatusButton PrevStatus (TwitterStatusButton s)
@@ -245,18 +239,22 @@ namespace P1
 				}
 
 #region aggregate state changes
+
 /**
  * these states can only be true for a single button;clears sets for other buttons
  */
 		
-				public void TargetSet (TwitterStatusButton status)
+				public void TargetSet (TwitterStatusButton activeButton)
 				{
-						targetedButton = status;
+						targetedButton = activeButton;
 						foreach (TwitterStatusButton s in statusButtons) {
-								if (s.index != status.index)
+								if (activeButton == null)
+										s.targetState.Change ("base");
+								else if (s.index != activeButton.index)
 										s.targetState.Change ("base");
 						}
-						targetedButton = status;
+						
+						targetedButton = activeButton;
 				}
 
 				public void ResetAllColors ()
@@ -269,15 +267,20 @@ namespace P1
 				public void ShowArrowKeys ()
 				{
 						TwitterStatusButton a = Radical.instance.activeTwitter;
+
 						if (a != null && targetedButton != null) {
-								if (upArrowInd != null) {
+								int difference = targetedButton.index - a.index;
+
+								upDisplay.level = -difference;
+								downDisplay.level = difference;
+								/*					if (upArrowInd != null) {
 										upArrowInd.SetActive (a.index > targetedButton.index);
 										upArrowInd.renderer.material.color = Color.green;
 				}
 								if (downArrowInd != null) {
 										downArrowInd.SetActive (a.index < targetedButton.index);
 										downArrowInd.renderer.material.color = Color.green;
-				}
+						} */
 						}
 				}
 

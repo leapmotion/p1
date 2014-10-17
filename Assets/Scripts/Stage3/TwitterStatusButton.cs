@@ -2,6 +2,7 @@
 using System.Collections;
 using TMPro;
 using System.Text.RegularExpressions;
+using SimpleJSON;
 
 namespace P1
 {
@@ -17,17 +18,26 @@ namespace P1
 				const float LINE_HEIGHT = 1.0f;
 				public	TextMeshPro text;
 				public GameObject background;
-				public GameObject backgroundActive;
+				public GameObject backgroundTarget;
 				public float h;
 				public float w;
 				Color baseColor;
 				public Color targetColor = Color.black;
 				public State targetState;
-				const string STATE_NAME_TLS = "twitter status button trigger state";
+				public State overState;
+				const string TARGETED_STATE_NAME = "twitter status button targeted";
+				const string BASE = "base";
+				const string TARGET = "target";
+				const string OVER_STATE_NAME = "twitter status button over";
+				const string NOT_OVER = "not over";
+				const string OVER = "over";
 				public GripManager gripManager;
-				private Color original_bg_color = new Color (160.0f / 255.0f, 178.0f / 255.0f, 193.0f / 255.0f);
-				private Color original_bg_active_color;
+				static Color back_color;
+				static Color over_color;
+				static Color target_color;
+				static Color over_target_color;
 				public TextMeshPro indexTextMesh;
+				static bool colorsLoaded = false;
 		
 				public Tweet status {
 						get { return status_; }
@@ -66,7 +76,9 @@ namespace P1
 				{
 						InitState ();
 						InitText ();
+						InitColors ();
 						InitBackground ();
+						SetColor (back_color);
 				}
 
 				public void InitText ()
@@ -82,71 +94,113 @@ namespace P1
 						baseColor = background.renderer.material.color;
 						if (HEIGHT <= 0)
 								HEIGHT = background.renderer.bounds.size.y;
-
-						//original_bg_color = background.renderer.material.color;
-						original_bg_active_color = backgroundActive.renderer.material.color;
 				}
 		
 				public void InitState ()
 				{
-						if (!StateList.HasList (STATE_NAME_TLS))
-								InitTLS ();
-						targetState = new State (STATE_NAME_TLS);
+						OverStates ();
 
-						targetState.StateChangedEvent += OnTLSStateChange;
+						targetState = new State (TARGETED_STATE_NAME);
+						overState = new State (OVER_STATE_NAME);
+
+						targetState.StateChangedEvent += OnTargetedStateChange;
+						overState.StateChangedEvent += OnOverStateChange;
+
 				}
 
 #endregion
 
 #region targetState
 
+		
+				void InitColors ()
+				{
+						if (!colorsLoaded) {
+								JSONNode n = Utils.FileToJSON ("twitter_button_config.json");
+				
+								back_color = Utils.JsonNodeToColor (n ["back"]);
+								over_color = Utils.JsonNodeToColor (n ["over"]);
+								target_color = Utils.JsonNodeToColor (n ["target"]);
+								over_target_color = Utils.JsonNodeToColor (n ["over_target"]);
+				
+								colorsLoaded = true;
+						}
+			
+				}
+
 				public void Activate ()
 				{
-
 						foreach (TwitterStatusButton b in list.statusButtons) {
-								b.ResetColor ();
-//@TODO: put in list?
-						}
-						if (targetState.state == "target") {
-								SetColor (Color.magenta);
-						} else {
-								SetColor (Color.cyan);
-						}
+								if (b.index != index)
+					b.overState.Change (NOT_OVER);
+			}
+						overState.Change (OVER);
+			
 				}
-
+		
 				public void SetColor (Color color)
 				{
-						list.ResetAllColors ();
-
-						background.renderer.material.color = color;
-						backgroundActive.renderer.material.color = color;
+						SetColor (color, color);
 				}
-
+		
+				public void SetColor (Color color, Color tColor)
+				{
+						background.renderer.material.color = color;
+						backgroundTarget.renderer.material.color = tColor;
+				}
+		
 				public void ResetColor ()
 				{
-						background.renderer.material.color = original_bg_color;
-						backgroundActive.renderer.material.color = original_bg_active_color;
+						SetColor (back_color, over_color);
 				}
 
-				void OnTLSStateChange (StateChange change)
+				void OnOverStateChange (StateChange change)
 				{
+						UpdateColors ();
+				}
+
+				void OnTargetedStateChange (StateChange change)
+				{
+						Debug.Log (string.Format ("Setting state of {0} to {1}", index, change.state));
+
 						switch (change.toState.name) {
-						case "base": 
+						case BASE: 
 								background.SetActive (true);
-								backgroundActive.SetActive (false);
+								backgroundTarget.SetActive (false);
 								break;
 				
-						case "target": 
+						case  TARGET: 
 								background.SetActive (false);
-								backgroundActive.SetActive (true);
+								backgroundTarget.SetActive (true);
 								list.TargetSet (this);
 								break;
 						}
+						UpdateColors ();
+				}
+
+				void UpdateColors ()
+				{
+						if (targetState.state == TARGET) {
+								if (overState.state == OVER) {
+										SetColor (over_target_color);
+								} else {
+										SetColor (target_color);
+								}
+						} else {
+								if (overState.state == OVER) {
+										SetColor (over_color);
+								} else {
+										SetColor (back_color);
+								}
+						}
 				}
 		
-				void InitTLS ()
+				void OverStates ()
 				{
-						new StateList (STATE_NAME_TLS, "base", "target");
+						if (!StateList.HasList (TARGETED_STATE_NAME))
+								StateList.Create (TARGETED_STATE_NAME, BASE, TARGET);
+						if (!StateList.HasList (OVER_STATE_NAME))
+								StateList.Create (OVER_STATE_NAME, NOT_OVER, OVER);
 				}
 		
 #endregion

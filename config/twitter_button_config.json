@@ -1,0 +1,9 @@
+{
+  "back" : {"red" : 0, "green" : 0.25, "blue" : 0.25 },
+  "over": {"red": 0.25, "green": 0.5, "blue" : 0.75 },
+  "target": {"red": 0, "green": 0, "blue":  1},
+  "over_target": {"red": 0.5, "green": 0, "blue":0},
+  
+  	"text_color": {"red": 0, "green": 0, "blue": 0}
+}
+  

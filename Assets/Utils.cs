@@ -95,6 +95,11 @@ namespace P1
 						ReadColors ("Assets/Blockform/colors.json");
 				}
 
+		public static Color JsonNodeToColor (JSONNode n)
+		{
+			return new Color(n["red"].AsFloat, n["green"].AsFloat, n["blue"].AsFloat);
+		}
+
 				public static void ReadColors (string path)
 				{
 						JSONNode JSONroot = FileToJSON (path);

@@ -1,52 +1,25 @@
 fileFormatVersion: 2
-guid: 8f70a7e7aade8431c8c8129c57058234
+guid: ed82fa1117e5b4e119022fcec4ef3693
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
     100000: //RootNode
-    100002: down1
-    100004: down2
-    100006: down3
-    100008: Plane
-    100010: up1
-    100012: up2
-    100014: up3
-    100016: reticle
+    100002: up1
+    100004: up2
+    100006: up3
     400000: //RootNode
-    400002: down1
-    400004: down2
-    400006: down3
-    400008: Plane
-    400010: up1
-    400012: up2
-    400014: up3
-    400016: reticle
-    2300000: //RootNode
-    2300002: down1
-    2300004: down2
-    2300006: down3
-    2300008: Plane
-    2300010: up1
-    2300012: up2
-    2300014: up3
-    2300016: reticle
-    3300000: //RootNode
-    3300002: down1
-    3300004: down2
-    3300006: down3
-    3300008: Plane
-    3300010: up1
-    3300012: up2
-    3300014: up3
-    3300016: reticle
-    4300000: Plane
-    4300002: down3
-    4300004: down2
-    4300006: down1
-    4300008: up3
-    4300010: up2
-    4300012: up1
-    4300014: reticle
+    400002: up1
+    400004: up2
+    400006: up3
+    2300000: up1
+    2300002: up2
+    2300004: up3
+    3300000: up1
+    3300002: up2
+    3300004: up3
+    4300000: up3
+    4300002: up2
+    4300004: up1
     7400000: Default Take
     9500000: //RootNode
   materials:
