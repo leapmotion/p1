@@ -27,6 +27,8 @@ namespace P1
 				public GameObject downInd;
 				public GameObject upArrowInd;
 				public GameObject downArrowInd;
+				public ArrowDisplay upDisp;
+				public ArrowDisplay downDisp;
 
 		#region TouchState
 				const string TWITTER_LIST_STATE_NAME = "Touched state name";
@@ -271,14 +273,21 @@ namespace P1
 				{
 						TwitterStatusButton a = Radical.instance.activeTwitter;
 						if (a != null && targetedButton != null) {
-								if (upArrowInd != null) {
+								int diff = a.index - targetedButton.index;
+
+								upDisp.level = diff;
+								downDisp.level = -diff;
+
+								/*	if (upArrowInd != null) {
 										upArrowInd.SetActive (a.index > targetedButton.index);
 										upArrowInd.renderer.material.color = Color.green;
 								}
 								if (downArrowInd != null) {
 										downArrowInd.SetActive (a.index < targetedButton.index);
 										downArrowInd.renderer.material.color = Color.green;
-								}
+								} */
+
+
 						}
 				}
 
