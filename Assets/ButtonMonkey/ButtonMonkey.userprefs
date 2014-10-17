@@ -1,6 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ButtonMonkey/MonkeyCounter.cs">
+    <Files>
+      <File FileName="ButtonMonkey/Main.cs" Line="88" Column="6" />
+      <File FileName="ButtonMonkey/MonkeyTester.cs" Line="37" Column="33" />
+      <File FileName="ButtonMonkey/MonkeyCounter.cs" Line="19" Column="42" />
+      <File FileName="ButtonMonkey/SimpleJSON.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

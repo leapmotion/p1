@@ -1,35 +1,87 @@
 ﻿using UnityEngine;
 using System.Collections;
+using TMPro;
 
 namespace P1
 {
 		public class SimpleDimClamper : MonoBehaviour
 		{
+// the dimension of constraint
+				public Utils.Dimension dim = Utils.Dimension.Y;
+// the boundries of motion - absolute and unchanging over time
 				public float min = 0;
 				public float max = 0;
-				public Utils.Dimension dim = Utils.Dimension.Y;
-				public float HUG_RADIUS = 1f;
-				public float HUG_FORCE = 5f;
-				public GameObject minGameObject;
-				public GameObject maxGameObject;
+
+// objects that if set, define min and max values
+				public GameObject ceilingObject;
+				public GameObject floorObject;
+
+#region dynamic size indicators
+		
+				// the dyamic bounds -- usually a local component or a collider attached to a child object, as it must move with this object to be useable.
+				BoxCollider c; 
+		
+				// objects that in the absence of a boxCollider, define the dynamic top and bottom; should be children of this object.
+				public GameObject topObject;
+				public GameObject bottomObject;
+
+// values -- in the absence of the above objects, offset the transform by these values
+				public float minOffset = 0;
+				public float maxOffset = 0;
+#endregion
+
+// debugger affordances
 				public GameObject maxIndicator;
 				public GameObject minIndicator;
-				public float BOUNCE_SCALE = 0.8f;
+				public TextMeshPro feedback;
+
+#region extents
+		
+				public float top {
+						get {
+								if (c == null) {
+										return topObject != null ? topObject.transform.position.y : transform.position.y + minOffset;
+								} else {
+										return c.bounds.max.y;
+								}
+						}
+				}
+		
+				public float bottom {
+						get {
+								if (c == null) {
+										return bottomObject != null ? bottomObject.transform.position.y : transform.position.y + minOffset;
+								} else {
+										return c.bounds.min.y;
+								}
+						}
+				}
+		
+				public float bottomDepth {
+						get { return bottom - transform.position.y; }
+				}
+		
+				public float topDepth {
+						get { return transform.position.y - top; }
+				}
+		
+#endregion
+
 		
 				// Use this for initialization
 				void Start ()
 				{
-						if (minGameObject != null) {
+						if (ceilingObject != null) {
 								switch (dim) {
 								case Utils.Dimension.Y: // only one for now
-										min = minGameObject.transform.position.y;
+										min = ceilingObject.transform.position.y;
 										break;
 								} 
 						}
-						if (maxGameObject != null) {
+						if (floorObject != null) {
 								switch (dim) {
 								case Utils.Dimension.Y: // only one for now
-										max = maxGameObject.transform.position.y;
+										max = floorObject.transform.position.y;
 										break;
 								} 
 						}
@@ -40,7 +92,7 @@ namespace P1
 				void Update ()
 				{
 						MoveIndicators ();
-						Bounce ();
+						HaltAtBoundry ();
 				}
 
 				void StopMoving (Vector3 p)
@@ -51,69 +103,65 @@ namespace P1
 
 				void MoveIndicators ()
 				{
-						BoxCollider c = GetComponent<BoxCollider> ();
+						Vector3 p;
 						switch (dim) {
 						case Utils.Dimension.Y: // only one for now
 								if (maxIndicator != null) {
-										Vector3 p = maxIndicator.transform.position;
-										p.y = c.bounds.max.y;
+										p = maxIndicator.transform.position;
+										p.y = top;
 										maxIndicator.transform.position = p;
 								}
 								if (minIndicator != null) {
-										Vector3 p = minIndicator.transform.position;
-										p.y = c.bounds.min.y;
+										p = minIndicator.transform.position;
+										p.y = bottom;
 										minIndicator.transform.position = p;
 								}
 								break;
 						}
 				}
-		
-				void Hug ()
+
+				object Inty (float top)
 				{
-						switch (dim) {
-						case Utils.Dimension.Y: // only one for now
-								Vector3 p = transform.localPosition;
-								if (p.y - HUG_RADIUS < min) {
-										rigidbody.AddForce (Vector3.up * HUG_FORCE);
-								} else if (p.y + HUG_RADIUS > max) {
-										rigidbody.AddForce (Vector3.down * HUG_FORCE);
-								}
-								break;
-						}
+						return Mathf.RoundToInt (top * 100);
 				}
 		
-				void Bounce ()
+				void HaltAtBoundry ()
 				{
+						Vector3 p = transform.position;
+						string msg = string.Format (
+				"y: {0}\n top = {1}\n bottom: {2}\n min: {3}\n max: {4}",
+				Inty (p.y), Inty (top), Inty (bottom), Inty (min), Inty (max));
+
+						if (feedback != null)
+								feedback.text = msg;
+						else
+								Debug.Log (msg);
 						switch (dim) {
 						case Utils.Dimension.Y: // only one for now
-								Vector3 p = transform.position;
-								BoxCollider c = GetComponent<BoxCollider> ();
-								if (c == null)
-										return;
-								if (c.bounds.min.y < min) { // at bottom
-										//		Debug.Log ("At Bottom");
-										p.y = min - (c.bounds.min.y - p.y);
+								if (bottom < min) { // at bottom
+										Debug.Log ("At Bottom");
+										while (bottom <= min) {
+												p.y += 0.01f;
+												transform.position = p;
+										}
 										StopMoving (p);
-								} else if (c.bounds.max.y > max) { // at top
-										//	Debug.Log ("At Top");
-										p.y = max - (c.bounds.max.y - p.y);
+								} else if (top > max) { // at top
+										Debug.Log ("At Top");
+										while (top >= max) {
+												p.y -= 0.01f;
+												transform.position = p;
+										}
 										StopMoving (p);
-								} else { // in the middle
+								} else { 
+// in the middle
 								}
+								break;
+
+						default:
+								Debug.Log ("Bad dimension: cannot handle dim " + dim);
 								break;
 						}
 				}
 
-				void Reflect ()
-				{
-
-						switch (dim) {
-						case Utils.Dimension.Y: // only one for now
-								Vector3 p = rigidbody.velocity;
-								p.y *= -BOUNCE_SCALE;
-								rigidbody.velocity = p;
-								break;
-						}
-				}
 		}
 }

@@ -10,7 +10,7 @@ namespace P1
 				TwitterList list_;
 				Tweet status_;
 				int index_;
-				static float HEIGHT = 2;
+				static float HEIGHT = 3;
 				const float MIN_WIDTH = 25;
 				const float MARGIN_HEIGHT = 0.5f;
 				const float MARGIN_WIDTH = 1.5f;
@@ -21,19 +21,34 @@ namespace P1
 				public float h;
 				public float w;
 				Color baseColor;
-				public Color targetColor = Color.black;
 				public State targetState;
 				const string STATE_NAME_TLS = "twitter status button trigger state";
 				public GripManager gripManager;
 				private Color original_bg_color = new Color (160.0f / 255.0f, 178.0f / 255.0f, 193.0f / 255.0f);
-				private Color original_bg_active_color;
+				private Color original_bg_active_color = new Color(0.0f / 255.0f, 255.0f / 255.0f, 76.0f / 255.0f);
 				public TextMeshPro indexTextMesh;
-		
+				const int MAX_WORD_LENGTH = 30;
+				const int SIZE_BOOST = 2;
+
+				string SizeMe (string s)
+				{
+						string first = "";
+						string rest = "";
+						string[] words = s.Split (' ');
+						foreach (string w in words) {
+								if (first.Length < MAX_WORD_LENGTH)
+										first += (w + " ");
+								else
+										rest += (w + " ");
+						}
+						return string.Format ("<b>{1}</b><size=-{0}>{2}</size>", SIZE_BOOST, first, rest);
+				}
+
 				public Tweet status {
 						get { return status_; }
 						set {
 								status_ = value;
-								text.text = value.text;
+								text.text = SizeMe (value.text);
 								RefreshPosition ();
 						}
 				}
@@ -84,7 +99,7 @@ namespace P1
 								HEIGHT = background.renderer.bounds.size.y;
 
 						//original_bg_color = background.renderer.material.color;
-						original_bg_active_color = backgroundActive.renderer.material.color;
+						//original_bg_active_color = backgroundActive.renderer.material.color;
 				}
 		
 				public void InitState ()
@@ -99,6 +114,24 @@ namespace P1
 #endregion
 
 #region targetState
+
+				public void Activate ()
+				{
+
+						foreach (TwitterStatusButton b in list.statusButtons) {
+								b.ResetColor ();
+//@TODO: put in list?
+						}
+						//HACK: Trying to make all paths equivalent in race condition
+						if (targetState == null)
+								InitState ();
+
+						if (targetState.state == "target") {
+								SetColor (Color.magenta);
+						} else {
+								SetColor (Color.cyan);
+						}
+				}
 
 				public void SetColor (Color color)
 				{

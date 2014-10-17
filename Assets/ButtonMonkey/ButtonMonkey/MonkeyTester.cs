@@ -4,266 +4,272 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using SimpleJSON;
-using P1;
 
 namespace ButtonMonkey
 {
-		public struct Trial
+	public struct Trial
+	{
+		public MonkeyCounter counter;
+		public List<int> keys;
+
+		public override string ToString ()
 		{
-				public MonkeyCounter counter;
-				public List<int> keys;
-
-				public override string ToString ()
-				{
-						string report = "";
-						if (keys.Count > 0) {
-								report += "Trial Keys: ";
-								foreach (int k in keys) {
-										report += k.ToString () + ".";
-								}
-								report += "\n" + counter.ToString () + "\n";
-						}
-						return report;
+			string report = "";
+			if (keys.Count > 0) {
+				report += "Trial Keys: ";
+				foreach (int k in keys) {
+					report += k.ToString () + ".";
 				}
-
-				//Print results in Dorin accessibility mode
-				public string ToDorin (bool isGrid)
-				{
-						string report = "";
-						if (keys.Count > 0) {
-								report += "Trial Keys: ";
-								foreach (int k in keys) {
-										report += k.ToString () + ".";
-								}
-								report += "\n" + counter.ToDorin (isGrid) + "\n";
-						}
-						return report;
-				}
+				report += "\n" + counter.ToString () + "\n";
+			}
+			return report;
 		}
 
-		public class MonkeyTester
+		//Print results in Dorin accessibility mode
+		public string ToDorin (bool isGrid)
 		{
-				Stopwatch timer;
-				// Single Trial Variables
-				Trial trial;
-				float current;
-				bool correct;
-				int step;
-				// Multiple Trial Records
-				List<Trial> history;
-				string recordFile;
-				int test;
-				int testNum;
-				// Dorin accessibility mode
-				static bool empowerDorin = true;
-				protected bool isDorinGrid = false;
-
-				// Initialize to completed state
-				public MonkeyTester ()
-				{
-						timer = new Stopwatch ();
-						// Initialize to Empty Trial
-						trial = new Trial ();
-						current = 0.0f;
-						correct = false;
-						step = 0;
-						history = new List<Trial> ();
-						recordFile = "";
-						test = 0;
-						testNum = 0;
-						Initialize ();
-						//ASSERT: StageComplete() == true
-						//ASSERT: TrialComplete() == true
+			string report = "";
+			if (keys.Count > 0) {
+				report += "Trial Keys: ";
+				foreach (int k in keys) {
+					report += k.ToString () + ".";
 				}
+				report += "\n" + counter.ToDorin (isGrid) + "\n";
+			}
+			return report;
+		}
+	}
 
-				// Configured generation of target keys
-				protected virtual List<int> GenerateKeys ()
-				{
-						return new List<int> ();
-				}
-			
-				protected JSONNode testConfig;
+	public class MonkeyTester
+	{
+		Stopwatch timer;
+		// Single Trial Variables
+		Trial trial;
+		float current;
+		bool correct;
+		int step;
+		// Multiple Trial Records
+		List<Trial> history;
+		string recordFile;
+		int test;
+		int testNum;
+		// Dorin accessibility mode
+		static bool empowerDorin = true;
+		protected bool isDorinGrid = false;
 
-				/// <summary>
-				/// Configures the test using ./Assets/config/<test>_config.json
-				/// Stores test results in ./TestResults/<userName>/<test>-<year>-<month>-<day>_<hour>-<minute>-<second>-<AM/PM>.csv
-				/// Copies all configurations into same directory as test results.
-				/// </summary>
-				public void ConfigureTest (string testName)
-				{
-						//(1) Create unique record directory
-						//JSONNode userConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/config/user_config.json"));
-						JSONNode userConfig = Utils.FileToJSON ("user_config.json");
-						string recordPath = Environment.CurrentDirectory + "/TestResults/" + userConfig ["userName"].Value + "/";
-						Directory.CreateDirectory (recordPath);
+		// Initialize to completed state
+		public MonkeyTester ()
+		{
+			timer = new Stopwatch ();
+			// Initialize to Empty Trial
+			trial = new Trial ();
+			current = 0.0f;
+			correct = false;
+			step = 0;
+			history = new List<Trial> ();
+			recordFile = "";
+			test = 0;
+			testNum = 0;
+			Initialize ();
+			//ASSERT: StageComplete() == true
+			//ASSERT: TrialComplete() == true
+		}
 
-						//(2) Copy configurations into directory
-						string configPath = Environment.CurrentDirectory + "/config/";
-						string[] files = Directory.GetFiles (configPath);
-						foreach (string f in files) {
-								string configName = Path.GetFileName (f);
-								string recordName = Path.Combine (recordPath, configName);
-								if (configName.Substring (configName.Length - 5, 5) != ".meta") { // Ignore if the file is .meta
-										System.IO.File.Copy (f, recordName, true);
-								}
-						}
-			
-						//(3) Read test configuration
-						//testConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/Assets/config/" + testName + "_config.json"));
-						testConfig = Utils.FileToJSON (testName + "_config.json");
-						testNum = testConfig ["test"] ["number"].AsInt;
+		// Configured generation of target keys
+		protected virtual List<int> GenerateKeys ()
+		{
+			return new List<int> ();
+		}
 
-						//(4) Create test file
-						recordFile = recordPath + string.Format (testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
-						File.WriteAllText (recordFile, "No Data from Trials");
-				}
+		protected JSONNode testConfig;
+
+		/// <summary>
+		/// Configures the test using ./config/<test>_config.json
+		/// Stores test results in ./TestResults/<userName>/<testName>-<year>-<month>-<day>_<hour>-<minute>-<second>-<AM/PM>.csv
+		/// Copies all configurations into same directory as test results.
+		/// </summary>
+		public void ConfigureTest (string testName)
+		{
+			//(1) Create user record directory
+			string userConfigPath = Environment.CurrentDirectory + "/config/user_config.json";
+			if (File.Exists (userConfigPath)) {
+				JSONNode userConfig = JSONNode.Parse (File.ReadAllText (userConfigPath));
+				string recordPath = Environment.CurrentDirectory + "/TestResults/" + userConfig ["userName"].Value + "/";
+				Directory.CreateDirectory (recordPath);
 				
-				void Initialize ()
-				{
-						step = 0;
-						trial.counter = new MonkeyCounter ();
-						if (testConfig != null) {
-								trial.keys = GenerateKeys ();
-								trial.counter.ChangeTarget (trial.keys [step]);
-						} else {
-								trial.keys = new List<int> ();
-						}
+				//(2) Copy configurations into user record directory
+				string configPath = Environment.CurrentDirectory + "/config/";
+				string[] files = Directory.GetFiles (configPath);
+				foreach (string f in files) {
+					string configName = Path.GetFileName (f);
+					string recordName = Path.Combine (recordPath, configName);
+					// Ignore if the file is .meta
+					if (configName.Substring (configName.Length - 5) == ".meta")
+						continue;
+					System.IO.File.Copy (f, recordName, true);
 				}
 
-				public void Start ()
-				{
-						Initialize ();
-					
-						// Begin test
-						current = 0.0f;
-						timer.Reset ();
-						timer.Start ();
-				}
-
-				//Events are broadcast AFTER trial state has been updated
-				public delegate void TrialUpdate (MonkeyTester trial);
-
-				public event TrialUpdate TrialEvent;
-
-				public void WhenPushed (bool complete, int symbol)
-				{
-						UnityEngine.Debug.Log ("MonkeyTester.WhenPushed symbol = " + symbol);
-						if (StageComplete ())
-								UnityEngine.Debug.Log ("StageComplete");
-						if (TrialComplete ())
-								UnityEngine.Debug.Log ("TrialCompelte");
-
-						if (StageComplete () ||
-								TrialComplete ()) {
-								//Already complete -> no event
-								return;
-						}
-
-						UnityEngine.Debug.Log ("trial.keys [" + step + "] = " + trial.keys [step]);
-
-						current = timer.ElapsedMilliseconds / 1000.0f;
-						trial.counter.WhenPushed (complete, symbol, current);
-
-						if (complete) {
-								UnityEngine.Debug.Log ("BEFORE");
-								if (symbol == trial.keys [step]) {
-										UnityEngine.Debug.Log ("AFTER");
-										correct = true;
-										step += 1;
-										if (TrialComplete ()) {
-												trial.counter.CommitTrial ();
-												history.Add (trial);
-												test += 1;
-												// Do not immediately start next test
-										} else {
-												trial.counter.ChangeTarget (trial.keys [step]);
-										}
-								} else {
-										correct = false;
-								}
+				//(3) Create test record
+				recordFile = recordPath + string.Format (testName + "-{0:yyyy-MM-dd_hh-mm-ss-tt}.csv", System.DateTime.Now);
+				File.WriteAllText (recordFile, "No Data from Trials"); //This will be overwritten when trial begins
+			}
 			
-								// Only send events for complete button pushes
-								if (TrialEvent != null) {
-										TrialEvent (this);
-								}
-						}
-
-						// Update test results immediately
-						UnityEngine.Debug.Log ("recordFile = " + recordFile);
-						if (recordFile.Length > 0) {
-								UnityEngine.Debug.Log ("Writing!!!");
-								if (empowerDorin) {
-										File.WriteAllText (recordFile, this.ToDorin (isDorinGrid));
-								} else {
-										File.WriteAllText (recordFile, this.ToString ());
-								}
-						}
-				}
-		
-				public List<int> GetTrialKeys ()
-				{
-						return trial.keys;
-				}
-
-				public string GetTrialKeysString ()
-				{
-						string trialKeys = "";
-						for (int k = 0; k < trial.keys.Count; k += 1) {
-								trialKeys += trial.keys [k].ToString ();
-						}
-						return trialKeys;
-				}
-
-				public int GetTrialStep ()
-				{
-						return step;
-				}
-
-				public bool WasCorrect ()
-				{
-						return correct;
-				}
-
-				public float WasAtTime ()
-				{
-						return current;
-				}
-
-				public bool TrialComplete ()
-				{
-						return step >= trial.keys.Count;
-				}
-
-				public bool StageComplete ()
-				{
-						return test >= testNum;
-				}
-		
-				//Print results in CSV format
-				public override string ToString ()
-				{
-						string report = "";
-						foreach (Trial h in history) {
-								report += h.ToString ();
-						}
-						if (!TrialComplete ()) {
-								report += trial.ToString ();
-						}
-						return report;
-				}
-
-				//Print results in Dorin accessibility mode
-				public string ToDorin (bool isGrid)
-				{
-						string report = "";
-						foreach (Trial h in history) {
-								report += h.ToDorin (isGrid);
-						}
-						if (!TrialComplete ()) {
-								report += trial.ToDorin (isGrid);
-						}
-						return report;
-				}
+			//(4) Read test configuration
+			string testConfigPath = Environment.CurrentDirectory + "/config/" + testName + "_config.json";
+			if (File.Exists (testConfigPath)) {
+				testConfig = JSONNode.Parse (File.ReadAllText (Environment.CurrentDirectory + "/config/" + testName + "_config.json"));
+				testNum = testConfig ["test"] ["number"].AsInt;
+			}
 		}
+
+		/// <summary>
+		/// Path to csv file where test results are recorded
+		/// </summary>
+		public string recordPath {
+			get {
+				return recordFile;
+			}
+		}
+				
+		void Initialize ()
+		{
+			step = 0;
+			trial.counter = new MonkeyCounter ();
+			if (testConfig != null) {
+				trial.keys = GenerateKeys ();
+				if (trial.keys.Count > 0) {
+					trial.counter.ChangeTarget (trial.keys [step]);
+				} else {
+					test = testNum;
+				}
+			} else {
+				trial.keys = new List<int> ();
+				test = testNum;
+			}
+		}
+
+		public void Start ()
+		{
+			Initialize ();
+					
+			// Begin test
+			current = 0.0f;
+			timer.Reset ();
+			timer.Start ();
+		}
+
+		//Events are broadcast AFTER trial state has been updated
+		public delegate void TrialUpdate (MonkeyTester trial);
+
+		public event TrialUpdate TrialEvent;
+
+		public void WhenPushed (bool complete, int symbol)
+		{
+			if (StageComplete () ||
+				TrialComplete ()) {
+				//Already complete -> no event
+				return;
+			}
+
+			current = timer.ElapsedMilliseconds / 1000.0f;
+			trial.counter.WhenPushed (complete, symbol, current);
+
+			if (complete) {
+				if (symbol == trial.keys [step]) {
+					correct = true;
+					step += 1;
+					if (TrialComplete ()) {
+						trial.counter.CommitTrial ();
+						history.Add (trial);
+						test += 1;
+						// Do not immediately start next test
+					} else {
+						trial.counter.ChangeTarget (trial.keys [step]);
+					}
+				} else {
+					correct = false;
+				}
+			
+				// Only send events for complete button pushes
+				if (TrialEvent != null) {
+					TrialEvent (this);
+				}
+			}
+
+			// Update test results immediately
+			if (recordFile.Length > 0) {
+				if (empowerDorin) {
+					File.WriteAllText (recordFile, this.ToDorin (isDorinGrid));
+				} else {
+					File.WriteAllText (recordFile, this.ToString ());
+				}
+			}
+		}
+		
+		public List<int> GetTrialKeys ()
+		{
+			return trial.keys;
+		}
+
+		public string GetTrialKeysString ()
+		{
+			string trialKeys = "";
+			for (int k = 0; k < trial.keys.Count; k += 1) {
+				trialKeys += trial.keys [k].ToString () + " ";
+			}
+			return trialKeys;
+		}
+
+		public int GetTrialStep ()
+		{
+			return step;
+		}
+
+		public bool WasCorrect ()
+		{
+			return correct;
+		}
+
+		public float WasAtTime ()
+		{
+			return current;
+		}
+
+		public bool TrialComplete ()
+		{
+			return step >= trial.keys.Count;
+		}
+
+		public bool StageComplete ()
+		{
+			return test >= testNum;
+		}
+		
+		//Print results in CSV format
+		public override string ToString ()
+		{
+			string report = "";
+			foreach (Trial h in history) {
+				report += h.ToString ();
+			}
+			if (!TrialComplete ()) {
+				report += trial.ToString ();
+			}
+			return report;
+		}
+
+		//Print results in Dorin accessibility mode
+		public string ToDorin (bool isGrid)
+		{
+			string report = "";
+			foreach (Trial h in history) {
+				report += h.ToDorin (isGrid);
+			}
+			if (!TrialComplete ()) {
+				report += trial.ToDorin (isGrid);
+			}
+			return report;
+		}
+	}
 }
 

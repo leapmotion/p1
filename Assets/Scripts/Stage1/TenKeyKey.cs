@@ -12,8 +12,11 @@ namespace P1
     public GameObject trigger;
     public GameObject cushion;
 
-    private Color original_color = new Color(0.25f, 0.25f, 0.25f);
+    //private Color original_color = new Color(0.25f, 0.25f, 0.25f);
+    private Color original_color;
     private bool mouse_clicked = false;
+
+    public float springConstant = 1000.0f;
 
     [SerializeField]
     private float m_KeypadUniformScale;
@@ -78,6 +81,46 @@ namespace P1
       }
     }
 
+    public void Init()
+    {
+      button.GetComponent<SpringJoint>().connectedAnchor = transform.position;
+    }
+
+    public void SetActive(bool value)
+    {
+      if (value)
+      {
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+          collider.enabled = true;
+        }
+        SpringJoint[] joints = GetComponentsInChildren<SpringJoint>();
+        foreach (SpringJoint joint in joints)
+        {
+          joint.spring = springConstant;
+        }
+      }
+      else
+      {
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+          collider.enabled = false;
+        }
+        SpringJoint[] joints = GetComponentsInChildren<SpringJoint>();
+        foreach (SpringJoint joint in joints)
+        {
+          joint.spring = 0;
+        }
+      }
+    }
+
+    public virtual void TriggerAction()
+    {
+      OnTenKeyEvent(true, "Leap");
+    }
+
     public void SetTriggerSensitivity(float sensitivity)
     {
       BoxCollider box_collider = GetComponentInChildren<Joint>().GetComponent<BoxCollider>();
@@ -122,8 +165,14 @@ namespace P1
 
     State state;
 
+    void Awake()
+    {
+      original_color = button.renderer.material.color;
+      Debug.Log(original_color);
+    }
+
     // Use this for initialization
-    void Start()
+    public virtual void Start()
     {
       if (!StateList.HasList("ButtonState"))
       {
