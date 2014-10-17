@@ -25,7 +25,7 @@ namespace P1
 				const string STATE_NAME_TLS = "twitter status button trigger state";
 				public GripManager gripManager;
 				private Color original_bg_color = new Color (160.0f / 255.0f, 178.0f / 255.0f, 193.0f / 255.0f);
-				private Color original_bg_active_color;
+				private Color original_bg_active_color = new Color(0.0f / 255.0f, 255.0f / 255.0f, 76.0f / 255.0f);
 				public TextMeshPro indexTextMesh;
 				const int MAX_WORD_LENGTH = 30;
 				const int SIZE_BOOST = 2;
@@ -99,7 +99,7 @@ namespace P1
 								HEIGHT = background.renderer.bounds.size.y;
 
 						//original_bg_color = background.renderer.material.color;
-						original_bg_active_color = backgroundActive.renderer.material.color;
+						//original_bg_active_color = backgroundActive.renderer.material.color;
 				}
 		
 				public void InitState ()
