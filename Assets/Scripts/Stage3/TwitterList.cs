@@ -78,8 +78,6 @@ namespace P1
 										//monkeyDo.WhenPushed (true, Radical.instance.activeTwitter.index);
 								}
 						}
-
-						ActivateClosestRadicalButton ();
 				}
 
 				public void Trigger ()
@@ -105,10 +103,10 @@ namespace P1
 										closest = b;
 								else if (Radical.DistanceFrom (b.text.transform.position.y) < distance) {
 										closest = b;
-										distance = Radical.DistanceFrom (closest.text.transform.position.y);
 								}
+								distance = Radical.DistanceFrom (closest.text.transform.position.y);
 						}
-
+			
 						Radical.instance.activeTwitter = closest;
 				}
 
@@ -141,6 +139,11 @@ namespace P1
 						}
 						UpdateTouched ();
 						UpdateInd ();
+				}
+
+				void FixedUpdate ()
+				{
+						ActivateClosestRadicalButton ();
 				}
 
 				public void TrialUpdate (MonkeyTester trial)

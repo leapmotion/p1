@@ -43,7 +43,7 @@ namespace P1
 						get { return status_; }
 						set {
 								status_ = value;
-								text.text = value.text;
+				text.text = SizeMe(value.text);
 								RefreshPosition ();
 						}
 				}
@@ -109,6 +109,23 @@ namespace P1
 				}
 
 #endregion
+		
+		const int MAX_WORD_LENGTH = 30;
+		const int SIZE_BOOST = 2;
+		string SizeMe(string s)
+		{
+			string first = "";
+			string rest = "";
+			string[] words = s.Split(' ');
+			foreach (string w in words)
+			{
+				if (first.Length < MAX_WORD_LENGTH)
+					first += (w + " ");
+				else
+					rest += (w + " ");
+			}
+			return string.Format("<b>{1}</b><size=-{0}>{2}</size>", SIZE_BOOST, first, rest);
+		}
 
 #region targetState
 
