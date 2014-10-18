@@ -123,6 +123,7 @@ namespace P1
 
     private void UpdateFadeScreen() 
     {
+	  /*
       if (Input.GetKeyDown(KeyCode.RightArrow))
       {
         Debug.Log("Going to Next Scene");
@@ -133,6 +134,7 @@ namespace P1
         Debug.Log("Going to Prev Scene");
         PrevScene();
       }
+      */
 
       float alpha = 1.0f - Mathf.Clamp01((Time.time - relativeTime) / timeThreshold);
       if (!sceneLoaded)
