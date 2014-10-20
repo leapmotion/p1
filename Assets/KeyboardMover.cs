@@ -38,6 +38,7 @@ public class KeyboardMover : MonoBehaviour
 				}
 				if (oculus) {
 						//Recentering
+						//TODO: This should trigger a display of movement direction
 						if (Input.GetKey (KeyCode.RightShift)) {
 								UnityEngine.Debug.Log ("Recentering... right");
 								oculus.SetOrientationOffset (new Quaternion (0, spin * Time.deltaTime, 0, 0));
