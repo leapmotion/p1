@@ -30,15 +30,9 @@ public class Foldable : MonoBehaviour
 				float angleDiff = foldAngle - hingeJoint.angle;
 
 				if (maxDiff < angleDiff) {
-						Debug.Log ("name(" + name + "): maxDiff < angleDiff = " + angleDiff + 
-								"\n foldAngle = " + foldAngle +
-								"\n hingeJoint.angle = " + hingeJoint.angle);
 						angleDiff = foldAngle - 180.0f;
 				}
 				if (- maxDiff > angleDiff) {
-						Debug.Log ("name(" + name + "): -maxDiff > angleDiff = " + angleDiff + 
-								"\n foldAngle = " + foldAngle +
-								"\n hingeJoint.angle = " + hingeJoint.angle);
 						angleDiff = foldAngle + 180.0f;
 				}
 
@@ -46,8 +40,6 @@ public class Foldable : MonoBehaviour
 				float filter = 0.0f;
 				if (filterTime > 0.0f) {
 						filter = Mathf.Exp (-Time.deltaTime / filterTime);
-						Debug.Log ("name(" + name + "): hingeJoint.angle = " + hingeJoint.angle + 
-								"\nfoldAngle = " + ((filter * angleDiff) + hingeJoint.angle).ToString ());
 				}
 				foldAngle = (filter * angleDiff) + hingeJoint.angle;
 
